@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html class="iframe-h">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>社刊详情</title>
+		<link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="/css/admin.css" />
+		<link rel="stylesheet" type="text/css" href="/css/formSelects-v4.css" />
+		<link rel="stylesheet" type="text/css" href="/css/page.css" />
+		<style>
+			.layui-form-label{width:100px;}
+			.layui-input{width:200px;}
+			.mar-r-s{margin-right:125px;}
+			.layer-textarea{width:420px;}
+			.layui-form-label{width:100px;}
+			.layui-input{width:170px;}
+			.layui-edge{display:none;}
+			.layui-input,.xm-select-parent .xm-input{border:none;}
+			.layui-textarea{width:420px;height:200px;border:none;}
+		</style>
+	</head>
+	<body>
+		<div class="pageloading">
+			<img src="/images/loading.png" class="rotation" />
+		</div>
+		<div class="wrap-container clearfix">
+			<div class="column-content-detail">
+				<form class="layui-form">
+					<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="magazineTitle">社刊标题：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="magazineTitle" name="magazine_title" lay-verify="magazine_title" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+					    <div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="magazineTag">社刊标签：</label>
+					        <div class="layui-input-inline">
+					        	<select id="magazineTag" name="magazine_tag" xm-select="xm-magazineTag">
+									<option value="">请选择文章标签</option>
+								</select>
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+					    <div class="layui-inline mar-r-s" style="position:relative;top:-20px;">
+					        <label class="layui-form-label" for="startDate">发布时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="startDate" name="start_date" autocomplete="off" class="layui-input" placeholder="--" readOnly='readOnly' />
+					        </div>
+					    </div>
+				  		<div class="layui-inline mar-r-s" style="position:relative;top:-5px;">
+					        <label class="layui-form-label" for="logoUp">社刊封面：</label>
+					        <div class="layui-input-inline" style="position:relative;">
+					        	<img id="magazineIcon" src="/images/up_logo.png" class="up-img" />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="magazineDesc">社刊简介：</label>
+					        <div class="layui-input-inline">
+						    	<textarea placeholder="请输入社刊简介" id="magazineDesc" class="layui-textarea layer-textarea"></textarea>
+						    </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+					    <div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="articleId">所属文章：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="articleId" name="article_title" autocomplete="off" class="layui-input" placeholder="" readOnly='readOnly' />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+						<div class="table-data">
+							<table class="layui-hide table-box" id="dataList" lay-filter="dataList"></table>
+						</div>
+				  	</div>
+      			</form>
+			</div>
+		</div>
+		<input type="hidden" id="getDate" value="" />
+	</body>
+	<script src="/static/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery-1.8.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/formSelects-v4.js"></script>
+	<script type="text/javascript" charset="utf-8">
+	layui.use(['form', 'table', 'laydate', 'laypage', 'layer'], function(){
+		var form = layui.form, table = layui.table, laydate = layui.laydate, laypage = layui.laypage, layer = layui.layer,formSelects = layui.formSelects;  //初始化layui控件
+		var parame = public.getParame();
+		formSelects.btns("xm-magazineTag", []);
+	    layui.formSelects.value("xm-magazineTag", []);
+	    var img_one = '';  //社刊封面
+	    //请求标签
+	    $.ajax({
+	    	type: 'post',
+	    	url: '/tag/selectlist',
+	    	data: {'page': 1, 'limit': 999999999, 'tagType': 3},
+	    	async: false,
+			dataType: 'json',
+			success: function(data) {
+				if(data.code == '0'){
+					var sign_str = "";
+			       	var sign_arr = [];
+		        	//标签管理列表数据
+		        	$.each(data.data,function(k,val){
+		        		sign_str = {"name": val.tagName, "value": val.id};
+		        		sign_arr.push(sign_str);
+			        });
+					formSelects.data('xm-magazineTag', 'local', {arr: sign_arr});
+				}else{
+					layer.alert(data.msg, {icon: 5, title: "提示"});
+				}
+			}
+	    });
+	    //上传文件
+        var logoUp = document.querySelector('#logoUp');
+	    $("#logoUp").change(function(){
+	    	var file = this.files[0];
+            // 确认选择的文件是图片
+            if(file.type.indexOf("image") == 0 && file.size <= 2048000) {
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function(e) {
+                    var newUrl = this.result;
+                    $.post('/img/upload', {'base64img': newUrl.split(",")[1]}, function(data) {
+                    	if(data.code == '0' && data.data != ""){
+                    		img_one = data.data;
+	                    	$("#magazineIcon").attr("src", img_one);
+                    	}else{
+                    		layer.alert("上传出错", {icon: 5, title: "提示"});
+                    	}
+                    }, 'json');
+                };
+            }else{
+            	layer.alert("上传文件必须是图片且小于2M", {icon: 5, title: "提示"});
+            }
+	    });
+	    //信息回显
+	    $.ajax({
+	    	type: 'post',
+	    	url: '/magazines/select',
+	    	data: {'id': parame.id},
+	    	async: false,
+			dataType: 'json',
+			success: function(data) {
+				if(data.code == '0'){
+					//回显多选项
+					if(data.data.magazineTag == '1'){
+						var status = [data.data.magazineTag];
+					}else{
+						var status = data.data.magazineTag.split(',');
+					}
+					$("#magazineTitle").val(data.data.magazineTitle);  //社刊标题
+					layui.formSelects.value("xm-magazineTag", status);  //社刊标签
+			    	$("#startDate").val(data.data.startDate);  //发布时间
+			    	$("#magazineDesc").val(data.data.magazineDesc);  //社刊简介
+			    	img_one = data.data.magazineIcon;  //社刊封面
+			    	$("#magazineIcon").attr("src", data.data.magazineIcon);  //社刊封面
+			    	$("#getDate").val(data.data.articlesIds);  //文章列表id串
+				}else{
+					layer.alert(data.msg, {icon: 5, title: "提示"});
+				}
+			}
+	    });
+		//加载表格数据
+		$("#getDate").click(function() {
+			var idsarr = $("#getDate").val();
+			//初始检测
+			if(idsarr == null || idsarr == ""){
+				idsarr = -1;
+			}
+			//拉取数据
+			table.render({
+		        elem: '#dataList',
+		        url: '/articles/selectlist',
+		        method: 'post',
+		        id: 'dataList',
+		        where: {
+		            'ids': idsarr
+		        },
+		        cols: [
+		               
+		               [
+
+			            {type: 'checkbox', LAY_CHECKED: true, hide: true},
+			            {field: 'id', title: 'id', hide: true},
+			            {field: 'userId', title: '作者id', hide: true},
+			            {field: 'communityId', title: '社群id', hide: true},
+			            {type: 'numbers', title: '序号', width: 60},
+			            {field: 'articleTitle', title: '文章标题', width: 150, event: 'onSelect'},
+			            {field: 'articleTitle', title: '列表标题', width: 150, event: 'onSelect', edit: 'text'},
+			            {field: 'articleIcon', title: '文章封面', width: 150, event: 'onSelect', templet: function(d) {
+			            	return d.articlIcon == "" ? "--" : public.showImg(d.articleIcon);
+				        }},
+			            {field: 'articleOutline', title: '文章简述', width: 250, event: 'onSelect'},
+			            {field: 'articleContent', title: '文章内容', width: 250, event: 'onSelect'},
+			            {field: 'articleTag', title: '文章标签', width: 200, event: 'onSelect'},
+			            {field: 'readCount', title: '文章阅读量', width: 120, event: 'onSelect'},
+			            {field: 'followCount', title: '关注量', width: 100, event: 'onSelect'}
+			            
+		        		]
+		               
+		              ],
+		        page: false,
+		        loading: true,
+		        done: function (res, curr, count) {
+		      		//图片点击放大
+		      		$("img").click(function() {
+		      			public.bigImg($(this).parent());
+		      		});
+			    	$("input,textarea").attr("readOnly", "readOnly");
+			    	$("select").attr("disabled", "disabled");
+			    	$("div,input").click(function(){
+			    		return false;
+			    	});
+		      		$(".pageloading").hide();
+		        }
+		    });
+		});
+		$("#getDate").trigger("click");
+		public.adaptation();
+	});
+	</script>
+</html>

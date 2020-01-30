@@ -1,0 +1,99 @@
+/* pages/writing/index.wxss */
+@import "../editor/editor.wxss";
+@import "/welCropper/welCropper.wxss";
+.label{
+  display: flex;
+  width: 100%; 
+  padding: 20rpx 0;
+  font-size: 26rpx;
+  color: #0b0b0b;
+  border-bottom: 1px solid #efefef;
+}
+.lname{
+  margin-top: 12rpx;
+}
+.label input{
+  padding: 10rpx 20rpx 10px 10rpx;
+  flex: 1;
+}
+.label textarea{
+  flex: 1;
+  font-size: 26rpx;
+  line-height: 32rpx;
+  padding: 15rpx 10rpx;
+  height: 100rpx;
+}
+.tr{
+  color: #999;
+  text-align: right;
+}
+.ico image{
+  margin-top: 10rpx;
+  width: 20rpx;
+  height: 38rpx;
+}
+.upload_icon image{
+  vertical-align: middle;
+  margin: 0 0 0 30rpx;
+  width: 40rpx;
+  height: 40rpx;
+}
+.upload_img image{
+  width: 72rpx;
+  height: 72rpx;
+}
+.recom{
+  margin-top: 30rpx;
+  font-size: 28rpx;
+  color: #0b0b0b;
+}
+.recom checkbox-group{
+  display: inline-block;
+}
+.richarea{
+  margin: 30rpx 0;
+}
+.rich{
+  width: 100%; height: 300rpx;
+}
+.check{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 100;
+  background: #fff;
+  top: 0;
+}
+.check label{
+  padding: 30rpx 40rpx;
+  display: block;
+  border-bottom: 1px solid #efefef;
+}
+.check label checkbox .wx-checkbox-input{
+  width: 30rpx;
+  height: 30rpx;
+}
+.btnbar{
+  margin: 20rpx 30rpx;
+  display: flex;
+  justify-content: space-between;
+}
+.upload_icon2 image{
+  vertical-align: middle;
+  margin: 0 0 0 0rpx;
+  width: 52rpx;
+  height: 52rpx;
+}
+.labeltextarea{
+  display: flex;
+  width: 100%; 
+  padding: 20rpx 0;
+  font-size: 28rpx;
+  color: #0B0B0B;
+  justify-content: center;
+}
+.positionviewbg{
+display: flex;
+position: absolute;
+margin: 394rpx 0 0 290rpx;
+}

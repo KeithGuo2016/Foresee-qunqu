@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html class="iframe-h">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>评论管理</title>
+		<link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="/css/admin.css" />
+		<link rel="stylesheet" type="text/css" href="/css/page.css" />
+	</head>
+	<body>
+		<div class="pageloading">
+			<img src="/images/loading.png" class="rotation" />
+		</div>
+		<div class="wrap-container clearfix layui-anim layui-anim-fadein">
+			<div class="column-content-detail" id="page" style="padding-right:4px;">
+				<!-- <div class="layui-form-item page-btn" action="">
+					顶部按钮
+					<div class="layui-inline tool-btn" id="menuBtn"></div>
+					顶部按钮
+				</div> -->
+				<form class="layui-form">
+					<div class="page-search pad-top">
+						<!--创建时间-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="createdDate">创建时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="createdDate" name="created_date" autocomplete="off" class="layui-input" placeholder="请选择创建时间" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--创建时间-->
+						<!--删除标志-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="isDeleted">删除标志：</label>
+					        <div class="layui-input-inline">
+					        	<select id="isDeleted" name="is_deleted">
+									<option value="">请选择删除标志</option>
+									<option value="0">未删除</option>
+									<option value="1">已删除</option>
+								</select>
+					        </div>
+						</div>
+						<!--删除标志-->
+						<div class="layui-inline search-btn">
+							<button type="button" class="layui-btn layui-btn-sm btn-search bg-blue main-search" id="searchBt" lay-submit="">搜索</button>
+						</div>
+					</div>
+				</form>
+				<div class="">
+					<table class="layui-hide table-box" id="dataList" lay-filter="orderAll"></table>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="/static/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery-1.8.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+	layui.use(['form', 'table', 'laydate', 'laypage', 'layer'], function(){
+	    var form = layui.form, table = layui.table, laypage = layui.laypage, laydate = layui.laydate, layer = layui.layer;  //初始化layui控件
+	    //数据对应表
+	    var is_deleted = ["未删除", "已删除"];
+	    //获取筛选条件
+	    var get_search = function(){
+	    	var search_arr = [];
+	    	search_arr["created_date_start"] = public.getTime($.trim($("#createdDate").val())).start;  //创建时间起始
+	    	search_arr["created_date_end"] = public.getTime($.trim($("#createdDate").val())).end;  //创建时间终止
+	    	search_arr["is_deleted"] = $.trim($("#isDeleted").val());  //删除标志
+	    	return search_arr;
+	    };
+	    //数据表格渲染控件
+	    table.render({
+	        elem: '#dataList',
+	        url: '/articlescomment/selectlist',
+	        method: 'post',
+	        //data: data.data,
+	        id: 'orderAll',
+	        where: {
+	            //初始化发送至后台数据
+	        },
+	        cols: [
+	               
+	               [
+	                
+		            {field: 'id', title: 'id', hide: true, templet: function(d) {
+		            	return d.id == null ? "--" : d.id;
+			        }},
+		            {field: 'isDeleted', title: 'isDeleted', hide: true, templet: function(d) {
+		            	return d.isDeleted == null ? "--" : d.isDeleted;
+			        }},
+		            {field: 'userid', title: 'userid', hide: true, templet: function(d) {
+		            	return d.userid == null ? "--" : d.userid;
+			        }},
+		            {field: 'articlesId', title: 'articlesId', hide: true, templet: function(d) {
+		            	return d.articlesId == null ? "--" : d.articlesId;
+			        }},
+		            {field: 'pid', title: 'pid', hide: true, templet: function(d) {
+		            	return d.pid == null ? "--" : d.pid;
+			        }},
+		            {field: 'toUserId', title: 'toUserId', hide: true, templet: function(d) {
+		            	return d.toUserId == null ? "--" : d.toUserId;
+			        }},
+		            {type: 'numbers', title: '序号', width: 60},
+		            {field: 'content', title: '评论内容', width: 300, event: 'onSelect', templet: function(d) {
+		            	return d.content == "" ? "--" : d.content;
+			        }},
+		            {field: 'createdDate', title: '创建时间', width: 170, event: 'onSelect', templet: function(d) {
+		            	return d.createdDate == "" ? "--" : d.createdDate;
+			        }},
+		            {field: 'nickName', title: '创建人', width: 100, event: 'onSelect', templet: function(d) {
+		            	return d.nickName == null ? "--" : d.nickName;
+			        }},
+		            {field: 'isDeleted', title: '删除标志', width: 100, event: 'onSelect', templet:function(d){
+		            	return is_deleted[d.isDeleted];
+			        }}
+		            
+	        		]
+	               
+	              ],
+	        page: true,
+	        limit: 10,
+	        limits: [5, 10, 15, 25, 35],
+	        loading: true,
+	        done: function (res, curr, count) {
+	           if ($(".layui-table-main").find("tr").length != 0) {
+	                $(".layui-table-page").show();
+	           }
+	           $(".pageloading").hide();
+	        }
+	    });
+	    public.adaptation();
+	    //请求三级菜单
+		public.getmenu();
+	    //点击搜索
+	    $("#searchBt").click(function() {
+	    	var res = get_search();
+	        //请求后台数据表格接口
+	        table.reload("orderAll", {
+	            url: "/articlescomment/selectlist",
+	            where: {
+	                "createdDateStar": res.created_date_start,  //创建时间起始
+	                "createdDateEnd": res.created_date_end,  //创建时间终止
+	                "isDeleted": res.is_deleted  //删除标志
+	            },
+	            method: "post"
+	        });
+	        public.adaptation();
+	    });
+	    //点击删除
+	    $("#page").on("click", ".btn-del", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	var status = $("tr.layui-table-click").find("td:eq(1) div").text();
+	    	if(ids != '' && ids != undefined){
+	    		if(status != '1'){
+	    			layer.confirm('您确认删除该数据吗？', {icon: 3, title:'提示'}, function(index){
+		        		//删除申请
+			    		$.post('/articlescomment/update', {'id': ids, 'isDeleted': 1}, function(data) {
+			    			if(data.code == '0'){
+			    				layer.msg('删除成功', {'icon': 1,time:1000},function(){
+			    					layer.closeAll();
+			        	            $("#searchBt").click();
+		                        });
+			    			}else{
+			    				layer.alert(data.msg, {icon: 5, title: "提示"});
+			    			}
+			    		});
+	        		});
+	    		}else{
+	    			layer.alert("您只能操作未删除的数据！", {icon: 5, title: "提示"});
+	    		}
+        	}else {
+        		layer.alert("请先选中要操作的数据项！", {icon: 5, title: "提示"});
+        	}
+   		});
+	    //点击恢复
+	    $("#page").on("click", ".btn-add", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	var status = $("tr.layui-table-click").find("td:eq(1) div").text();
+	    	if(ids != '' && ids != undefined){
+	    		if(status != '0'){
+	    			layer.confirm('您确认恢复该数据吗？', {icon: 3, title:'提示'}, function(index){
+		        		//恢复申请
+			    		$.post('/articlescomment/update', {'id': ids, 'isDeleted': 0}, function(data) {
+			    			if(data.code == '0'){
+			    				layer.msg('恢复成功', {'icon': 1,time:1000},function(){
+			    					layer.closeAll();
+			        	            $("#searchBt").click();
+		                        });
+			    			}else{
+			    				layer.alert(data.msg, {icon: 5, title: "提示"});
+			    			}
+			    		});
+	        		});
+	    		}else{
+	    			layer.alert("您只能操作已删除的数据！", {icon: 5, title: "提示"});
+	    		}
+        	}else {
+        		layer.alert("请先选中要操作的数据项！", {icon: 5, title: "提示"});
+        	}
+   		});
+   		//点击刷新
+	    /*$("#page").on("click", ".refreshBtn", function () {
+	    	$('.iframe', window.parent.document).attr('src', $('.iframe', window.parent.document).attr('src'));
+   		});*/
+	    //创建时间
+	    laydate.render({
+	        elem: '#createdDate',
+	        range: true
+	    });
+	});
+	</script>
+</html>    

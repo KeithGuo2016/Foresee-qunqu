@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foresee.mapper.WechatUserMapperCostom">
+  <resultMap id="BaseResultMap" type="com.foresee.vo.WechatUserVo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="app_id" jdbcType="VARCHAR" property="appId" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="union_id" jdbcType="VARCHAR" property="unionId" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="head_url" jdbcType="VARCHAR" property="headUrl" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="communityId" jdbcType="INTEGER" property="communityid" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="user_mark" jdbcType="VARCHAR" property="userMark" />
+    <result column="is_vip" jdbcType="INTEGER" property="isVip" />
+    <result column="is_admin" jdbcType="INTEGER" property="isAdmin" />
+    <result column="is_community" jdbcType="INTEGER" property="isCommunity" />
+    <result column="user_type" jdbcType="VARCHAR" property="userType" />
+    <result column="flow_sts" jdbcType="VARCHAR" property="flowSts" />
+    <result column="user_desc" jdbcType="VARCHAR" property="userDesc" />
+    <result column="bg_icon" jdbcType="VARCHAR" property="bgIcon" />
+    
+    <result column="community_name" jdbcType="VARCHAR" property="communityName" />
+    <result column="community_icon" jdbcType="VARCHAR" property="communityIcon" />
+    <result column="isAddCommunityAplly" jdbcType="INTEGER" property="isAddCommunityAplly" />
+    <result column="community_code_icon" jdbcType="VARCHAR" property="communityCodeIcon" />
+    <result column="pinyin" jdbcType="VARCHAR" property="pinyin" />
+    <result column="p_count" jdbcType="INTEGER" property="pcount" />
+    
+    
+  </resultMap>
+   <select id="selectOneByOpenid" resultMap="BaseResultMap" >
+  SELECT
+	u.user_type,
+	IFNULL(GROUP_CONCAT( b.tag_name ),'') user_mark,
+	u.union_id,
+	u.uid,
+	u.bg_icon,
+	u.user_desc,
+	IFNULL(u.phone,'') phone,
+	u.open_id,
+	u.nick_name,
+	u.is_vip,
+	u.is_deleted,
+	u.is_community,
+	u.is_admin,
+	u.id,
+	u.head_url,
+	u.flow_sts,
+	u.created_date,
+	IFNULL(u.communityId,0) communityId,
+	u.app_id,
+	u.city,
+	IFNULL(c.community_name,'') community_name,
+	IFNULL(c.community_code_icon,'') community_code_icon,
+	IFNULL(c.community_icon,'') community_icon,
+	IFNULL(count(ua.id),0) isAddCommunityAplly
+FROM
+	wechat_user u 
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, u.user_mark ) 
+	LEFT JOIN communitys c ON u.communityId = c.id 
+	left join communitys ua on (ua.flow_sts='0'  and ua.admin_id=u.id)
+WHERE
+	u.open_id = #{openid}
+	GROUP BY u.id
+	
+   </select>
+
+   <select id="selectByCommunityId" resultMap="BaseResultMap" >
+SELECT
+	wu.user_type,
+	wu.union_id,
+	wu.uid,
+	wu.bg_icon,
+	wu.user_desc,
+	IFNULL(wu.phone,'') phone,
+	wu.open_id,
+	wu.nick_name,
+	wu.is_vip,
+	wu.is_deleted,
+	wu.is_community,
+	wu.is_admin,
+	wu.id,
+	wu.head_url,
+	wu.flow_sts,
+	wu.created_date,
+	IFNULL(wu.communityId,0) communityId,
+	wu.app_id,
+	wu.city
+FROM
+	wechat_user wu  
+WHERE
+	wu.is_deleted = '0' 
+	AND wu.is_community = '0' 
+	AND wu.is_admin = '0'
+	and wu.communityId=#{communityid}
+	order by wu.nick_name
+   </select>
+
+
+    <select id="selectAdminList" resultMap="BaseResultMap" >
+  SELECT
+	wu.user_type,
+	wu.union_id,
+	wu.uid,
+	wu.bg_icon,
+	wu.user_desc,
+	wu.phone,
+	wu.open_id,
+	wu.nick_name,
+	wu.is_vip,
+	wu.is_deleted,
+	wu.is_community,
+	wu.is_admin,
+	wu.id,
+	wu.head_url,
+	wu.flow_sts,
+	wu.created_date,
+	wu.communityId,
+	wu.app_id,
+	wu.city
+FROM
+	wechat_user wu  
+WHERE
+	wu.is_deleted = '0' 
+	AND ( wu.is_admin = '1' OR wu.is_community = '1' )
+	AND wu.communityId=#{communityid}
+	order by wu.is_admin
+   </select>
+
+   <select id="initRedisSession" resultMap="BaseResultMap" >
+  SELECT
+	u.user_type,
+	IFNULL(GROUP_CONCAT( b.tag_name ),'') user_mark,
+	u.union_id,
+	u.uid,
+	u.bg_icon,
+	IFNULL(u.user_desc,'') user_desc,
+	IFNULL(u.phone,'') phone,
+	u.open_id,
+	u.nick_name,
+	u.is_vip,
+	u.is_deleted,
+	u.is_community,
+	u.is_admin,
+	u.id,
+	u.head_url,
+	u.flow_sts,
+	u.created_date,
+	IFNULL(u.communityId,0) communityId,
+	u.app_id,
+	u.city,
+	IFNULL(c.community_name,'') community_name,
+	IFNULL(c.community_code_icon,'') community_code_icon,
+	IFNULL(c.community_icon,'') community_icon,
+	
+	IFNULL(count(ua.id),0) isAddCommunityAplly
+FROM
+	wechat_user u  
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, u.user_mark ) 
+	LEFT JOIN communitys c ON  (u.communityId = c.id and c.is_deleted='0' and c.flow_sts= '1')
+	left join communitys ua on (ua.flow_sts='0'  and ua.admin_id=u.id)
+WHERE
+	1 =1
+	GROUP BY u.id
+   </select>
+</mapper>

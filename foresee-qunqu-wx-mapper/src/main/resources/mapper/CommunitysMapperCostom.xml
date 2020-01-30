@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foresee.mapper.CommunitysMapperCostom">
+  <resultMap id="BaseResultMap" type="com.foresee.vo.CommunityVo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="community_name" jdbcType="VARCHAR" property="communityName" />
+    <result column="community_icon" jdbcType="VARCHAR" property="communityIcon" />
+    <result column="community_mark" jdbcType="VARCHAR" property="communityMark" />
+    <result column="community_tag" jdbcType="VARCHAR" property="communityTag" />
+    <result column="bg_icon" jdbcType="VARCHAR" property="bgIcon" />
+    <result column="auth_desc" jdbcType="VARCHAR" property="authDesc" />
+    <result column="community_notice" jdbcType="VARCHAR" property="communityNotice" />
+    <result column="community_desc" jdbcType="VARCHAR" property="communityDesc" />
+    <result column="community_type" jdbcType="INTEGER" property="communityType" />
+    <result column="admin_id" jdbcType="INTEGER" property="adminId" />
+    <result column="community_sts" jdbcType="CHAR" property="communitySts" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="flow_sts" jdbcType="VARCHAR" property="flowSts" />
+    <result column="member_count" jdbcType="INTEGER" property="memberCount" />
+    <result column="work_count" jdbcType="INTEGER" property="workCount" />
+    <result column="read_count" jdbcType="INTEGER" property="readCount" />
+    <result column="isjion" jdbcType="INTEGER" property="isjion" />
+     <result column="community_code_icon" jdbcType="VARCHAR" property="communityCodeIcon" />
+    
+    
+  </resultMap>
+  <select id="selectHome" resultMap="BaseResultMap">
+  SELECT
+	c.id,
+	c.flow_sts,
+	c.community_code_icon,
+	c.created_date,
+	IFNULL(c.auth_desc,'暂无认证信息                                                     ') auth_desc,
+	c.community_type,
+	GROUP_CONCAT( b.tag_name ) community_tag,
+	c.community_sts,
+	IFNULL(c.community_notice,'') community_notice,
+	c.community_name,
+	IFNULL(c.community_mark,'') community_mark,
+	c.community_icon,
+	IFNULL(c.community_desc,'') community_desc,
+	c.bg_icon,
+	IFNULL(ua.userNum,0) member_count,
+	IFNULL(art.read_count,0) read_count,
+	IFNULL(art.articleNum,0) work_count
+	 
+FROM
+	communitys c 
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, c.community_tag ) 
+	LEFT JOIN ( SELECT count( 1 ) userNum, u.communityId FROM wechat_user u GROUP BY u.communityId ) ua ON ua.communityId = c.id
+	LEFT JOIN (
+SELECT
+	count( 1 ) articleNum,
+	sum( a.read_count ) read_count,
+	a.community_id 
+FROM
+	articles a 
+	where a.is_draft='0'
+	and a.is_deleted='0'
+GROUP BY
+	a.community_id 
+	) art ON art.community_id = c.id 
+	where   c.is_deleted = '0' and c.flow_sts='1'
+	and (c.community_type is null or c.community_type = 0)
+	group by c.id
+	order by c.created_date desc
+  
+  </select>
+  <select id="selectCommunityVoById" resultMap="BaseResultMap" parameterType="INTEGER">
+  SELECT
+	c.id,
+	c.flow_sts,
+	c.created_date,
+	c.community_code_icon,
+	c.community_type,
+	IFNULL(c.auth_desc,'暂无认证信息                                                     ') auth_desc,
+	GROUP_CONCAT( b.tag_name ) community_tag,
+	c.community_sts,
+	IFNULL(c.community_notice,'') community_notice,
+	c.community_name,
+	IFNULL(c.community_mark,'') community_mark,
+	c.community_icon,
+	IFNULL(c.community_desc,'') community_desc,
+	c.bg_icon,
+	IFNULL(ua.userNum,0) member_count,
+	IFNULL(art.read_count,0) read_count,
+	<if test="userid!=null and userid!=''">
+		count(wu.id) isjion,
+	</if> 
+	<if test="userid==null or userid==''">
+		0 isjion,
+	</if> 
+	
+	IFNULL(art.articleNum,0) work_count
+	
+	 
+FROM
+	communitys c
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, c.community_tag ) 
+	LEFT JOIN ( SELECT count( 1 ) userNum, u.communityId FROM wechat_user u GROUP BY u.communityId ) ua ON ua.communityId = c.id
+	LEFT JOIN (
+SELECT
+	count( 1 ) articleNum,
+	sum( a.read_count ) read_count,
+	a.community_id 
+FROM
+	articles a 
+	where a.is_draft='0'
+	and a.is_deleted='0'
+GROUP BY
+	a.community_id 
+	) art ON art.community_id = c.id 
+	<if test="userid!=null and userid!=''">
+		left join user_apply wu on (wu.apply_target_id=c.id and wu.is_deleted='0' and wu.apply_type = '2' and wu.apply_sts ='0'  and wu.userId=#{userid})
+	</if> 
+	
+where c.id = #{id}
+  
+  </select>
+  
+  <select id="selectFollowList" resultMap="BaseResultMap" parameterType="INTEGER">
+  SELECT
+	c.id,
+	c.flow_sts,
+	c.created_date,
+	c.community_code_icon,
+	c.community_type,
+	IFNULL(c.auth_desc,'暂无认证信息                                                     ') auth_desc,
+	GROUP_CONCAT( b.tag_name ) community_tag,
+	c.community_sts,
+	c.community_notice,
+	c.community_name,
+	c.community_mark,
+	c.community_icon,
+	c.community_desc,
+	c.bg_icon,
+	IFNULL(ua.userNum,0) member_count,
+	IFNULL(art.read_count,0) read_count,
+	IFNULL(art.articleNum,0) work_count
+	 
+FROM
+	communitys c join communitys_follow cf on cf.communitys_id = c.id
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, c.community_tag ) 
+	LEFT JOIN ( SELECT count( 1 ) userNum, u.communityId FROM wechat_user u GROUP BY u.communityId ) ua ON ua.communityId = c.id
+	LEFT JOIN (
+SELECT
+	count( 1 ) articleNum,
+	sum( a.read_count ) read_count,
+	a.community_id 
+FROM
+	articles a 
+	where a.is_draft='0'
+	and a.is_deleted='0'
+GROUP BY
+	a.community_id 
+	) art ON art.community_id = c.id 
+	where cf.userId = #{userid}
+	and cf.is_deleted = '0'
+	and c.is_deleted = '0'
+	and c.flow_sts='1'
+	group by c.id
+  
+  </select>
+  <select id="searchCommunitys" resultMap="BaseResultMap" >
+  SELECT
+	* 
+FROM
+	(
+SELECT
+	c.id,
+	c.flow_sts,
+	c.created_date,
+	c.community_code_icon,
+	c.community_type,
+	IFNULL(c.auth_desc,'暂无认证信息') auth_desc,
+	GROUP_CONCAT( b.tag_name ) community_tag,
+	c.community_sts,
+	c.community_notice,
+	c.community_name,
+	c.community_mark,
+	c.community_icon,
+	c.community_desc,
+	c.bg_icon,
+	IFNULL( ua.userNum, 0 ) member_count,
+	IFNULL( art.read_count, 0 ) read_count,
+	IFNULL( art.articleNum, 0 ) work_count,
+	c.community_tag tagId 
+FROM
+	communitys c
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, c.community_tag )
+	LEFT JOIN ( SELECT count( 1 ) userNum, u.communityId FROM wechat_user u GROUP BY u.communityId ) ua ON ua.communityId = c.id
+	LEFT JOIN (
+SELECT
+	count( 1 ) articleNum,
+	sum( a.read_count ) read_count,
+	a.community_id 
+FROM
+	articles a 
+	where a.is_draft='0'
+	and a.is_deleted='0'
+GROUP BY
+	a.community_id 
+	) art ON art.community_id = c.id 
+where c.flow_sts ='1' and c.is_deleted='0'
+GROUP BY
+	c.id 
+	) ta 
+WHERE
+	1 = 1 
+	<if test="tagId!=null and tagId!=''">
+		and FIND_IN_SET( #{tagId}, ta.tagId ) 
+	</if> 
+	<if test="searchDesc!=null and searchDesc!=''">
+		AND (
+		ta.community_tag LIKE '%${searchDesc}%'
+		OR ta.community_name LIKE '%${searchDesc}%'
+		OR ta.community_notice LIKE '%${searchDesc}%'
+		OR ta.community_mark LIKE '%${searchDesc}%'
+		OR ta.community_desc LIKE '%${searchDesc}%'
+		)
+		
+	</if> 
+	 
+ORDER BY
+	ta.created_date DESC
+  </select>
+   
+</mapper>

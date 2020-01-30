@@ -1,0 +1,169 @@
+<view class='topbox' style="background:url('{{detail.bgIcon}}')">
+  <view class="returnico" bindtap="goBack"></view>
+  <view class="zhe2">
+    <view class='topimg'>
+      <image src='{{detail.communityIcon}}'></image>
+      <view>群成员{{detail.memberCount}}人</view>
+    </view>
+    <view class='toptxt'>
+      <view class='topname'>{{detail.communityName}}</view>
+      <view class='topdes'>{{detail.communityMark}}</view>
+      <view class='handle'>
+        <view wx:if='{{!isJoin}}' class='focus tc join' bindtap="join">加入</view>
+        <view class='focus tc' bindtap="follow">{{follow}}</view>
+      </view>
+    </view>
+  </view>
+</view>
+<view class='tabnav'>
+  <view wx:for='{{tabNav}}' class='{{index == curIndex ? "cur":""}}' wx:key='index' data-id='{{index}}' bindtap='tabSwitch'>
+    {{item}}
+  </view>
+</view>
+<!-- view>
+  <scroll-view  >
+      <view class="scrolltxt clr_g">
+      <view class="marquee_box">
+        <view class="marquee_text" style="transform: translateX({{marqueeDistance}}px)">
+        <text class="clr_g">{{detail.authDesc}}</text>
+        <text style="margin-right:{{marquee_margin}}px;"  class="clr_g"></text>
+        <text style="margin-right:{{marquee_margin}}px;" class="clr_g">{{detail.authDesc}}</text>    
+        </view>
+      </view>
+      </view>
+</scroll-view>
+</view -->
+<view class='list_box' wx:if="{{curIndex == 0}}">
+  <view class='artical'>
+    <view class='arlist' wx:for='{{artList}}' data-id='{{item.id}}' wx:key='{{ite.id}}' bindtap='detail'>
+      <view class='arlist_l'>
+        <view class='atit'>{{item.articleTitle}}</view>
+        <view class='ainfo'>
+          <text class='fl'>{{item.nickName}} · {{item.recommendDate}}</text>
+          <text class='fr'>{{item.readCount}}人阅读</text>
+        </view>
+      </view>
+      <view class='arlist_r'>
+        <image src='{{item.articleIcon}}'></image>
+      </view>
+    </view>
+  </view>
+  <view class="nodata">—— 喂喂，你碰到我的底线了 ——</view>
+</view>
+<view class='list_box' wx:if="{{curIndex == 1}}">
+  <view class='list' wx:for='{{collList}}' wx:key='{{item.id}}' data-id='{{item.id}}' bindtap='collDetail'>
+    <view class='{{item.status ? "status":"statusover"}}'>{{item.status?'征稿中':'已结束'}}</view>
+    <view class="posRel">
+      <image class='dataimg' src='{{item.contributeIcon}}' mode="widthFix"></image>
+      <block wx:if="{{!item.status}}">
+        <view class="zhe"></view>
+      </block>
+    </view>
+    <view class='ltit'>{{item.contributeTitle}}</view>
+    <view class='ltxt1'>
+      <block wx:if="{{item.contributeType == 1}}">
+        <view class='price {{item.status?"":"gr"}}'>
+          <text>¥</text> {{item.minMoney}}-{{item.maxMoney}}
+        </view>
+      </block>
+      <block wx:else>
+        <view class='price {{item.status?"":"gr"}}'>有奖征稿</view>
+      </block>
+      <view class='tag'>{{item.tagName}}</view>
+    </view>
+    <view class='ltxt1'>
+      <view class='time2'>
+        <image src='../images/time2.png'></image>
+        <text decode="{{true}}">&ensp;{{item.countDown}}</text>
+      </view>
+      <view class='info'>欲购稿件量:{{item.buyNum}}篇</view>
+    </view>
+  </view>
+  <view class="nodata">—— 喂喂，你碰到我的底线了 ——</view>
+</view>
+<view class='list_box' wx:if="{{curIndex == 2}}">
+  <view class='into_tit mt30'>社群信息</view>
+  <view class='label'>
+    <view class='lakey'>创建时间</view>
+    <view class='laval'>{{detail.createdDate}}</view>
+  </view>
+  <view class='label'>
+    <text class='lakey' decode="{{true}}">&nbsp;&nbsp;&nbsp;社群ID</text>
+    <text class='laval'>{{detail.id}}</text>
+  </view>
+  <view class='label'>
+    <text class='lakey'>社群公告</text>
+    <text class='laval'>{{detail.communityNotice}}</text>
+  </view>
+  <view class='into_tit pd40'>社群说明</view>
+  <view class='info1'>{{detail.communityDesc}}</view>
+  <view class='into_tit pd40'>社群成员</view>
+  <view class='member' bindtap='allMembers'>
+    <view class='mlist' wx:for='{{memList}}' wx:key="{{item.id}}">
+      <image src='{{item.headUrl}}'></image>
+      <text>{{item.nickName}}</text>
+    </view>
+  </view>
+  <view class='total tc' bindtap='allMembers'>
+    共{{detail.memberCount}}人
+    <view class="arrows mb6"></view>
+  </view>
+</view>
+<view class='list_box' wx:if="{{curIndex == 3}}">
+  <view class='list_un' wx:for='{{commList}}' wx:key='{{item.id}}' data-id='{{item.id}}' bindtap="shekanDetail">
+    <view class='listl'>
+      <image src='{{item.magazineIcon}}'></image>
+    </view>
+    <view class='listr'>
+      <view class='tita'>{{item.magazineTitle}}</view>
+      <view class='des des_sk'>{{item.magazineDesc}}</view>
+      <view class='source'>
+        <text>{{detail.communityName}}</text> 社刊/出品
+      </view>
+      <view class='count'>
+        {{item.readCount}}人阅读
+        <text>{{item.followCount}}人喜欢</text>
+      </view>
+    </view>
+  </view>
+</view>
+<!-- 申请加入社群 -->
+  <view class="dialog" wx:if='{{applyJoin}}'>
+    <view class="apply">
+      <view class="apply_top">
+        <view class="ap_can" bindtap="canApply">取消</view>
+        <view class="aptit">申请加入社群</view>
+        <view class="ap_ok" bindtap="goApply">确定</view>
+      </view>
+      <view class="apply_con">
+        <label>
+          <view class="key">姓名：</view>
+          <view class="val">
+            <input type="text" bindinput="getName" placeholder='请输入姓名'></input>
+          </view>
+        </label>
+        <label>
+          <view class="key">QQ\微信：</view>
+          <view class="val">
+            <input type="text" bindinput="getQQ" placeholder='请输入QQ或者微信'></input>
+          </view>
+        </label>
+        <label>
+          <view class="key">电话：</view>
+          <view class="val">
+            <input type="text" maxlength='11' bindinput='checkPhone' placeholder='请输入电话号码'></input>
+          </view>
+        </label>
+        <label>
+          <view class='laba'>验证码：</view>
+          <input class='phone' maxlength="6" bindinput="codeNum"></input>
+          <view wx:if='{{showCode}}' class='code tc {{phoneVerify ? "check":""}}' bindtap='getCode'>获取验证码</view>
+          <view wx:else class='timec'>{{time}} s</view>
+        </label>
+        <label>
+          <view class="key">说明：</view>
+          <textarea bindinput="getApply" placeholder="申请说明"></textarea>
+        </label>
+      </view>
+    </view>
+  </view>

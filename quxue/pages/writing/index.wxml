@@ -1,0 +1,67 @@
+<!-- 引入组件 -->
+<import src="/welCropper/welCropper.wxml" />
+
+<view class="check" wx:if='{{selTag}}'>
+
+  <checkbox-group bindchange="checkboxChange">
+    <scroll-view scroll-y="true" style="height:600rpx;">
+      <label class="checkbox" wx:for="{{itemList}}" wx:key='item.id'>
+        <checkbox value="{{item.value}},{{item.id}}" checked="{{item.checked}}" />{{item.value}}
+      </label>
+    </scroll-view>
+  </checkbox-group>
+  <view class='coll_btn tc' bindtap="selok">确定</view>
+</view>
+
+<view class='list_box'>
+  <view class='label2 labelborder'>
+    <view class='lname'>标题：</view>
+    <textarea id="textareaid" style="height:{{!cropperData.hidden || selTag?'0':'54rpx'}}" bindinput="artitle" placeholder="请输入标题"  value="{{detail.articleTitle}}" type='text'></textarea>
+  </view>
+  <view class='label labelborder'>
+    <view class='lname'>标签：</view>
+    <input bindtap="selectTag" disabled class='tr' type='text' value='{{tag}}'></input>
+    <view class='ico'>
+      <image src="../images/jt_icon.png"></image>
+    </view>
+  </view>
+  <view class='label labelborder'>
+    <view class='lname'>简述：</view>
+    <textarea style="height:{{!cropperData.hidden || selTag?'0':'100rpx'}}"   placeholder="请输入简述" bindinput="ardesc" value="{{detail.articleOutline}}"></textarea>
+  </view>
+  <view class='label'>
+
+    <view wx:if='{{upicon}}' class="upload_icon2" bindtap='selectTap' data-mode='rectangle'>
+      <image src="../images/fengmian.png"></image>
+    </view>
+    <view wx:else class="upload_icon upload_img" bindtap='selectTap' data-mode='rectangle'>
+      <!--bindtap="chooseImg"-->
+      <image src="{{tempFile}}"></image>
+    </view>
+    <view class='lname2'>添加封面 </view>
+    <view class='recom'>参与首页推荐：
+      <checkbox-group bindchange="recom">
+        <checkbox checked="{{recom==1}}" value="是"></checkbox>
+      </checkbox-group>
+    </view>
+  </view>
+
+
+  <view class='richarea'>
+    <view class="page-body">
+      <view class='wrapper'>
+
+        <editor id="editor" class="ql-container" placeholder="{{placeholder}}" showImgSize showImgToolbar showImgResize bindinput="onStatusChange" read-only="{{readOnly}}" bindready="onEditorReady">
+        </editor>
+      </view>
+    </view>
+  </view>
+  <view class="wrtbtn">
+    <view class='coll_tem tc' data-type="{{1}}" bindtap="pub">保存草稿</view>
+    <view class='coll_temimg tc upload_icon' bindtap="insertImage">
+      <image src="../images/qietu.png"></image>
+    </view>
+    <view class='pub_btn tc' data-type="{{0}}" bindtap="pub">立即发布</view>
+  </view>
+</view>
+<template is="welCropper" data="{{cropperData:cropperData, cropperMovableItems:cropperMovableItems, cropperChangableData:cropperChangableData}}"></template>

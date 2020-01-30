@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foresee.mapper.UserNewsMapperCostom">
+  <resultMap id="BaseResultMap" type="com.foresee.vo.UserNewsVo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="userId" jdbcType="INTEGER" property="userid" />
+    <result column="news_title" jdbcType="VARCHAR" property="newsTitle" />
+    <result column="news_type" jdbcType="CHAR" property="newsType" />
+    <result column="news_content" jdbcType="VARCHAR" property="newsContent" />
+    <result column="news_sts" jdbcType="CHAR" property="newsSts" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    
+    <result column="date_string" jdbcType="VARCHAR" property="dateString" />
+  </resultMap>
+  <select id="selectMyNews" resultMap="BaseResultMap" >
+  SELECT
+	n.*,
+CASE
+	WHEN to_days( now( ) ) - to_days( n.created_date ) > 0 THEN
+	date_format( n.created_date, '%y-%m-%d %H:%i' ) 
+	WHEN date_format( timediff( now( ), n.created_date ), '%H' ) = 0 THEN
+	'刚刚' ELSE CONCAT( date_format( timediff( now( ), n.created_date ), '%H' ) + '', '小时前' ) 
+	END date_string 
+FROM
+	user_news n 
+WHERE
+	n.userId =#{userid} 
+	AND n.is_deleted = '0' 
+ORDER BY
+	n.news_sts ASC,
+n.created_date DESC
+  </select>
+</mapper>

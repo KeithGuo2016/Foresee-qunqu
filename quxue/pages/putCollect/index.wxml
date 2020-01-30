@@ -1,0 +1,42 @@
+<!-- 引入组件 -->
+<import src="/welCropper/welCropper.wxml" />
+<view class="check" wx:if='{{selTag}}'>
+  <checkbox-group bindchange="checkboxChange">
+    <label class="checkbox" wx:for="{{itemList}}" wx:key='item.id'>
+      <checkbox value="{{item.value}}" checked="{{item.checked}}" />{{item.value}}
+    </label>
+  </checkbox-group>
+  <view class='coll_btn tc' bindtap="selok">确定</view>
+</view>
+
+<view class='list_box'>
+  <view class='label'>
+    <view class='lname'>标题：</view>
+    <input bindinput="artitle" type='text'></input>
+  </view>
+  <view class='label'>
+    <view class='lname'>选择封面图片：</view>
+    <view wx:if='{{upicon}}' class="upload_icon2" bindtap='selectTap' data-mode='rectangle'>
+      <image src="../images/fengmian.png"></image>
+    </view>
+    <view wx:else class="upload_icon upload_img" bindtap='selectTap' data-mode='rectangle'>
+      <image src="{{tempFile}}"></image>
+    </view>
+  </view>
+
+  <!--view class='recom'>是否存为草稿： <checkbox-group bindchange="isDraf"><checkbox value="是"></checkbox></checkbox-group> </view-->
+  <view class='richarea'>
+    <view class="page-body">
+      <view id="labeltextarea" class='labeltextarea'>
+        <editor id="editor" class="ql-container" placeholder="{{placeholder}}" showImgSize showImgToolbar showImgResize bindinput="onStatusChange" read-only="{{readOnly}}" bindready="">
+        </editor>
+        <view class='upload_icon2 positionviewbg' style="margin: {{thisH}}rpx 0 0 290rpx; " bindtap="insertImage">
+          <image src="../images/qietu.png"></image>
+        </view>
+      </view>
+     
+    </view>
+  </view>
+  <view class='coll_btn tc' bindtap="pub">发布</view>
+</view>
+<template is="welCropper" data="{{cropperData:cropperData, cropperMovableItems:cropperMovableItems, cropperChangableData:cropperChangableData}}"></template>

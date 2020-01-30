@@ -1,0 +1,46 @@
+/* pages/addArticle/index.wxss */
+.arlist{
+  width: 100%;
+  display: flex;
+  margin-top: 50rpx;
+}
+.arlist_l{
+  position: relative;
+  flex: 1;
+}
+.atit{
+  font-size: 32rpx;
+  font-weight: bold;
+  line-height: 48rpx;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+}
+.ainfo{
+  position: absolute;
+  width: 100%;
+  bottom: 10rpx;
+  font-size: 24rpx;
+  color: #b4b2b2;
+}
+.arlist_r image{
+  width: 160rpx; height: 160rpx;
+  margin-left: 30rpx;
+}
+.radio{
+  width: 30rpx; height: 30rpx;
+  border-radius: 50%;
+  border: 1px solid #979797;
+  margin: 30rpx 20px 0 0;
+}
+.radio_check{background: #38bab8;}
+.coll_btn{
+  position: fixed;
+  left: 30rpx;
+  bottom: 10rpx;
+}
+.list_box{
+  padding-bottom: 180rpx;
+}

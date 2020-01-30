@@ -1,0 +1,138 @@
+<view class='list_box gray_bg'>
+  <view class='list'>
+    <view class='{{detail.status? "status":"statusover"}}'>
+      <block wx:if="{{detail.status}}">
+        进行中
+      </block>
+      <block wx:else>
+        已结束
+      </block>
+    </view>
+    <view>
+      <image class='limg' src='{{detail.contributeIcon}}' mode="widthFix"></image>
+    </view>
+    <view class='ltit'>
+      <text wx:if="{{detail.contributeRange == 2}}">VIP</text> {{detail.contributeTitle}}
+    </view>
+    <view class='ltxt1'>
+
+      <block wx:if="{{detail.contributeType == 1}}">
+        <view class='price'>
+          <text>¥</text>{{detail.minMoney}}-{{detail.maxMoney}}</view>
+      </block>
+      <block wx:else>
+        <view class='price'>有奖征稿</view>
+      </block>
+
+      <view class='tag'>{{detail.tagName}}</view>
+    </view>
+    <view class='ltxt1'>
+      <view class='time2'>
+        <image src='../images/time2.png'></image>
+        <text decode="{{true}}">&ensp;{{detail.countDown}} </text>
+      </view>
+      <view class='info'>欲购稿件量:{{detail.buyNum}}篇</view>
+    </view>
+  </view>
+</view>
+<ad unit-id="adunit-f8cc2dad673c350f"></ad>
+<view class='text_box coll_info'>
+  <import src="../wxParse/wxParse.wxml" />
+  <template is="wxParse" data="{{wxParseData:desc.nodes}}" />
+</view>
+
+<view class="line"></view>
+<view class='coll_tit tc' wx:if="{{isShowCase}}">征稿说明</view>
+<view class='coll_templ' wx:if="{{isShowCase}}">
+  <import src="../wxParse/wxParse.wxml" />
+  <template is="wxParse" data="{{wxParseData:case.nodes}}" />
+</view>
+<view class="line"></view>
+<!-- 已征稿 -->
+<view class="list_box coll_over">
+  <view class="over_num">已征稿</view>
+  <block wx:for='{{deliveryList}}' wx:key='this'>
+  
+    <view class='arlist' data-id="{{item.id}}" bindtap='detail'>
+      <view class='arlist_l'>
+        <view class='atit'>{{item.deliveryTitle}}</view>
+        <view class='ainfo'>
+          <text class='fl'>{{item.userName}} ·{{item.deliveryDate}}</text>
+          <text class='fr'>{{item.readNum}}人阅读</text>
+        </view>
+      </view>
+      <view class='arlist_r'>
+        <image src='{{item.deliveryIcon}}'></image>
+      </view>
+    </view>
+  </block>
+
+  <block wx:if="{{count>3}}">
+    <view class="nodata" data-id="{{detail.id}}" bindtap='goMore'>全部征稿（{{count}}）<view class="arrows mb6"></view>
+    </view>
+  </block>
+</view>
+<block wx:if="{{detail.status}}">
+  <block wx:if="{{detail.contributeRange == 2}}">
+    <block wx:if="{{isVip}}">
+      <view class='coll_btn tc' data-id="{{detail.id}}" bindtap='pub'>参加征稿</view>
+    </block>
+    <block wx:else>
+      <view class='coll_btn novip tc' bindtap='pub'>升级VIP作者参加征稿</view>
+    </block>
+  </block>
+  <block wx:elif="{{detail.contributeRange == 1}}">
+    <block wx:if="{{detail.communityId == communityId}}">
+      <view class='coll_btn tc' data-id="{{detail.id}}" bindtap='pub'>参加征稿</view>
+    </block>
+    <block wx:else>
+      <view class='coll_btn nomember tc'>非本社群成员无法参与</view>
+    </block>
+  </block>
+  <block wx:else>
+      <view class='coll_btn tc' data-id="{{detail.id}}" bindtap='pub'>参加征稿</view>
+  </block>
+</block>
+<view class="btn_bottom"></view>
+
+<!-- 申请成为vip -->
+<view class="dialog" wx:if='{{applyVip}}'>
+  <view class="apply">
+    <view class="apply_top">
+      <view class="ap_can" bindtap="canApply">取消</view>
+      <view class="aptit">申请成为VIP</view>
+      <view class="ap_ok" bindtap="goApply">确定</view>
+    </view>
+    <view class="apply_con">
+      <label>
+        <view class="key">姓名：</view>
+        <view class="val">
+          <input type="text" bindinput="getName"></input>
+        </view>
+      </label>
+      <label>
+        <view class="key">QQ\微信：</view>
+        <view class="val">
+          <input type="text" bindinput="getQQ" placeholder='请输入QQ或者微信'></input>
+        </view>
+      </label>
+      <label>
+        <view class="key">电话：</view>
+        <view class="val">
+          <input type="text" maxlength='11' bindinput='checkPhone'></input>
+        </view>
+      </label>
+      <label>
+        <view class='laba'>验证码：</view>
+        <input class='phone' maxlength="6" bindinput="codeNum"></input>
+        <view wx:if='{{showCode}}' class='code tc {{phoneVerify ? "check":""}}' bindtap='getCode'>获取验证码</view>
+        <view wx:else class='timec'>{{time}} s</view>
+      </label>
+      <label>
+        <view class="key">说明：</view>
+        <textarea bindinput="getApply" placeholder="申请说明"></textarea>
+      </label>
+    </view>
+
+  </view>
+</view>

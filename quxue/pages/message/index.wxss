@@ -1,0 +1,18 @@
+/* pages/message/index.wxss */
+.messlist{
+  padding: 0 0 50rpx 0;
+}
+.messtit{
+  font-size: 32rpx;
+  font-weight: bold;
+}
+.messtxt{
+  font-size: 30rpx;
+  color: #333;
+  line-height: 50rpx;
+  margin: 10rpx 0 15rpx;
+}
+.messtime{
+  font-size: 26rpx;
+  color: #b4b2b2b2;
+}

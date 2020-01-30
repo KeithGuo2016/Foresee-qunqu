@@ -1,0 +1,74 @@
+<view class="top">
+  <view class='search' bindtap='goSearch'>
+    <image src='../images/search.png'></image>
+    <input placeholder='请输入您想要搜索的内容' disabled='true'></input>
+  </view>
+  <view class="appadmin" bindtap='applyAdmin'>申请成为管理员</view>
+</view>
+<view class='flex membox'>
+  <scroll-view class="flex1" scroll-y scroll-into-view="id{{toView}}" style='height:calc(100vh - 102rpx)'>
+    <block wx:for='{{list}}' wx:key='id'>
+      <view class='head' id='id{{item.id}}'>{{item.title}} ({{item.sumNum}})人</view>
+      <view class='bgf fz14'>
+        <view class='flex alic memlist' wx:for='{{item.userList}}' wx:for-index="idx" wx:key='i' wx:for-item='n' data-id='{{item.id}}'>
+          <view class='memname' bindtap='memDetail' data-id='{{n.openId}}'>
+            <view class='memimg'>
+              <view class='memtag' wx:if='{{n.isCommunity}}'>
+                <image class='shezhang_image' src='../images/me_l.png'></image>
+              </view>
+              <view class='memtag' wx:if='{{n.isAdmin}}'>
+                <image class='admin_image' src='../images/admin.png'></image>
+              </view>
+              <image src='{{n.headUrl}}'></image>
+              <view wx:if='{{n.isCommunity}}' class='mempos'>社长</view>
+              <view wx:if='{{n.isAdmin}}' class='mempos admem'>管理员</view>
+            </view>
+            <view>{{n.nickName}}</view>
+          </view>
+        </view>
+      </view>
+    </block>
+    <view class="pb60"></view>
+  </scroll-view>
+  <view class='guide_box'>
+    <view class='guide'>
+      <view class='{{index == curIndex ? "cur":""}}' wx:for='{{guArr}}' wx:key='index' data-i='{{index}}' bindtap='toViewPinyin'>{{item}}</view>
+    </view>
+  </view>
+</view>
+
+<!-- 申请出版 -->
+<view class="dialog" wx:if='{{applyPub}}'>
+  <view class="apply">
+    <view class="apply_top">
+      <view class="ap_can" bindtap="canApply">取消</view>
+      <view class="aptit">申请成为管理员</view>
+      <view class="ap_ok" bindtap="goApply">确定</view>
+    </view>
+    <view class="apply_con">
+      <label>
+        <view class="key">姓名：</view>
+        <view class="val">
+          <input type="text" bindinput="getName"></input>
+        </view>
+      </label>
+      <label>
+        <view class="key">电话：</view>
+        <view class="val">
+          <input type="text" maxlength='11' bindinput='checkPhone'></input>
+        </view>
+      </label>
+      <label>
+        <view class='laba'>验证码：</view>
+        <input class='phone' maxlength="6" bindinput="codeNum"></input>
+        <view wx:if='{{showCode}}' class='code tc {{phoneVerify ? "check":""}}' bindtap='getCode'>获取验证码</view>
+        <view wx:else class='timec'>{{time}} s</view>
+      </label>
+      <label>
+        <view class="key">说明：</view>
+        <textarea cursor-spacing='200' bindinput="getApply" placeholder="申请说明"></textarea>
+      </label>
+    </view>
+
+  </view>
+</view>

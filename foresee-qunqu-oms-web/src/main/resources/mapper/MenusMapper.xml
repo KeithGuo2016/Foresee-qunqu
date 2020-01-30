@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.foresee.dao.MenusMapper" >
+  <resultMap id="BaseResultMap" type="com.foresee.model.Menus" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="menu_name" property="menuname" jdbcType="VARCHAR" />
+    <result column="menu_url" property="menuurl" jdbcType="VARCHAR" />
+    <result column="menu_icon" property="menuicon" jdbcType="VARCHAR" />
+    <result column="menu_level" property="menulevel" jdbcType="INTEGER" />
+    <result column="menu_pid" property="menupid" jdbcType="INTEGER" />
+    <result column="menu_desc" property="menudesc" jdbcType="INTEGER" />
+    <result column="create_id" property="createid" jdbcType="INTEGER" />
+    <result column="create_time" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="is_enable" property="isenable" jdbcType="INTEGER" />
+    <result column="th1" property="th1" jdbcType="VARCHAR" />
+    <result column="th2" property="th2" jdbcType="VARCHAR" />
+    <result column="th3" property="th3" jdbcType="VARCHAR" />
+    <result column="th4" property="th4" jdbcType="VARCHAR" />
+    <result column="th5" property="th5" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, menu_name, menu_url, menu_icon, menu_level, menu_pid, menu_desc, create_id, create_time, 
+    is_enable, th1, th2, th3, th4, th5
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from menus
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectMenuList" resultMap="BaseResultMap" parameterType="com.foresee.model.Menus" >
+    select 
+    <include refid="Base_Column_List" />
+    from menus
+    where 1=1
+    <include refid="querysql"/>
+    ORDER BY menu_desc asc
+  </select>  
+  <sql id="querysql">
+  	  <if test="id != null and id!='' " >
+        and id = #{id,jdbcType=INTEGER}
+      </if>
+  	  <if test="menuname != null and menuname!='' " >
+        and menu_name = #{menuname,jdbcType=VARCHAR}
+      </if>
+      <if test="menuurl != null and menuurl!='' " >
+        and menu_url = #{menuurl,jdbcType=VARCHAR}
+      </if>
+      <if test="menuicon != null and menuicon!='' " >
+       and menu_icon = #{menuicon,jdbcType=VARCHAR}
+      </if>
+      <if test="menulevel != null and menulevel!='' " >
+       and menu_level = #{menulevel,jdbcType=INTEGER}
+      </if>
+      <if test="menupid != null and menupid!='' " >
+       and menu_pid = #{menupid,jdbcType=INTEGER}
+      </if>
+      <if test="menudesc != null and menudesc!='' " >
+       and menu_desc = #{menudesc,jdbcType=INTEGER}
+      </if>
+      <if test="createid != null and createid!='' " >
+       and create_id = #{createid,jdbcType=INTEGER}
+      </if>
+      <if test="createtime != null and createtime!='' " >
+       and create_time = #{createtime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="isenable != null and isenable!='' " >
+       and is_enable = #{isenable,jdbcType=INTEGER}
+      </if>
+      <if test="th1 != null and th1!='' " >
+       and th1 = #{th1,jdbcType=VARCHAR}
+      </if>
+      <if test="th2 != null and th2!='' " >
+       and th2 = #{th2,jdbcType=VARCHAR}
+      </if>
+      <if test="th3 != null and th3!='' " >
+       and th3 = #{th3,jdbcType=VARCHAR}
+      </if>
+      <if test="th4 != null and th4!='' " >
+       and th4 = #{th4,jdbcType=VARCHAR}
+      </if>
+      <if test="th5 != null and th5!='' " >
+       and th5 = #{th5,jdbcType=VARCHAR}
+      </if>
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from menus
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.foresee.model.Menus" >
+    insert into menus (id, menu_name, menu_url, menu_icon, menu_level, menu_pid, menu_desc, create_id, create_time, 
+    is_enable, th1, th2, th3, th4, th5)
+    values (#{id,jdbcType=INTEGER}, #{menuname,jdbcType=VARCHAR}, #{menuurl,jdbcType=VARCHAR}, 
+      #{menuicon,jdbcType=VARCHAR}, #{menulevel,jdbcType=INTEGER}, #{menupid,jdbcType=INTEGER}, 
+      #{menudesc,jdbcType=INTEGER}, #{createid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{isenable,jdbcType=INTEGER}, #{th1,jdbcType=VARCHAR}, #{th2,jdbcType=VARCHAR}, 
+      #{th3,jdbcType=VARCHAR}, #{th4,jdbcType=VARCHAR}, #{th5,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.foresee.model.Menus" >
+    insert into menus
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="menuname != null" >
+        menu_name,
+      </if>
+      <if test="menuurl != null" >
+        menu_url,
+      </if>
+      <if test="menuicon != null" >
+        menu_icon,
+      </if>
+      <if test="menulevel != null" >
+        menu_level,
+      </if>
+      <if test="menupid != null" >
+        menu_pid,
+      </if>
+      <if test="menudesc != null" >
+        menu_desc,
+      </if>
+      <if test="createid != null" >
+        create_id,
+      </if>
+      <if test="createtime != null" >
+        create_time,
+      </if>
+      <if test="isenable != null" >
+        is_enable,
+      </if>
+      <if test="th1 != null" >
+        th1,
+      </if>
+      <if test="th2 != null" >
+        th2,
+      </if>
+      <if test="th3 != null" >
+        th3,
+      </if>
+      <if test="th4 != null" >
+        th4,
+      </if>
+      <if test="th5 != null" >
+        th5,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="menuname != null" >
+        #{menuname,jdbcType=VARCHAR},
+      </if>
+      <if test="menuurl != null" >
+        #{menuurl,jdbcType=VARCHAR},
+      </if>
+      <if test="menuicon != null" >
+        #{menuicon,jdbcType=VARCHAR},
+      </if>
+      <if test="menulevel != null" >
+        #{menulevel,jdbcType=INTEGER},
+      </if>
+      <if test="menupid != null" >
+        #{menupid,jdbcType=INTEGER},
+      </if>
+      <if test="menudesc != null" >
+        #{menudesc,jdbcType=INTEGER},
+      </if>
+      <if test="createid != null" >
+        #{createid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isenable != null" >
+        #{isenable,jdbcType=INTEGER},
+      </if>
+      <if test="th1 != null" >
+        #{th1,jdbcType=VARCHAR},
+      </if>
+      <if test="th2 != null" >
+        #{th2,jdbcType=VARCHAR},
+      </if>
+      <if test="th3 != null" >
+        #{th3,jdbcType=VARCHAR},
+      </if>
+      <if test="th4 != null" >
+        #{th4,jdbcType=VARCHAR},
+      </if>
+      <if test="th5 != null" >
+        #{th5,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.foresee.model.Menus" >
+    update menus
+    <set >
+      <if test="menuname != null" >
+        menu_name = #{menuname,jdbcType=VARCHAR},
+      </if>
+      <if test="menuurl != null" >
+        menu_url = #{menuurl,jdbcType=VARCHAR},
+      </if>
+      <if test="menuicon != null" >
+        menu_icon = #{menuicon,jdbcType=VARCHAR},
+      </if>
+      <if test="menulevel != null" >
+        menu_level = #{menulevel,jdbcType=INTEGER},
+      </if>
+      <if test="menupid != null" >
+        menu_pid = #{menupid,jdbcType=INTEGER},
+      </if>
+      <if test="menudesc != null" >
+        menu_desc = #{menudesc,jdbcType=INTEGER},
+      </if>
+      <if test="createid != null" >
+        create_id = #{createid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        create_time = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isenable != null" >
+        is_enable = #{isenable,jdbcType=INTEGER},
+      </if>
+      <if test="th1 != null" >
+        th1 = #{th1,jdbcType=VARCHAR},
+      </if>
+      <if test="th2 != null" >
+        th2 = #{th2,jdbcType=VARCHAR},
+      </if>
+      <if test="th3 != null" >
+        th3 = #{th3,jdbcType=VARCHAR},
+      </if>
+      <if test="th4 != null" >
+        th4 = #{th4,jdbcType=VARCHAR},
+      </if>
+      <if test="th5 != null" >
+        th5 = #{th5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.foresee.model.Menus" >
+    update menus
+    set menu_name = #{menuname,jdbcType=VARCHAR},
+      menu_url = #{menuurl,jdbcType=VARCHAR},
+      menu_icon = #{menuicon,jdbcType=VARCHAR},
+      menu_level = #{menulevel,jdbcType=INTEGER},
+      menu_pid = #{menupid,jdbcType=INTEGER},
+      menu_desc = #{menudesc,jdbcType=INTEGER},
+      create_id = #{createid,jdbcType=INTEGER},
+      create_time = #{createtime,jdbcType=TIMESTAMP},
+      is_enable = #{isenable,jdbcType=INTEGER},
+      th1 = #{th1,jdbcType=VARCHAR},
+      th2 = #{th2,jdbcType=VARCHAR},
+      th3 = #{th3,jdbcType=VARCHAR},
+      th4 = #{th4,jdbcType=VARCHAR},
+      th5 = #{th5,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByParentId" resultMap="BaseResultMap">
+  	  select 
+  	  <include refid="Base_Column_List" />
+    	from menus
+    	where menu_pid = #{id,jdbcType=INTEGER} and is_enable = 1
+    	order by menu_desc , create_time
+  </select>
+</mapper>

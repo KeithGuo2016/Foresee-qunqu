@@ -1,0 +1,113 @@
+<view class='tabnav'>
+  <view wx:for='{{tabNav}}' class='{{index == curIndex ? "cur":""}}' wx:key='index' data-id='{{index}}' bindtap='tabSwitch'>{{item}}</view>
+</view>
+<view class='list_box' wx:if="{{curIndex == 0}}">
+<view class="sc_sq" wx:for='{{applyList}}'  wx:key='{{item.id}}' data-id="{{item.id}}"  data-type="{{item.applyType}}" bindtap='goApplyDetail'>
+    <movable-area>
+      <movable-view out-of-bounds="true" direction="horizontal" x="{{item.xmove}}"
+          inertia="true"
+          data-productIndex="{{index}}"
+          bindtouchstart="handleTouchStart"
+          bindtouchend="handleTouchEnd"
+          bindchange="handleMovableChange">
+  <block wx:if="{{(item.applySts!=1 || item.applySts!=2) && !item.isDeleted}}"> 
+  <block wx:if="{{item.applyType=='7' || item.applyType=='4' || item.applyType=='2'}}">
+      <view class='messtit'>
+       {{item.applyTypeName}}
+      </view>
+      <view class='list_un' >
+        <view class='listl listla'><image src='{{item.targetIcon}}'></image></view>
+        <view class='listr'>
+          <view class='tita'>{{item.targetName}}</view>
+          <view class='des desa'>{{item.applyDesc}}</view>
+          <view class='source sourcea'>
+            <view class='count'>{{item.createdDates}}</view>
+          </view>
+        </view>
+      </view>
+   </block>
+   <block wx:esle>
+
+   <view class='list_un' >
+        <view class='listr'>
+          <view class='tita'>{{item.applyTypeName}}</view>
+          <view class='messtxt'>{{item.applyDesc}}</view>
+          <view class='source sourcea'>
+            <view class='count'>{{item.createdDates}}</view>
+          </view>
+        </view>
+    </view>
+   </block>
+  </block>
+  
+  </movable-view>
+  </movable-area>
+  <view class="canFo" bindtap='canFocus' data-index="{{index}}" data-id="{{item.id}}">取消关注</view>
+  </view>
+</view>
+
+<view class='list_box' wx:if="{{curIndex == 1}}">
+ <view class="sc_sq" wx:for='{{applyList}}'  wx:key='{{item.id}}' data-id="{{item.id}}"  data-type="{{item.applyType}}" bindtap='goApplyDetail'>
+   
+     
+  <block wx:if="{{(item.applySts==1 || item.applySts==2) && !item.isDeleted}}"> 
+  <block wx:if="{{item.applyType=='7' || item.applyType=='4' || item.applyType=='2'}}">
+      <view class='messtit'>
+       {{item.applyTypeName}}
+      </view>
+      <view class='list_un' >
+        <view class='listl listla'><image src='{{item.targetIcon}}'></image></view>
+        <view class='listr'>
+          <view class='tita'>{{item.targetName}}</view>
+          <view class='des desa'>{{item.applyDesc}}</view>
+          <view class='source sourcea'>
+            <view class='count'>{{item.createdDates}}</view>
+          </view>
+        </view>
+      </view>
+   </block>
+   <block wx:esle>
+    <view class='messlist' >
+      <view class='messtit'> {{item.applyTypeName}}</view>
+      <view class='messtxt'>
+        {{item.applyDesc}}
+      </view>
+      <view class='messtime'> {{item.createdDates}}</view>
+    </view>
+   </block>
+  </block>
+  </view>
+</view>
+
+<view class='list_box' wx:if="{{curIndex == 2}}">
+ <view class="sc_sq" wx:for='{{applyList}}'  wx:key='{{item.id}}' data-id="{{item.id}}"  data-type="{{item.applyType}}" bindtap='goApplyDetail'>
+    
+  <block wx:if="{{item.isDeleted}}"> 
+  <block wx:if="{{item.applyType=='7' || item.applyType=='4' || item.applyType=='2'}}">
+      <view class='messtit'>
+       {{item.applyTypeName}}
+      </view>
+      <view class='list_un' >
+        <view class='listl listla'><image src='{{item.targetIcon}}'></image></view>
+        <view class='listr'>
+          <view class='tita'>{{item.targetName}}</view>
+          <view class='des desa'>{{item.applyDesc}}</view>
+          <view class='source sourcea'>
+            <view class='count'>{{item.createdDates}}</view>
+          </view>
+        </view>
+      </view>
+   </block>
+   <block wx:esle>
+    <view class='messlist' >
+      <view class='messtit'> {{item.applyTypeName}}</view>
+      <view class='messtxt'>
+        {{item.applyDesc}}
+      </view>
+      <view class='messtime'> {{item.createdDates}}</view>
+    </view>
+   </block>
+  </block>
+  </view>
+</view>
+<view wx:if='{{nodata}}' class="nodata">—— 喂喂，你碰到我的底线了 ——</view>

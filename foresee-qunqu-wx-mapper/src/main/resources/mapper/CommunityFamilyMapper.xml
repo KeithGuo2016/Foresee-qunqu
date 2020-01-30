@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foresee.mapper.CommunityFamilyMapper">
+  <resultMap id="BaseResultMap" type="com.foresee.pojo.CommunityFamily">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="family_name" jdbcType="VARCHAR" property="familyName" />
+    <result column="family_desc" jdbcType="VARCHAR" property="familyDesc" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+  </resultMap>
+  <select id="selectListHaveCommunity" resultMap="BaseResultMap" >
+  SELECT
+	cf.* 
+FROM
+	community_family cf,
+	( SELECT count( 1 ) c_count, community_type FROM communitys WHERE is_deleted = '0' and flow_sts='1' GROUP BY community_type ) c 
+WHERE
+	cf.is_deleted = '0' 
+	AND c.community_type = cf.id 
+	AND c.c_count > 0 
+ORDER BY
+	cf.order_num
+  
+  </select>
+</mapper>

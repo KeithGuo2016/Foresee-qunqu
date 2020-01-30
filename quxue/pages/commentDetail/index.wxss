@@ -1,0 +1,108 @@
+/* pages/commentDetail/index.wxss */
+.comlist{
+  display: flex;
+  padding: 0 30rpx;
+}
+.comtxt{
+  flex: 1;
+}
+.comimg image{
+  width: 62rpx; height: 62rpx;
+  border-radius: 50%;
+  margin-right: 30rpx;
+}
+.name{
+  font-size: 30rpx;
+  margin-top: 20rpx;
+  color: #0f0f0f;
+}
+.txt{
+  font-size: 28rpx;
+  line-height: 38rpx;
+  font-weight: 500;
+  margin: 15rpx 0;
+}
+.compub{
+  display: flex;
+  justify-content: space-between;
+  font-size: 26rpx;
+  color: #b4b2b2;
+}
+.comicon image{
+  width: 60rpx; height: 36rpx;
+}
+.com_floor{
+  position: relative;
+  width: 100%; height: auto;
+  background: #efefef;
+}
+.flist{
+  display: flex;
+  padding: 15rpx 10rpx 10rpx;
+  border-bottom: 1px solid #ccc;
+}
+.flist:last-child{
+  border:none;
+}
+.more{
+  width: 100%; height: 45rpx;
+  line-height: 45rpx;
+  font-size: 24rpx;
+  color: #999;
+  text-indent: 30rpx;
+  background: #e5e5e5;
+}
+.flimg image{
+  width: 90rpx; height: 90rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+}
+.fltxt{flex: 1;}
+.fltxta{
+  display: flex;
+  justify-content: space-between;
+}
+.flname{
+  font-size: 28rpx;
+}
+.fltime{
+  font-size: 26rpx;
+  color: #b4b2b2;
+}
+.fltxtb{
+  font-size: 28rpx;
+  color: #b4b2b2;
+}
+.fltxtb text{
+  color: #AD8F3F;
+  margin-right: 10px;
+}
+.foot{
+  position: fixed;
+  display: flex;
+  left: 0; bottom: 0;
+  width: 100%; height: auto;
+  padding: 20rpx 30rpx;
+  box-sizing: border-box;
+  border-top: 1px solid #ccc;
+  background: #fff;
+}
+.foota{
+  width: 100%; height: 60rpx;
+  background: #efefef;
+  border-radius: 10rpx;
+  font-size: 26rpx;
+  line-height: 60rpx;
+  color: #b4b2b2;
+  text-indent: 20rpx;
+  margin-right: 30rpx;
+}
+.comtocom{
+  margin-top: 10rpx;
+  display: inline-block;
+  background: #ccc;
+  font-size: 24rpx;
+  color: #666;
+  border-radius: 30rpx;
+  padding: 3rpx 15rpx;
+}

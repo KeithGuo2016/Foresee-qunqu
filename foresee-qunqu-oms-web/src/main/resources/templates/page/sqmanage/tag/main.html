@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html class="iframe-h">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>标签管理</title>
+		<link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="/css/admin.css" />
+		<link rel="stylesheet" type="text/css" href="/css/page.css" />
+	</head>
+	<body>
+		<div class="pageloading">
+			<img src="/images/loading.png" class="rotation" />
+		</div>
+		<div class="wrap-container clearfix layui-anim layui-anim-fadein">
+			<div class="column-content-detail" id="page" style="padding-right:4px;">
+				<div class="layui-form-item page-btn" action="">
+					<!--顶部按钮-->
+					<div class="layui-inline tool-btn" id="menuBtn"></div>
+					<!--顶部按钮-->
+				</div>
+				<form class="layui-form">
+					<div class="page-search">
+						<!--标签名称-->
+						<div class="layui-inline">
+							<label class="layui-form-label " for="tagName">标签名称：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="tagName" name="tag_name" placeholder="请输入标签名称" autocomplete="off" class="layui-input" maxlength="200" />
+					        </div>
+						</div>
+						<!--标签名称-->
+						<!--创建时间-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="createdDate">创建时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="createdDate" name="created_date" autocomplete="off" class="layui-input" placeholder="请选择创建时间" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--创建时间-->
+						<!--更新时间-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="updatedDate">更新时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="updatedDate" name="updated_date" autocomplete="off" class="layui-input" placeholder="请选择更新时间" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--更新时间-->
+						<!--创建人-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="createdName">创建人员：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="createdName" name="created_by" placeholder="请输入创建人姓名" autocomplete="off" class="layui-input" maxlength="20" />
+					        </div>
+						</div>
+						<!--创建人-->
+						<!--更新人-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="updatedName">修改人员：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="updatedName" name="updated_by" placeholder="请输入修改人姓名" autocomplete="off" class="layui-input" maxlength="20" />
+					        </div>
+						</div>
+						<!--更新人-->
+						<!--标签类型-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="tagType">标签类型：</label>
+					        <div class="layui-input-inline">
+					        	<select id="tagType" name="tag_type">
+									<option value="">请选择标签类型</option>
+									<option value="0">社群</option>
+									<option value="1">文章</option>
+									<option value="2">用户</option>
+									<option value="3">社刊</option>
+									<option value="4">身份</option>
+									<option value="5">征稿</option>
+									<option value="6">社刊分类</option>
+								</select>
+					        </div>
+						</div>
+						<!--标签类型-->
+						<!--删除标志-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="isDeleted">删除标志：</label>
+					        <div class="layui-input-inline">
+					        	<select id="isDeleted" name="is_deleted">
+									<option value="">请选择删除标志</option>
+									<option value="0">未删除</option>
+									<option value="1">已删除</option>
+								</select>
+					        </div>
+						</div>
+						<!--删除标志-->
+						<div class="layui-inline search-btn">
+							<button type="button" class="layui-btn layui-btn-sm btn-search bg-blue main-search" id="searchBt" lay-submit="">搜索</button>
+						</div>
+					</div>
+				</form>
+				<div class="">
+					<table class="layui-hide table-box" id="dataList" lay-filter="orderAll"></table>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="/static/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery-1.8.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+	layui.use(['form', 'table', 'laydate', 'laypage', 'layer'], function(){
+	    var form = layui.form, table = layui.table, laypage = layui.laypage, laydate = layui.laydate, layer = layui.layer;  //初始化layui控件
+	    //数据对应表
+	    var is_deleted = ["未删除", "已删除"];
+	    var tag_type = ['社群', '文章', '用户', '社刊', '身份', '征稿', '社刊分类'];
+	    //获取筛选条件
+	    var get_search = function(){
+	    	var search_arr = [];
+	    	search_arr["tag_name"] = $.trim($("#tagName").val());  //标签名称
+	    	search_arr["created_date_start"] = public.getTime($.trim($("#createdDate").val())).start;  //创建时间起始
+	    	search_arr["created_date_end"] = public.getTime($.trim($("#createdDate").val())).end;  //创建时间终止
+	    	search_arr["updated_date_start"] = public.getTime($.trim($("#updatedDate").val())).start;  //更新时间起始
+	    	search_arr["updated_date_end"] = public.getTime($.trim($("#updatedDate").val())).end;  //更新时间终止
+	    	search_arr["created_by"] = $.trim($("#createdName").val());  //创建人
+	    	search_arr["updated_by"] = $.trim($("#updatedName").val());  //更新人
+	    	search_arr["tag_type"] = $.trim($("#tagType").val());  //标签类型
+	    	search_arr["is_deleted"] = $.trim($("#isDeleted").val());  //删除标志
+	    	return search_arr;
+	    };
+	    //数据表格渲染控件
+	    table.render({
+	        elem: '#dataList',
+	        url: '/tag/selectlist',
+	        method: 'post',
+	        //data: data.data,
+	        id: 'orderAll',
+	        where: {
+	            //初始化发送至后台数据
+	        },
+	        cols: [
+	               
+	               [
+	                
+		            {field: 'id', title: 'id', hide: true},
+		            {field: 'isDeleted', title: 'isDeleted', hide: true},
+		            {type: 'numbers', title: '序号', width: 60},
+		            {field: 'tagName', title: '标签名称', width: 150, event: 'onSelect'},
+		            {field: 'tagDesc', title: '标签说明', width: 220, event: 'onSelect'},
+		            {field: 'createdDate', title: '创建时间', width: 170, event: 'onSelect', templet: function(d) {
+		            	return d.createdDate == "" ? "--" : d.createdDate;
+			        }},
+		            {field: 'updatedDate', title: '更新时间', width: 170, event: 'onSelect', templet: function(d) {
+		            	return d.updatedDate == "" ? "--" : d.updatedDate;
+			        }},
+		            {field: 'createdName', title: '创建人', width: 100, event: 'onSelect', templet:function(d){
+		            	return d.createdName == null ? "--" : d.createdName;
+			        }},
+		            {field: 'updatedName', title: '修改人', width: 100, event: 'onSelect', templet:function(d){
+		            	return d.updatedName == null ? "--" : d.updatedName;
+			        }},
+		            {field: 'tagType', title: '标签类型', width: 100, event: 'onSelect', templet:function(d){
+		            	return tag_type[d.tagType];
+			        }},
+		            {field: 'isDeleted', title: '删除标志', width: 100, event: 'onSelect', templet:function(d){
+		            	return is_deleted[d.isDeleted];
+			        }}
+		            
+	        		]
+	               
+	              ],
+	        page: true,
+	        limit: 10,
+	        limits: [5, 10, 15, 25, 35],
+	        loading: true,
+	        done: function (res, curr, count) {
+	           if ($(".layui-table-main").find("tr").length != 0) {
+	                $(".layui-table-page").show();
+	           }
+	           $(".pageloading").hide();
+	        }
+	    });
+	    public.adaptation();
+	    //请求三级菜单
+		public.getmenu();
+	    //点击搜索
+	    $("#searchBt").click(function() {
+	    	var res = get_search();
+	        //请求后台数据表格接口
+	        table.reload("orderAll", {
+	            url: "/tag/selectlist",
+	            where: {
+	                "tagName": res.tag_name,  //标签名称
+	                "createdDateStar": res.created_date_start,  //创建时间起始
+	                "createdDateEnd": res.created_date_end,  //创建时间终止
+	                "updatedDateStar": res.updated_date_start,  //更新时间起始
+	                "updatedDateEnd": res.updated_date_end,  //更新时间终止
+	                "createdName": res.created_by,  //创建人
+	                "updatedName": res.updated_by,  //修改人
+	                "tagType": res.tag_type,  //标签类型
+	                "isDeleted": res.is_deleted  //删除标志
+	            },
+	            method: "post"
+	        });
+	        public.adaptation();
+	    });
+	    //点击添加
+	    $("#page").on("click", ".btn-add", function () {
+	        public.dialogLayer(2,"添加标签","tagmanageadd.html","530px","380px");
+   		});
+   		//点击编辑
+	    $("#page").on("click", ".btn-bj", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	if(ids != '' && ids != undefined){
+	    		public.dialogLayer(2,"编辑标签","tagmanageedit.html?id=" + ids,"530px","380px");
+        	}else {
+        		layer.alert("请先选中要编辑的标签", {icon: 5, title: "提示"});
+        	}
+   		});
+	    //点击详情
+	    $("#page").on("click", ".btn-info", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	if(ids != '' && ids != undefined){
+	    		public.dialogLayer(2,"标签详情","tagmanageinfo.html?id=" + ids,"530px","350px");
+        	}else {
+        		layer.alert("请先选中要操作的数据项！", {icon: 5, title: "提示"});
+        	}
+   		});
+	    //点击删除
+	    $("#page").on("click", ".btn-del", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	var status = $("tr.layui-table-click").find("td:eq(1) div").text();
+	    	if(ids != '' && ids != undefined){
+	    		if(status != '1'){
+	    			layer.confirm('您确认删除该数据吗？', {icon: 3, title:'提示'}, function(index){
+		        		//删除申请
+			    		$.post('/tag/updateisdeleted', {'id': ids}, function(data) {
+			    			if(data.code == '0'){
+			    				layer.msg('删除成功', {'icon': 1,time:1000},function(){
+			    					layer.closeAll();
+			        	            $("#searchBt").click();
+		                        });
+			    			}else{
+			    				layer.alert(data.msg, {icon: 5, title: "提示"});
+			    			}
+			    		});
+	        		});
+	    		}else{
+	    			layer.alert("您只能操作未删除的数据！", {icon: 5, title: "提示"});
+	    		}
+        	}else {
+        		layer.alert("请先选中要操作的数据项！", {icon: 5, title: "提示"});
+        	}
+   		});
+   		//点击刷新
+	    /*$("#page").on("click", ".refreshBtn", function () {
+	    	$('.iframe', window.parent.document).attr('src', $('.iframe', window.parent.document).attr('src'));
+   		});*/
+	    //创建时间
+	    laydate.render({
+	        elem: '#createdDate',
+	        range: true
+	    });
+	    //更新时间
+	    laydate.render({
+	        elem: '#updatedDate',
+	        range: true
+	    });
+	});
+	</script>
+</html>    

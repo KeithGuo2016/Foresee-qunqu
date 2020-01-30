@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.foresee.dao.ArticlesMapper" >
+  <resultMap id="BaseResultMap" type="com.foresee.model.Articles" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="article_title" property="articleTitle" jdbcType="VARCHAR" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="article_icon" property="articleIcon" jdbcType="VARCHAR" />
+    <result column="article_outline" property="articleOutline" jdbcType="VARCHAR" />
+    <result column="is_recommend" property="isRecommend" jdbcType="CHAR" />
+    <result column="article_tag" property="articleTag" jdbcType="VARCHAR" />
+    <result column="community_id" property="communityId" jdbcType="INTEGER" />
+    <result column="is_draft" property="isDraft" jdbcType="VARCHAR" />
+    <result column="read_count" property="readCount" jdbcType="INTEGER" />
+    <result column="follow_count" property="followCount" jdbcType="INTEGER" />
+    <result column="flow_date" property="flowDate" jdbcType="TIMESTAMP" />
+    <result column="flow_sts" property="flowSts" jdbcType="CHAR" />
+    <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="updated_date" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
+    <result column="gather_id" property="gatherId" jdbcType="INTEGER" />
+    <result column="recommend_date" property="recommendDate" jdbcType="TIMESTAMP" />
+    <result column="article_iconBg" property="articleIconBg" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.foresee.model.Articles" extends="BaseResultMap" >
+    <result column="article_content" property="articleContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, article_title, userId, article_icon, article_outline, is_recommend, article_tag, 
+    community_id, is_draft, read_count, follow_count, flow_date, flow_sts, created_date, 
+    updated_date, created_by, updated_by, is_deleted, gather_id, recommend_date,article_iconBg
+  </sql>
+  <sql id="Blob_Column_List" >
+    article_content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    	select 
+	    a.*,
+      	d.nick_name as createdName,
+      	e.nick_name as updatedName,
+	    GROUP_CONCAT(b.tag_name) as tagNames,
+	    c.community_name as communityName
+	    from articles a LEFT JOIN tag b ON FIND_IN_SET(b.id, a.article_tag)
+	    LEFT JOIN communitys c ON a.community_id = c.id	
+		LEFT JOIN wechat_user d ON a.created_by = d.id
+		LEFT JOIN wechat_user e ON a.updated_by = e.id
+	    where  a.id = #{id,jdbcType=INTEGER} 
+	    GROUP BY a.id
+  </select>
+  
+  <select id="selectList" resultMap="ResultMapWithBLOBs" parameterType="com.foresee.model.Articles" >
+	   select 
+	    a.*,
+      	d.nick_name as createdName,
+      	e.nick_name as updatedName,
+	    GROUP_CONCAT(b.tag_name) as tagNames,
+	    c.community_name as communityName
+	    from articles a LEFT JOIN tag b ON FIND_IN_SET(b.id, a.article_tag)
+	    LEFT JOIN communitys c ON a.community_id = c.id	
+		LEFT JOIN wechat_user d ON a.created_by = d.id
+		LEFT JOIN wechat_user e ON a.updated_by = e.id
+	    where 1=1
+    <include refid="querysql"></include>
+    	GROUP BY a.id order by a.is_deleted asc,a.created_date desc
+  </select>
+  <sql id="querysql">
+  	  <if test="id != null and id!=''" >
+        and a.id = #{id,jdbcType=INTEGER}
+      </if>
+      <if test="ids != null and ids!=''" >
+      	and find_in_set(a.id,#{ids})
+      </if>
+  	  <if test="articleTitle != null and articleTitle!=''" >
+        and a.article_title like concat('%',#{articleTitle,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="userid != null and userid!=''" >
+        and a.userId = #{userid,jdbcType=INTEGER}
+      </if>
+      <if test="articleIcon != null and articleIcon!=''" >
+        and a.article_icon = #{articleIcon,jdbcType=VARCHAR}
+      </if>
+      <if test="articleOutline != null and articleOutline!=''" >
+        and a.article_outline = #{articleOutline,jdbcType=VARCHAR}
+      </if>
+      <if test="isRecommend != null and isRecommend!=''" >
+        and a.is_recommend = #{isRecommend,jdbcType=CHAR}
+      </if>
+      <if test="articleTag != null and articleTag!=''" >
+        and a.article_tag = #{articleTag,jdbcType=VARCHAR}
+      </if>
+      <if test="communityId != null and communityId!=''" >
+        and a.community_id = #{communityId,jdbcType=INTEGER}
+      </if>
+      <if test="isDraft != null and isDraft!=''" >
+        and a.is_draft = #{isDraft,jdbcType=VARCHAR}
+      </if>
+      <if test="readCount != null and readCount!=''" >
+        and a.read_count = #{readCount,jdbcType=INTEGER}
+      </if>
+      <if test="followCount != null and followCount!=''" >
+        and a.follow_count = #{followCount,jdbcType=INTEGER}
+      </if>
+      <if test="flowDateStar != null and flowDateStar !='' and flowDateEnd != null and flowDateEnd != '' " >
+        <![CDATA[ and a.flow_date >= #{flowDateStar} and a.flow_date < #{flowDateEnd} ]]> 
+      </if>
+      <if test="flowSts != null and flowSts!=''" >
+        and a.flow_sts = #{flowSts,jdbcType=CHAR}
+      </if>
+      <if test="createdDateStar != null and createdDateStar !='' and createdDateEnd != null and createdDateEnd != '' " >
+        <![CDATA[ and a.created_date >= #{createdDateStar} and a.created_date < #{createdDateEnd} ]]> 
+      </if>
+      <if test="updatedDateStar != null and updatedDateStar != ''  and updatedDateEnd !=null and updatedDateEnd != ''" >
+      <![CDATA[ and a.updated_date >= #{updatedDateStar} and a.updated_date < #{updatedDateEnd} ]]> 
+      </if>
+      <if test="createdBy != null and createdBy!=''" >
+        and a.created_by = #{createdBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updatedBy != null and updatedBy!=''" >
+        and a.updated_by = #{updatedBy,jdbcType=VARCHAR}
+      </if>
+      <if test="isDeleted != null and isDeleted!=''  or isDeleted==0 " >
+        and a.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="gatherId != null and gatherId!='' " >
+        and a.gather_id = #{gatherId,jdbcType=INTEGER}
+      </if>
+      <if test="recommendDate != null and recommendDate!=''" >
+        and a.recommend_date = #{recommendDate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="recommendDateStar != null and recommendDateStar !='' and recommendDateEnd != null and recommendDateEnd != '' " >
+        <![CDATA[ and a.recommend_date >= #{recommendDateStar} and a.recommend_date < #{recommendDateEnd} ]]> 
+      </if>
+      <if test="articleContent != null and articleContent!=''" >
+        and a.article_content = #{articleContent,jdbcType=LONGVARCHAR}
+      </if>
+      <if test="arNotInMa != null and arNotInMa == 1" >
+        and a.id not in (SELECT articles_id FROM magazine_articles where is_deleted = '0')
+      </if>
+      
+  </sql>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from articles
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.foresee.model.Articles" >
+    insert into articles (id, article_title, userId, 
+      article_icon, article_outline, is_recommend, 
+      article_tag, community_id, is_draft, 
+      read_count, follow_count, flow_date, 
+      flow_sts, created_date, updated_date, 
+      created_by, updated_by, is_deleted, 
+      gather_id, recommend_date, article_content,article_iconBg
+      )
+    values (#{id,jdbcType=INTEGER}, #{articleTitle,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}, 
+      #{articleIcon,jdbcType=VARCHAR}, #{articleOutline,jdbcType=VARCHAR}, #{isRecommend,jdbcType=CHAR}, 
+      #{articleTag,jdbcType=VARCHAR}, #{communityId,jdbcType=INTEGER}, #{isDraft,jdbcType=VARCHAR}, 
+      #{readCount,jdbcType=INTEGER}, #{followCount,jdbcType=INTEGER}, #{flowDate,jdbcType=TIMESTAMP}, 
+      #{flowSts,jdbcType=CHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{updatedDate,jdbcType=TIMESTAMP}, 
+      #{createdBy,jdbcType=VARCHAR}, #{updatedBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, 
+      #{gatherId,jdbcType=INTEGER}, #{recommendDate,jdbcType=TIMESTAMP}, #{articleContent,jdbcType=LONGVARCHAR},
+      #{articleIconBg,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.foresee.model.Articles" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into articles
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="articleTitle != null" >
+        article_title,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="articleIcon != null" >
+        article_icon,
+      </if>
+      <if test="articleOutline != null" >
+        article_outline,
+      </if>
+      <if test="isRecommend != null" >
+        is_recommend,
+      </if>
+      <if test="articleTag != null" >
+        article_tag,
+      </if>
+      <if test="communityId != null" >
+        community_id,
+      </if>
+      <if test="isDraft != null" >
+        is_draft,
+      </if>
+      <if test="readCount != null" >
+        read_count,
+      </if>
+      <if test="followCount != null" >
+        follow_count,
+      </if>
+      <if test="flowDate != null" >
+        flow_date,
+      </if>
+      <if test="flowSts != null" >
+        flow_sts,
+      </if>
+      <if test="createdDate != null" >
+        created_date,
+      </if>
+      <if test="updatedDate != null" >
+        updated_date,
+      </if>
+      <if test="createdBy != null" >
+        created_by,
+      </if>
+      <if test="updatedBy != null" >
+        updated_by,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="gatherId != null" >
+        gather_id,
+      </if>
+      <if test="recommendDate != null" >
+        recommend_date,
+      </if>
+      <if test="articleContent != null" >
+        article_content,
+      </if>
+      <if test="articleIconBg != null" >
+        article_iconBg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="articleTitle != null" >
+        #{articleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="articleIcon != null" >
+        #{articleIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="articleOutline != null" >
+        #{articleOutline,jdbcType=VARCHAR},
+      </if>
+      <if test="isRecommend != null" >
+        #{isRecommend,jdbcType=CHAR},
+      </if>
+      <if test="articleTag != null" >
+        #{articleTag,jdbcType=VARCHAR},
+      </if>
+      <if test="communityId != null" >
+        #{communityId,jdbcType=INTEGER},
+      </if>
+      <if test="isDraft != null" >
+        #{isDraft,jdbcType=VARCHAR},
+      </if>
+      <if test="readCount != null" >
+        #{readCount,jdbcType=INTEGER},
+      </if>
+      <if test="followCount != null" >
+        #{followCount,jdbcType=INTEGER},
+      </if>
+      <if test="flowDate != null" >
+        #{flowDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flowSts != null" >
+        #{flowSts,jdbcType=CHAR},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedDate != null" >
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="gatherId != null" >
+        #{gatherId,jdbcType=INTEGER},
+      </if>
+      <if test="recommendDate != null" >
+        #{recommendDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="articleContent != null" >
+        #{articleContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="articleIconBg != null" >
+        #{articleIconBg,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.foresee.model.Articles" >
+    update articles
+    <set >
+      <if test="articleTitle != null" >
+        article_title = #{articleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="articleIcon != null" >
+        article_icon = #{articleIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="articleOutline != null" >
+        article_outline = #{articleOutline,jdbcType=VARCHAR},
+      </if>
+      <if test="isRecommend != null" >
+        is_recommend = #{isRecommend,jdbcType=CHAR},
+      </if>
+      <if test="articleTag != null" >
+        article_tag = #{articleTag,jdbcType=VARCHAR},
+      </if>
+      <if test="communityId != null" >
+        community_id = #{communityId,jdbcType=INTEGER},
+      </if>
+      <if test="isDraft != null" >
+        is_draft = #{isDraft,jdbcType=VARCHAR},
+      </if>
+      <if test="readCount != null" >
+        read_count = #{readCount,jdbcType=INTEGER},
+      </if>
+      <if test="followCount != null" >
+        follow_count = #{followCount,jdbcType=INTEGER},
+      </if>
+      <if test="flowDate != null" >
+        flow_date = #{flowDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flowSts != null" >
+        flow_sts = #{flowSts,jdbcType=CHAR},
+      </if>
+      <if test="createdDate != null" >
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedDate != null" >
+        updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="gatherId != null" >
+        gather_id = #{gatherId,jdbcType=INTEGER},
+      </if>
+      <if test="recommendDate != null" >
+        recommend_date = #{recommendDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="articleContent != null" >
+        article_content = #{articleContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="articleIconBg != null and articleIconBg !=''" >
+        article_iconBg = #{articleIconBg,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.foresee.model.Articles" >
+    update articles
+    set article_title = #{articleTitle,jdbcType=VARCHAR},
+      userId = #{userid,jdbcType=INTEGER},
+      article_icon = #{articleIcon,jdbcType=VARCHAR},
+      article_outline = #{articleOutline,jdbcType=VARCHAR},
+      is_recommend = #{isRecommend,jdbcType=CHAR},
+      article_tag = #{articleTag,jdbcType=VARCHAR},
+      community_id = #{communityId,jdbcType=INTEGER},
+      is_draft = #{isDraft,jdbcType=VARCHAR},
+      read_count = #{readCount,jdbcType=INTEGER},
+      follow_count = #{followCount,jdbcType=INTEGER},
+      flow_date = #{flowDate,jdbcType=TIMESTAMP},
+      flow_sts = #{flowSts,jdbcType=CHAR},
+      created_date = #{createdDate,jdbcType=TIMESTAMP},
+      updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      gather_id = #{gatherId,jdbcType=INTEGER},
+      recommend_date = #{recommendDate,jdbcType=TIMESTAMP},
+      article_content = #{articleContent,jdbcType=LONGVARCHAR},
+      article_iconBg = #{articleIconBg,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.foresee.model.Articles" >
+    update articles
+    set article_title = #{articleTitle,jdbcType=VARCHAR},
+      article_icon = #{articleIcon,jdbcType=VARCHAR},
+      article_outline = #{articleOutline,jdbcType=VARCHAR},
+      article_tag = #{articleTag,jdbcType=VARCHAR},    
+      is_draft = #{isDraft,jdbcType=VARCHAR},
+      updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      article_content = #{articleContent,jdbcType=LONGVARCHAR},
+      recommend_date = #{recommendDate,jdbcType=TIMESTAMP},
+      article_iconBg = #{articleIconBg,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

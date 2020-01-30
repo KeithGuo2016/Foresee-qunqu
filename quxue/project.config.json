@@ -1,0 +1,96 @@
+{
+	"description": "项目配置文件",
+	"packOptions": {
+		"ignore": []
+	},
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"coverView": true,
+		"nodeModules": true,
+		"autoAudits": true,
+		"checkInvalidKey": true,
+		"checkSiteMap": true,
+		"uploadWithSourceMap": true,
+		"babelSetting": {
+			"ignore": [],
+			"disablePlugins": [],
+			"outputPath": ""
+		}
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.8.0",
+	"appid": "wx83e14beaccf10316",
+	"projectname": "quxue",
+	"debugOptions": {
+		"hidedInDevtools": []
+	},
+	"isGameTourist": false,
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"gamePlugin": {
+			"current": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": -1,
+			"list": [
+				{
+					"id": 0,
+					"name": "pages/communityDetail/index",
+					"pathName": "pages/communityDetail/index",
+					"query": "id=332&invite=TH6GWP&eid=1",
+					"scene": null
+				},
+				{
+					"id": 1,
+					"name": "pages/members/index",
+					"pathName": "pages/members/index",
+					"query": "communityid=327&page=1&pageSize=10",
+					"scene": null
+				},
+				{
+					"id": 2,
+					"name": "pages/collectDetail/index",
+					"pathName": "pages/collectDetail/index",
+					"query": "id=47&invite=wer",
+					"scene": null
+				},
+				{
+					"id": 3,
+					"name": "pages/memberDetail/index",
+					"pathName": "pages/memberDetail/index",
+					"query": "id=owOPX5VITOuP2XwK1__H3Vr4Ay34",
+					"scene": 1005
+				},
+				{
+					"id": -1,
+					"name": "pages/deliveryList/index",
+					"pathName": "pages/deliveryList/index",
+					"query": "id=44&createUserid=370&userSeeRange=0",
+					"scene": null
+				}
+			]
+		}
+	}
+}

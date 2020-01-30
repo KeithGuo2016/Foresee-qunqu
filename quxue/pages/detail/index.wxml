@@ -1,0 +1,115 @@
+<view class='detail'>
+  <view class='d_tit'>{{detail.articleTitle}}</view>
+  <view class='author'>
+    <view class='avator' data-id="{{detail.openId}}" bindtap="goAuthorDetail">
+      <image src='{{detail.headUrl}}'></image>
+      <text class='nik'>{{detail.nickName}}</text>
+      <text class='time'>{{detail.recommendDate}}</text>
+    </view>
+
+    <block wx:if="{{!isFollowAuthor}}">
+      <view class='foll tc' bindtap="followAuthor">关注</view>
+    </block>
+    <block wx:else>
+      <view class='foll tc' bindtap="notFollowAuthor">已关注</view>
+    </block>
+
+  </view>
+  <view class='des'>“{{detail.articleOutline}}”</view>
+  <view class='content'>
+    <import src="../wxParse/wxParse.wxml" />
+    <template is="wxParse" data="{{wxParseData:content.nodes}}" />
+  </view>
+
+</view>
+<!-- 社群 -->
+<view class="nowcom" data-id="{{detail.communityId}}" bindtap="goCommunity">
+  <view class="com_icon">
+    <image src="{{detail.communityIcon}}"></image>
+    <text>{{detail.communityName}}</text> 社群/出品
+  </view>
+  <view class="com_txt">{{detail.communityMark}}</view>
+  <view class="com_txt">群成员
+    <text>{{detail.userNum}}</text>人</view>
+  <view class="combtnr">
+    <image src="../images/sqde.png"></image>
+  </view>
+</view>
+<view class='bottomGap'></view>
+<!-- <view class="pay"><image src="../images/pay.png"></image>打赏</view> -->
+<!-- 社群 end-->
+<view class='line'></view>
+<view class='detail2' >
+  <view class='comtit'>评论</view>
+  <block wx:if="{{!commentCount}}">
+  <view class="com_count">快来发表你的评论吧</view>
+  </block>
+  <block wx:else>
+
+    <view class='comlist' wx:for="{{commentList}}">
+      <view class='comimg'>
+        <image src='{{item.userIcon}}'></image>
+      </view>
+      <view class='comtxt'>
+        <view class='name'>{{item.userName}}</view>
+        <view class='txt'>
+          {{item.content}}
+        </view>
+        <view class='compub'>
+          <view class='pubtime'>{{item.countDown}}</view>
+          <view class='comicon' data-id="{{item.userid}}" data-pid="{{item.id}}" bindtap='goComment'>
+            <image src='../images/com_icon.png'></image>
+          </view>
+        </view>
+        <!--评论楼-->
+        <view class='com_floor'>
+          <view class='flist' wx:for="{{item.list}}" wx:for-item="list" bindtap="goComment" data-id="{{list.userid}}" data-pid="{{item.id}}" wx:key="this">
+            <view class='flimg'>
+              <image src='{{list.userIcon}}'></image>
+            </view>
+            <view class='fltxt'>
+              <view class='fltxta'>
+                <view class='flname'>{{list.userName}}</view>
+                <view class='fltime'>{{list.countDown}}</view>
+              </view>
+              <block wx:if="{{list.touserName == null}}">
+                <view class='fltxtb'>{{list.content}}</view>
+              </block>
+              <block wx:else>
+                <view class='fltxtb'>
+                  <text>回复</text>{{list.touserName}} {{list.content}}</view>
+                <!--view bindtap="goComment" data-id="{{list.userid}}"  data-pid="{{item.id}}" class="comtocom">回复 ></view-->
+              </block>
+            </view>
+          </view>
+          <block wx:if="{{item.toCommentNum > 2}}">
+            <view class='more' data-id="{{item.id}}" data-type="comment" bindtap='moreData'>{{item.toCommentNum}}条回复 展开 》</view>
+          </block>
+        </view>
+        <!--评论楼-->
+
+      </view>
+    </view>
+  </block>
+</view>
+<view class='foot'>
+  <view class='foota' data-id="{{0}}" data-pid="" bindtap='goComment'>有什么想说的，展开讲讲</view>
+  <view class='footb'>
+    <view class='foot_icon' data-id="{{detail.id}}" data-type="article" bindtap="moreData">
+      <image class='foa' src='../images/look.png'></image>{{detail.commentNum}}</view>
+    <view class='foot_icon' bindtap='coll'>
+      <image class='fob' src='{{isColl ?"../images/colla.png":"../images/coll.png"}}'></image>{{followCount}}</view>
+    <view class='foot_icon' bindtap='zan'>
+      <image class='foc' src='{{isZan ?"../images/zana.png":"../images/zan.png"}}'></image>{{zanVal}}</view>
+  </view>
+</view>
+<!-- 展开弹层 -->
+<view class='dialog' wx:if='{{comment}}'>
+  <view class='areabox'>
+    <view class='areabtn'>
+      <view class='cancel' bindtap='cancelComment'>取消</view>
+      <view class='ok' bindtap='doComment'>发布</view>
+    </view>
+    <textarea bindinput="getContent" placeholder='有什么想说的，展开讲讲'></textarea>
+  </view>
+</view>

@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.foresee.dao.WechatUserMapper" >
+  <resultMap id="BaseResultMap" type="com.foresee.model.WechatUser" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+    <result column="open_id" property="openId" jdbcType="VARCHAR" />
+    <result column="union_id" property="unionId" jdbcType="VARCHAR" />
+    <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    <result column="head_url" property="headUrl" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="updated_date" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
+    <result column="communityId" property="communityid" jdbcType="INTEGER" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="user_mark" property="userMark" jdbcType="VARCHAR" />
+    <result column="is_vip" property="isVip" jdbcType="CHAR" />
+    <result column="is_admin" property="isAdmin" jdbcType="CHAR" />
+    <result column="is_community" property="isCommunity" jdbcType="CHAR" />
+    <result column="user_type" property="userType" jdbcType="VARCHAR" />
+    <result column="flow_sts" property="flowSts" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, uid, app_id, open_id, union_id, nick_name, head_url, city, updated_date, created_date, 
+    created_by, updated_by, is_deleted, communityId, phone, user_mark, is_vip, is_admin, 
+    is_community, user_type, flow_sts
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        SELECT
+		a.*, 
+		e.nick_name as createdName,
+		f.nick_name as updatedName,
+    	GROUP_CONCAT(b.tag_name) AS tagMarks,
+		c.tag_name AS tagTypes,
+		d.community_name AS communityName
+	FROM
+		wechat_user a
+		LEFT JOIN tag b ON FIND_IN_SET(b.id, a.user_mark)
+		AND b.tag_type = 2
+		LEFT JOIN tag c ON c.id = a.user_type
+		AND c.tag_type = 4
+		LEFT JOIN communitys d ON a.communityId = d.id
+	  	LEFT JOIN wechat_user e ON a.created_by = e.id
+		LEFT JOIN wechat_user f ON a.updated_by = f.id
+    where a.id = #{id,jdbcType=INTEGER}
+    GROUP BY a.id order by a.is_deleted asc,a.created_date desc
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="com.foresee.model.WechatUser" >
+    SELECT
+		a.*, 
+		e.nick_name as createdName,
+		f.nick_name as updatedName,
+    GROUP_CONCAT(b.tag_name) AS tagMarks,
+		c.tag_name AS tagTypes,
+		d.community_name AS communityName
+	FROM
+		wechat_user a
+	LEFT JOIN tag b ON FIND_IN_SET(b.id, a.user_mark)
+	AND b.tag_type = 2
+	LEFT JOIN tag c ON c.id = a.user_type
+	AND c.tag_type = 4
+	LEFT JOIN communitys d ON a.communityId = d.id
+  	LEFT JOIN wechat_user e ON a.created_by = e.id
+	LEFT JOIN wechat_user f ON a.updated_by = f.id
+	WHERE
+		1 = 1
+	<include refid="querysql"></include>
+	GROUP BY a.id order by a.is_deleted asc,a.created_date desc
+  </select>
+  
+  
+  <select id="selectListCommunitysFollow" resultMap="BaseResultMap" parameterType="com.foresee.model.WechatUser" >
+    SELECT
+		e.*,
+		a.nick_name,
+		a.phone,GROUP_CONCAT(b.tag_name) AS tagMarks,
+		c.tag_name AS tagTypes,
+		d.community_name AS communityName
+	FROM
+		communitys_follow e
+  	LEFT JOIN wechat_user a  ON a.communityId = e.communitys_id
+	LEFT JOIN tag b ON FIND_IN_SET(b.id, a.user_mark)
+	AND b.tag_type = 2
+	LEFT JOIN tag c ON c.id = a.user_type
+	AND c.tag_type = 4
+	LEFT JOIN communitys d ON a.communityId = d.id
+	WHERE
+		1 = 1
+		<include refid="querysql"></include>
+	GROUP BY a.id order by e.is_deleted asc,e.created_date desc
+  </select>
+  <sql id="querysql">
+  	  <if test="id != null and id!=''" >
+        and a.id = #{id,jdbcType=INTEGER}
+      </if>
+  	  <if test="uid != null and uid!=''" >
+        and a.uid = #{uid,jdbcType=INTEGER}
+      </if>
+      <if test="appId != null and appId!=''" >
+        and a.app_id = #{appId,jdbcType=VARCHAR}
+      </if>
+      <if test="openId != null and openId!=''" >
+        and a.open_id = #{openId,jdbcType=VARCHAR}
+      </if>
+      <if test="unionId != null and unionId!=''" >
+        and a.union_id = #{unionId,jdbcType=VARCHAR}
+      </if>
+      <if test="nickName != null and nickName!=''" >
+        and a.nick_name like concat('%',#{nickName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="headUrl != null and headUrl!=''" >
+        and a.head_url = #{headUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="city != null and city!=''" >
+        and a.city = #{city,jdbcType=VARCHAR}
+      </if>
+      <if test="createdDateStar != null and createdDateStar !='' and createdDateEnd != null and createdDateEnd != '' " >
+        <![CDATA[ and a.created_date >= #{createdDateStar} and a.created_date < #{createdDateEnd} ]]> 
+      </if>
+      <if test="updatedDateStar != null and updatedDateStar != ''  and updatedDateEnd !=null and updatedDateEnd != ''" >
+      <![CDATA[ and a.updated_date >= #{updatedDateStar} and a.updated_date < #{updatedDateEnd} ]]> 
+      </if>
+      <if test="createdBy != null and createdBy!=''" >
+        and a.created_by = #{createdBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updatedBy != null and updatedBy!=''" >
+        and a.updated_by = #{updatedBy,jdbcType=VARCHAR}
+      </if>
+      <if test="isDeleted != null and isDeleted!=''  or isDeleted==0" >
+        and a.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="communityid != null and communityid!=''" >
+        and a.communityId = #{communityid,jdbcType=INTEGER}
+      </if>
+      <if test="isCommunityid != null and isCommunityid ==1 " >
+        and (a.communityId is NULL or a.communityId ='')
+      </if>
+      <if test="phone != null and phone!=''" >
+        and a.phone like concat('%',#{phone,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="userMark != null and userMark!=''" >
+        and a.user_mark = #{userMark,jdbcType=VARCHAR}
+      </if>
+      <if test="isVip != null and isVip!=''" >
+        and a.is_vip = #{isVip,jdbcType=CHAR}
+      </if>
+      <if test="isAdmin != null and isAdmin!=''" >
+        and a.is_admin = #{isAdmin,jdbcType=CHAR}
+      </if>
+      <if test="isCommunity != null and isCommunity!=''" >
+        and a.is_community = #{isCommunity,jdbcType=CHAR}
+      </if>
+      <if test="userType != null and userType!=''" >
+        and a.user_type = #{userType,jdbcType=VARCHAR}
+      </if>
+      <if test="flowSts != null and flowSts!=''" >
+        and a.flow_sts = #{flowSts,jdbcType=CHAR}
+      </if>
+      <if test="communitysId != null and communitysId!=''" >
+        and e.communitys_id = #{communitysId,jdbcType=INTEGER}
+      </if>
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wechat_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.foresee.model.WechatUser" >
+    insert into wechat_user (id, uid, app_id, 
+      open_id, union_id, nick_name, 
+      head_url, city, updated_date, 
+      created_date, created_by, updated_by, 
+      is_deleted, communityId, phone, 
+      user_mark, is_vip, is_admin, 
+      is_community, user_type, flow_sts
+      )
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{appId,jdbcType=VARCHAR}, 
+      #{openId,jdbcType=VARCHAR}, #{unionId,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, 
+      #{headUrl,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, 
+      #{createdDate,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, #{updatedBy,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=INTEGER}, #{communityid,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, 
+      #{userMark,jdbcType=VARCHAR}, #{isVip,jdbcType=CHAR}, #{isAdmin,jdbcType=CHAR}, 
+      #{isCommunity,jdbcType=CHAR}, #{userType,jdbcType=VARCHAR}, #{flowSts,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.foresee.model.WechatUser" >
+    insert into wechat_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="appId != null" >
+        app_id,
+      </if>
+      <if test="openId != null" >
+        open_id,
+      </if>
+      <if test="unionId != null" >
+        union_id,
+      </if>
+      <if test="nickName != null" >
+        nick_name,
+      </if>
+      <if test="headUrl != null" >
+        head_url,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="updatedDate != null" >
+        updated_date,
+      </if>
+      <if test="createdDate != null" >
+        created_date,
+      </if>
+      <if test="createdBy != null" >
+        created_by,
+      </if>
+      <if test="updatedBy != null" >
+        updated_by,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="communityid != null" >
+        communityId,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="userMark != null" >
+        user_mark,
+      </if>
+      <if test="isVip != null" >
+        is_vip,
+      </if>
+      <if test="isAdmin != null" >
+        is_admin,
+      </if>
+      <if test="isCommunity != null" >
+        is_community,
+      </if>
+      <if test="userType != null" >
+        user_type,
+      </if>
+      <if test="flowSts != null" >
+        flow_sts,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="appId != null" >
+        #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="openId != null" >
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="unionId != null" >
+        #{unionId,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null" >
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="headUrl != null" >
+        #{headUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null" >
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="communityid != null" >
+        #{communityid,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="userMark != null" >
+        #{userMark,jdbcType=VARCHAR},
+      </if>
+      <if test="isVip != null" >
+        #{isVip,jdbcType=CHAR},
+      </if>
+      <if test="isAdmin != null" >
+        #{isAdmin,jdbcType=CHAR},
+      </if>
+      <if test="isCommunity != null" >
+        #{isCommunity,jdbcType=CHAR},
+      </if>
+      <if test="userType != null" >
+        #{userType,jdbcType=VARCHAR},
+      </if>
+      <if test="flowSts != null" >
+        #{flowSts,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.foresee.model.WechatUser" >
+    update wechat_user
+    <set >
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="appId != null" >
+        app_id = #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="openId != null" >
+        open_id = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="unionId != null" >
+        union_id = #{unionId,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null" >
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="headUrl != null" >
+        head_url = #{headUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null" >
+        updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdDate != null" >
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="communityid != null" >
+        communityId = #{communityid,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="userMark != null" >
+        user_mark = #{userMark,jdbcType=VARCHAR},
+      </if>
+      <if test="isVip != null" >
+        is_vip = #{isVip,jdbcType=CHAR},
+      </if>
+      <if test="isAdmin != null" >
+        is_admin = #{isAdmin,jdbcType=CHAR},
+      </if>
+      <if test="isCommunity != null" >
+        is_community = #{isCommunity,jdbcType=CHAR},
+      </if>
+      <if test="userType != null" >
+        user_type = #{userType,jdbcType=VARCHAR},
+      </if>
+      <if test="flowSts != null" >
+        flow_sts = #{flowSts,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.foresee.model.WechatUser" >
+    update wechat_user
+    set uid = #{uid,jdbcType=INTEGER},
+      app_id = #{appId,jdbcType=VARCHAR},
+      open_id = #{openId,jdbcType=VARCHAR},
+      union_id = #{unionId,jdbcType=VARCHAR},
+      nick_name = #{nickName,jdbcType=VARCHAR},
+      head_url = #{headUrl,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      communityId = #{communityid,jdbcType=INTEGER},
+      phone = #{phone,jdbcType=VARCHAR},
+      user_mark = #{userMark,jdbcType=VARCHAR},
+      is_vip = #{isVip,jdbcType=CHAR},
+      is_admin = #{isAdmin,jdbcType=CHAR},
+      is_community = #{isCommunity,jdbcType=CHAR},
+      user_type = #{userType,jdbcType=VARCHAR},
+      flow_sts = #{flowSts,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

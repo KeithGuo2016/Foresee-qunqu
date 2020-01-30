@@ -1,0 +1,21 @@
+<view class="all">
+
+<view class='search' bindtap='goSearch'>
+  <image src='../images/search.png'></image>
+  <input placeholder='请输入您想要搜索的内容' disabled='true'></input>
+</view>
+<view class='list_box' >      
+  <view class='arlist pb5' wx:for="{{recomList}}" wx:key="item.id" data-id="{{item.id}}" bindtap='goDetail'>
+    <view class='arlist_l'>
+      <view class='atit'>{{item.articleTitle}}</view>
+      <view class='ainfo'>
+        <text class='fl'>{{item.nickName}} · {{item.recommendDate}}</text>
+        <text class='fr'>{{item.readCount}}人阅读</text>
+      </view>
+    </view>
+    <view class='arlist_r'><image src='{{item.articleIcon}}'></image></view>
+  </view>
+</view>
+<!-- no data -->
+  <view wx:if='{{nodata}}' class="nodata">—— 喂喂，你碰到我的底线了 ——</view>
+</view>

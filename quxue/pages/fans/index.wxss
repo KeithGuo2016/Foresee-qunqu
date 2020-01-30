@@ -1,0 +1,2 @@
+/* pages/fans/index.wxss */
+@import '../members/index.wxss'

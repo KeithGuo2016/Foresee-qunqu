@@ -1,0 +1,246 @@
+/* pages/detail/index.wxss */
+.detail{
+  margin: 0 30rpx;
+}
+.d_tit{
+  font-size: 36rpx;
+  font-weight: bold;
+  line-height: 45rpx;
+}
+.author{
+  display: flex;
+  justify-content: space-between;
+  margin: 20rpx 0;
+}
+.avator image{
+  width: 96rpx; height: 96rpx; 
+  border-radius: 50%;
+  vertical-align: middle;
+}
+.nik{
+  font-size: 30rpx;
+  color: #0f0f0f;
+  margin: 0 30rpx 0 10rpx;
+}
+.time{
+  font-size: 28rpx;
+  color: #b4b2b2;
+}
+.foll{
+  width: 120rpx; height: 40rpx;
+  margin-top: 28rpx;
+  border: 1px solid #333;
+  line-height: 40rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  border-radius: 40rpx;
+}
+.des{
+  padding: 20rpx;
+  border-top: 5rpx solid #333;
+  background: #efefef;
+  font-size: 26rpx;
+  line-height: 40rpx;
+  font-weight: bold;
+}
+.content{
+  margin: 30rpx 0;
+  font-size: 30rpx;
+  line-height: 48rpx;
+}
+.content view{
+  margin-bottom: 30rpx;
+}
+.content image{
+  width: 690rpx; height: 360rpx;
+}
+.comtit{
+  margin-top: 30rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+.comlist{
+  display: flex;
+  margin-top: 30rpx;
+}
+.comtxt{
+  flex: 1;
+}
+.comimg image{
+  width: 96rpx; height: 96rpx;
+  border-radius: 50%;
+  margin-right: 30rpx;
+}
+.name{
+  font-size: 30rpx;
+  margin-top: 20rpx;
+  color: #b4b2b2;
+}
+.txt{
+  font-size: 28rpx;
+  line-height: 38rpx;
+  margin: 15rpx 0;
+}
+.compub{
+  display: flex;
+  justify-content: space-between;
+  font-size: 26rpx;
+  color: #b4b2b2;
+}
+.comicon image{
+  width: 60rpx; height: 36rpx;
+}
+.com_floor{
+  position: relative;
+  width: 100%; height: auto;
+  background: #efefef;
+}
+.flist{
+  display: flex;
+  padding: 15rpx 10rpx 10rpx;
+  border-bottom: 1px solid #ccc;
+}
+.flist:last-child{
+  border:none;
+}
+.more{
+  width: 100%; height: 45rpx;
+  line-height: 45rpx;
+  font-size: 24rpx;
+  color: #999;
+  text-indent: 30rpx;
+  background: #e5e5e5;
+}
+.flimg image{
+  width: 80rpx; height: 80rpx;
+  margin-right: 20rpx;
+}
+.fltxt{flex: 1;}
+.fltxta{
+  display: flex;
+  justify-content: space-between;
+}
+.flname{
+  font-size: 28rpx;
+}
+.fltime{
+  font-size: 26rpx;
+  color: #b4b2b2;
+}
+.fltxtb{
+  font-size: 28rpx;
+  color: #b4b2b2;
+}
+.fltxtb text{
+  color: #AD8F3F;
+  margin-right: 10px;
+}
+.comtocom{
+  margin-top: 10rpx;
+  display: inline-block;
+  background: #ccc;
+  font-size: 24rpx;
+  color: #666;
+  border-radius: 30rpx;
+  padding: 3rpx 15rpx;
+}
+.foot{
+  position: fixed;
+  display: flex;
+  left: 0; bottom: 0;
+  width: 100%; height: auto;
+  padding: 20rpx 30rpx;
+  box-sizing: border-box;
+  border-top: 1px solid #ccc;
+  background: #fff;
+}
+.foota{
+  width: 400rpx; height: 60rpx;
+  background: #efefef;
+  border-radius: 10rpx;
+  font-size: 26rpx;
+  line-height: 60rpx;
+  color: #b4b2b2;
+  text-indent: 20rpx;
+  margin-right: 30rpx;
+}
+.footb{
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  font-size: 24rpx;
+  color: #b4b2b2;
+}
+.foot_icon{text-align: center;}
+.foot_icon image{
+  display: block;
+}
+.foa{width: 42rpx; height: 50rpx;}
+.fob{width: 54rpx; height: 48rpx;}
+.foc{width: 48rpx; height: 46rpx;}
+.nowcom{
+  position: relative;
+  width: 690rpx; height: auto;
+  margin: 30rpx auto;
+  padding: 20rpx 0;
+  box-sizing: border-box;
+  border: 1px solid #efefef;
+  border-radius: 10rpx;
+  text-align: center;
+}
+.combtnr{
+  right: 30rpx;
+  top: 60rpx;
+  position: absolute;
+  width: 50rpx; height: 50rpx;
+  background: #BCD7D7;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 50rpx;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fff;
+}
+.com_icon{
+  font-size: 28rpx;
+  color: #38BAB8;
+}
+.com_icon text{
+  font-size: 30rpx;
+  font-weight: bold;
+  margin: 0 15rpx;
+}
+.com_icon image{
+  vertical-align: middle;
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+}
+.com_txt{
+  padding:0 70rpx;
+  font-size: 28rpx;
+  color: #9B9B9B;
+  margin-top: 10rpx;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+ 
+}
+.com_txt text{
+  color: #38BAB8;
+}
+.pay{
+  margin: 30rpx auto;
+  width: 200rpx; height: auto;
+  text-align: center;
+  padding: 10rpx 20rpx;
+  border: 3rpx solid #FFA820;
+  font-size: 40rpx;
+  color: #FFA820;
+  border-radius: 50rpx;
+}
+.pay image{
+  width: 50rpx; height: 56rpx;
+  vertical-align: middle;
+  margin-right: 10rpx;
+}

@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foresee.mapper.ContributesMapperCostom">
+  <resultMap id="BaseResultMap" type="com.foresee.vo.ContributesVo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_userId" jdbcType="INTEGER" property="createUserid" />
+    <result column="contribute_userId" jdbcType="INTEGER" property="contributeUserid" />
+    <result column="contribute_title" jdbcType="VARCHAR" property="contributeTitle" />
+    <result column="contribute_icon" jdbcType="VARCHAR" property="contributeIcon" />
+    <result column="orientation" jdbcType="VARCHAR" property="orientation" />
+    <result column="contribute_tag" jdbcType="VARCHAR" property="contributeTag" />
+    <result column="buy_num" jdbcType="INTEGER" property="buyNum" />
+    <result column="max_money" jdbcType="VARCHAR" property="maxMoney" />
+    <result column="min_money" jdbcType="VARCHAR" property="minMoney" />
+    <result column="true_money" jdbcType="VARCHAR" property="trueMoney" />
+    <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="contribute_range" jdbcType="CHAR" property="contributeRange" />
+    <result column="user_see_range" jdbcType="CHAR" property="userSeeRange" />
+    <result column="contribute_type" jdbcType="INTEGER" property="contributeType" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="flow_sts" jdbcType="CHAR" property="flowSts" />
+    <result column="contribute_desc" jdbcType="LONGVARCHAR" property="contributeDesc" />
+    <result column="case_desc" jdbcType="LONGVARCHAR" property="caseDesc" />
+    <result column="tag_name" jdbcType="VARCHAR" property="tagName" />
+    <result column="count_down" jdbcType="VARCHAR" property="countDown" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+	  <result column="community_id" jdbcType="INTEGER" property="communityId" />
+  </resultMap>
+  <!-- 查询首页信息 -->
+  <select id="selectAllListHome" resultMap="BaseResultMap" >
+  <if test="communityId!=null and communityId!=''">
+  SELECT
+	* 
+FROM
+	(
+SELECT
+	c.id,
+	c.contribute_title,
+	c.contribute_icon,
+	c.orientation,
+	c.contribute_tag,
+	c.buy_num,
+	c.max_money,
+	c.min_money,
+	c.start_date,
+	c.end_date,
+	c.contribute_range,
+	c.user_see_range,
+	c.contribute_type,
+	c.community_id,
+	c.item_order,
+	GROUP_CONCAT( b.tag_name ) AS tag_name,
+CASE
+		WHEN timediff( c.end_date, now( ) ) > 0 THEN
+		CONCAT(DATEDIFF( c.end_date, now( )),'天',date_format(timediff( c.end_date, now( ) ),'%h时%i分%s秒') )ELSE '0' 
+	END count_down,
+CASE
+		
+		WHEN timediff( c.end_date, now( ) ) > 0 THEN
+		1 ELSE 0
+END STATUS 
+FROM
+	contributes c join communitys com on (com.id= c.community_id and com.is_deleted='0')
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, c.contribute_tag ) 
+WHERE
+
+	c.contribute_range != '1' 
+	AND c.flow_sts = '1' 
+	AND c.is_deleted = '0' 
+GROUP BY
+	c.id UNION
+SELECT
+	c.id,
+	c.contribute_title,
+	c.contribute_icon,
+	c.orientation,
+	c.contribute_tag,
+	c.buy_num,
+	c.max_money,
+	c.min_money,
+	c.start_date,
+	c.end_date,
+	c.contribute_range,
+	c.user_see_range,
+	c.contribute_type,
+	c.community_id,
+	c.item_order,
+	GROUP_CONCAT( b.tag_name ) AS tag_name,
+CASE
+		WHEN timediff( c.end_date, now( ) ) > 0 THEN
+		CONCAT(DATEDIFF( c.end_date, now( )),'天',date_format(timediff( c.end_date, now( ) ),'%h时%i分%s秒') )ELSE '0' 
+	END count_down,
+CASE
+		
+		WHEN timediff( c.end_date, now( ) ) > 0 THEN
+		1 ELSE 0
+END STATUS 
+FROM
+	contributes c join communitys com on (com.id= c.community_id and com.is_deleted='0')
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, c.contribute_tag ) 
+WHERE
+	c.contribute_range = '1' 
+	AND c.flow_sts = '1' 
+	AND c.is_deleted = '0' 
+	AND c.community_id = #{communityId}
+GROUP BY
+	c.id 
+	) v 
+ORDER BY
+v.item_order DESC, v.end_date DESC
+		
+  </if>
+  <if test="communityId==null or communityId==''">
+  SELECT
+	c.id,
+	c.contribute_title,
+	c.contribute_icon,
+	c.orientation,
+	c.contribute_tag,
+	c.buy_num,
+	c.max_money,
+	c.min_money,
+	c.start_date,
+	c.end_date,
+	c.contribute_range,
+	c.user_see_range,
+	c.contribute_type,
+	c.community_id,
+	GROUP_CONCAT( b.tag_name ) AS tag_name,
+CASE
+		WHEN timediff( c.end_date, now( ) ) > 0 THEN
+		CONCAT(DATEDIFF( c.end_date, now( )),'天',date_format(timediff( c.end_date, now( ) ),'%h时%i分%s秒') )ELSE '0' 
+	END count_down,
+CASE
+		
+		WHEN timediff( c.end_date, now( ) ) > 0 THEN
+		1 ELSE 0
+END STATUS 
+FROM
+	contributes c join communitys com on (com.id= c.community_id and com.is_deleted='0')
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, c.contribute_tag ) 
+WHERE
+	c.contribute_range != '1' 
+	AND c.flow_sts = '1' 
+	AND c.is_deleted = '0' 
+GROUP BY
+	c.id 
+ORDER BY
+c.item_order DESC, c.end_date DESC
+	
+  </if>
+  </select>
+  
+  <select id="selectListCommunityId" resultMap="BaseResultMap" >
+
+SELECT
+	c.id,
+	c.contribute_title,
+	c.contribute_icon,
+	c.orientation,
+	c.contribute_tag,
+	c.buy_num,
+	c.max_money,
+	c.min_money,
+	c.start_date,
+	c.end_date,
+	c.contribute_range,
+	c.user_see_range,
+	c.contribute_type,
+	c.community_id,
+	GROUP_CONCAT( b.tag_name ) AS tag_name,
+CASE
+		WHEN timediff( c.end_date, now( ) ) > 0 THEN
+		CONCAT(DATEDIFF( c.end_date, now( )),'天',date_format(timediff( c.end_date, now( ) ),'%h时%i分%s秒') )ELSE '0' 
+	END count_down,
+CASE
+		
+		WHEN timediff( c.end_date, now( ) ) > 0 THEN
+		1 ELSE 0
+END STATUS 
+FROM
+	contributes c
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, c.contribute_tag ) 
+WHERE
+	c.contribute_range = '1'    
+	AND c.flow_sts = '1' 
+	AND c.is_deleted = '0' 
+	AND c.community_id = #{communityId}
+GROUP BY
+	c.id 
+	
+ORDER BY
+c.end_date DESC	
+  </select>
+  <select id="selectVoById" resultMap="BaseResultMap" >
+  SELECT
+	c.*,
+	GROUP_CONCAT( b.tag_name ) AS tag_name,
+CASE
+		WHEN timediff( c.end_date, now( ) ) > 0 THEN
+		CONCAT(DATEDIFF( c.end_date, now( )),'天',date_format(timediff( c.end_date, now( ) ),'%h时%i分%s秒') )ELSE '0' 
+	END count_down,
+CASE
+		
+		WHEN timediff( c.end_date, now( ) ) > 0 THEN
+		1 ELSE 0
+END STATUS 
+FROM
+	contributes c
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, c.contribute_tag ) 
+WHERE
+	c.id=#{id}
+GROUP BY
+c.id
+  </select>
+  
+  <select id="searchContributes" resultMap="BaseResultMap" >
+   <if test="communityId!=null and communityId!=''">
+   SELECT
+	* 
+FROM
+	(
+SELECT
+	c.id,
+	c.contribute_title,
+	c.contribute_icon,
+	c.orientation,
+	c.contribute_tag,
+	c.contribute_desc,
+	c.case_desc,
+	c.buy_num,
+	c.max_money,
+	c.min_money,
+	c.start_date,
+	c.end_date,
+	c.contribute_range,
+	c.user_see_range,
+	c.contribute_type,
+	c.community_id,
+	GROUP_CONCAT( b.tag_name ) AS tag_name,
+CASE
+		WHEN timediff( c.end_date, now( ) ) > 0 THEN
+		CONCAT(DATEDIFF( c.end_date, now( )),'天',date_format(timediff( c.end_date, now( ) ),'%h时%i分%s秒') )ELSE '0' 
+	END count_down,
+CASE
+		
+		WHEN timediff( c.end_date, now( ) ) > 0 THEN
+		1 ELSE 0
+END STATUS 
+FROM
+	contributes c join communitys com on (com.id= c.community_id and com.is_deleted='0')
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, c.contribute_tag ) 
+WHERE
+	c.contribute_range = '0' 
+	AND c.flow_sts = '1' 
+	AND c.is_deleted = '0' 
+GROUP BY
+	c.id UNION
+SELECT
+	c.id,
+	c.contribute_title,
+	c.contribute_icon,
+	c.orientation,
+	c.contribute_tag,
+	c.contribute_desc,
+	c.case_desc,
+	c.buy_num,
+	c.max_money,
+	c.min_money,
+	c.start_date,
+	c.end_date,
+	c.contribute_range,
+	c.user_see_range,
+	c.contribute_type,
+	c.community_id,
+	GROUP_CONCAT( b.tag_name ) AS tag_name,
+CASE
+		WHEN timediff( c.end_date, now( ) ) > 0 THEN
+		CONCAT(DATEDIFF( c.end_date, now( )),'天',date_format(timediff( c.end_date, now( ) ),'%h时%i分%s秒') )ELSE '0' 
+	END count_down,
+CASE
+		
+		WHEN timediff( c.end_date, now( ) ) > 0 THEN
+		1 ELSE 0
+END STATUS 
+FROM
+	contributes c join communitys com on (com.id= c.community_id and com.is_deleted='0')
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, c.contribute_tag ) 
+WHERE
+	c.contribute_range = '1' 
+	AND c.flow_sts = '1' 
+	AND c.is_deleted = '0' 
+	AND c.community_id = #{communityId}
+GROUP BY
+	c.id 
+	) v 
+	where 1=1
+	<if test="tagId!=null and tagId!=''">
+		and FIND_IN_SET( #{tagId}, v.contribute_tag ) 
+	</if> 
+	 <if test="searchDesc!=null and searchDesc!=''">
+	 and (v.contribute_title like '%${searchDesc}%' or v.tag_name like '%${searchDesc}%'
+	 or v.contribute_desc like '%${searchDesc}%' or v.case_desc like '%${searchDesc}%' )
+	 </if>
+	
+ORDER BY
+v.end_date DESC
+</if>
+<if test="communityId==null or communityId==''">
+SELECT
+	* 
+FROM
+	(
+SELECT
+	c.id,
+	c.contribute_title,
+	c.contribute_icon,
+	c.orientation,
+	c.contribute_tag,
+	c.contribute_desc,
+	c.case_desc,
+	c.buy_num,
+	c.max_money,
+	c.min_money,
+	c.start_date,
+	c.end_date,
+	c.contribute_range,
+	c.user_see_range,
+	c.contribute_type,
+	c.community_id,
+	GROUP_CONCAT( b.tag_name ) AS tag_name,
+CASE
+		WHEN timediff( c.end_date, now( ) ) > 0 THEN
+		CONCAT(DATEDIFF( c.end_date, now( )),'天',date_format(timediff( c.end_date, now( ) ),'%h时%i分%s秒') )ELSE '0' 
+	END count_down,
+CASE
+		
+		WHEN timediff( c.end_date, now( ) ) > 0 THEN
+		1 ELSE 0
+END STATUS 
+FROM
+	contributes c join communitys com on (com.id= c.community_id and com.is_deleted='0')
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, c.contribute_tag ) 
+WHERE
+	c.contribute_range = '0' 
+	AND c.flow_sts = '1' 
+	AND c.is_deleted = '0' 
+GROUP BY
+	c.id 
+	) v 
+	where 1=1
+	<if test="tagId!=null and tagId!=''">
+		and FIND_IN_SET( #{tagId}, v.contribute_tag ) 
+	</if> 
+	 <if test="searchDesc!=null and searchDesc!=''">
+	 and (v.contribute_title like '%${searchDesc}%' or v.tag_name like '%${searchDesc}%'
+	 or v.contribute_desc like '%${searchDesc}%' or v.case_desc like '%${searchDesc}%' )
+	 </if>
+	
+ORDER BY
+v.end_date DESC
+</if>
+  </select>
+</mapper>

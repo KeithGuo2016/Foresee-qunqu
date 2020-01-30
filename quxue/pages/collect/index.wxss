@@ -1,0 +1,126 @@
+/* pages/collect/index.wxss */
+.list{
+  position: relative;
+  width:100%;
+  margin-top: 40rpx;
+  padding-bottom: 40rpx;
+  background: #F1F1F1;
+}
+.dataimg{
+  width: 100%;
+  display: inline-block;
+  border-top-left-radius: 8rpx;
+  border-top-right-radius: 8rpx;
+}
+.ltit{
+  margin-left: 20rpx;
+  margin-top: 20rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #000000;
+  line-height: 45rpx;
+}
+.ltxt1{
+  display: flex;
+  margin: 0 20rpx;
+  justify-content: space-between;
+  align-items:center;/*垂直居中*/
+}
+.price{
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #38bab8;
+  margin: 16rpx 0;
+}
+.gr{
+  color: #8A8A8A !important;
+}
+.price text{
+  font-size: 28rpx;
+  font-weight: 500;
+}
+.tag{
+  min-width: 80rpx;
+  line-height: 36rpx;
+  height: 36rpx;
+  font-size: 24rpx;
+  text-align: center;
+  color: #fff;
+  padding: 0 8rpx;
+  background: #10399e;
+}
+.tag1{
+  background: #9072ff;
+}
+.time{
+  font-size: 24rpx;
+  color: #666;
+  position: relative;
+}
+.time image{
+  width: 20rpx;
+  height: 20rpx;
+  margin: -5rpx 0 0 10rpx;
+}
+.time2{
+  font-size: 24rpx;
+  color: #b4b2b2;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.time2 image{
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.time::before{
+  position: absolute;
+  display: inline-block;
+  content: '';
+  width: 30rpx;
+  height: 30rpx;
+  border-radius: 50%;
+  border:1px solid #333;
+}
+.info{
+  font-size: 28rpx;
+  color:#b4b2b2;
+}
+.info2{
+  font-size: 24rpx;
+  color: #666;
+}
+.status{
+  position: absolute;
+  z-index: 100;
+  left: 24rpx;
+  top: 30rpx;
+  height: 36rpx;
+  line-height: 36rpx;
+  padding: 0 8rpx;
+  background: #38BAB8;
+  font-size: 24rpx;
+  color: #ffffff;
+}
+.statusover{
+  position: absolute;
+  z-index: 10;
+  left: 20rpx;
+  top: 20rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  padding: 0 15rpx;
+  background: #8A8A8A;
+  font-size: 24rpx;
+  color: #fff;
+}
+.zhe{
+  position: absolute;
+  top:0;
+  bottom: 10rpx;
+  width: 100%;
+  background-color: rgba(255, 255, 266, .3);
+  border-top-left-radius: 8rpx;
+  border-top-right-radius: 8rpx;
+}

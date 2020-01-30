@@ -1,0 +1,22 @@
+<view class='list_box'>
+<view class="sc_sq arc" wx:for='{{productList}}' wx:key='{{item.id}}' >
+    <movable-area>
+      <movable-view out-of-bounds="true" direction="horizontal" x="{{item.xmove}}"
+          inertia="true"
+          data-productIndex="{{index}}"
+          bindtouchstart="handleTouchStart"
+          bindtouchend="handleTouchEnd"
+          bindchange="handleMovableChange">
+        <view class='messlist' data-id="{{item.id}}" bindtap='goWrite'>
+          <view class='messtit'>《{{item.articleTitle}}》</view>
+          <view class='messtxt'>
+          {{item.articleOutline}}
+          </view>
+          <view class='messtime'>{{item.recommendDate}}</view>
+        </view>
+      </movable-view>
+    </movable-area>
+    <view class="canFo" bindtap='delTemp' data-index="{{index}}" data-id="{{item.id}}">删除</view>
+</view>
+
+</view>

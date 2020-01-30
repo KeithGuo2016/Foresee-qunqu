@@ -1,0 +1,7 @@
+/* pages/myComment/index.wxss */
+@import '../message/index.wxss';
+.messtxt{
+  color: #000;
+  font-weight: 500;
+  margin-bottom: 20rpx;
+}

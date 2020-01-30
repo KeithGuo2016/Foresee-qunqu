@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.foresee.dao.UserApplyMapper" >
+  <resultMap id="BaseResultMap" type="com.foresee.model.UserApply" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="apply_type" property="applyType" jdbcType="CHAR" />
+    <result column="apply_desc" property="applyDesc" jdbcType="VARCHAR" />
+    <result column="apply_sts" property="applySts" jdbcType="CHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="wechat_num" property="wechatNum" jdbcType="VARCHAR" />
+    <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="updated_date" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
+    <result column="apply_target_id" property="applyTargetId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, userId, apply_type, apply_desc, apply_sts, phone, qq, wechat_num, created_date, 
+    updated_date, created_by, updated_by, is_deleted ,apply_target_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT
+        a.*,
+		f.nick_name as createdName,
+		g.nick_name as updatedName,
+		b.nick_name as nickName,
+        b.head_url as headUrl,
+		e.community_name AS communityName
+	FROM
+		user_apply a LEFT JOIN wechat_user b ON a.userId = b.id
+	    LEFT JOIN communitys e ON b.communityId = e.id
+	LEFT JOIN wechat_user f ON a.created_by = f.id
+	LEFT JOIN wechat_user g ON a.updated_by = g.id
+	WHERE a.id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="com.foresee.model.UserApply" >
+    SELECT
+    	b.communityId as communityId,
+        a.*,
+		f.nick_name as createdName,
+		g.nick_name as updatedName,
+		b.nick_name as nickName,
+        b.head_url as headUrl,
+		e.community_name AS communityName
+	FROM
+		user_apply a LEFT JOIN wechat_user b ON a.userId = b.id
+	    LEFT JOIN communitys e ON b.communityId = e.id
+	LEFT JOIN wechat_user f ON a.created_by = f.id
+	LEFT JOIN wechat_user g ON a.updated_by = g.id
+	WHERE
+		1 = 1
+    <include refid="querysql"></include>
+    order by a.is_deleted asc,a.created_date desc
+  </select>
+  
+  <select id="selectListJoinCommunity" resultMap="BaseResultMap" parameterType="com.foresee.model.UserApply" >
+    SELECT
+        a.*,
+		f.nick_name as createdName,
+		g.nick_name as updatedName,
+		b.nick_name as nickName,
+        b.head_url as headUrl,
+		e.community_name AS communityName
+	FROM
+		user_apply a LEFT JOIN wechat_user b ON a.userId = b.id
+	    LEFT JOIN communitys e ON a.apply_target_id = e.id
+	LEFT JOIN wechat_user f ON a.created_by = f.id
+	LEFT JOIN wechat_user g ON a.updated_by = g.id
+	WHERE
+		1 = 1
+    <include refid="querysql"></include>
+    order by a.is_deleted asc,a.created_date desc
+  </select>
+  
+  <sql id="querysql">
+  	  <if test="id != null and id!='' " >
+        and a.id = #{id,jdbcType=INTEGER}
+      </if>
+  	  <if test="userid != null and userid!='' " >
+        and a.userId = #{userid,jdbcType=INTEGER}
+      </if>
+      <if test="channelId != null and channelId>0">
+        and b.communityId = #{channelId,jdbcType=INTEGER}
+      </if>
+      <if test="applyType != null and applyType!='' " >
+        and a.apply_type = #{applyType,jdbcType=CHAR}
+      </if>
+      <if test="applyDesc != null and applyDesc!='' " >
+        and a.apply_desc = #{applyDesc,jdbcType=VARCHAR}
+      </if>
+      <if test="applySts != null and applySts!='' " >
+        and a.apply_sts = #{applySts,jdbcType=CHAR}
+      </if>
+      <if test="phone != null and phone!='' " >
+        and a.phone = #{phone,jdbcType=VARCHAR}
+      </if>
+      <if test="qq != null and qq!='' " >
+        and a.qq = #{qq,jdbcType=VARCHAR}
+      </if>
+      <if test="wechatNum != null and wechatNum!='' " >
+        and a.wechat_num = #{wechatNum,jdbcType=VARCHAR}
+      </if>
+      <if test="createdDateStar != null and createdDateStar !='' and createdDateEnd != null and createdDateEnd != '' " >
+        <![CDATA[ and a.created_date >= #{createdDateStar} and a.created_date < #{createdDateEnd} ]]> 
+      </if>
+      <if test="updatedDateStar != null and updatedDateStar != ''  and updatedDateEnd !=null and updatedDateEnd != ''" >
+      <![CDATA[ and a.updated_date >= #{updatedDateStar} and a.updated_date < #{updatedDateEnd} ]]> 
+      </if>
+      <if test="createdBy != null and createdBy!='' " >
+        and a.created_by = #{createdBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updatedBy != null and updatedBy!='' " >
+        and a.updated_by = #{updatedBy,jdbcType=VARCHAR}
+      </if>
+      <if test="isDeleted != null and isDeleted!='' or isDeleted==0" >
+        and a.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="applyTargetId != null and applyTargetId!='' " >
+        and a.apply_target_id = #{applyTargetId,jdbcType=INTEGER}
+      </if>
+  </sql>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_apply
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.foresee.model.UserApply" >
+    insert into user_apply (id, userId, apply_type, 
+      apply_desc, apply_sts, phone, 
+      qq, wechat_num, created_date, 
+      updated_date, created_by, updated_by, 
+      is_deleted ,apply_target_id)
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{applyType,jdbcType=CHAR}, 
+      #{applyDesc,jdbcType=VARCHAR}, #{applySts,jdbcType=CHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{qq,jdbcType=VARCHAR}, #{wechatNum,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, 
+      #{updatedDate,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, #{updatedBy,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=INTEGER},#{applyTargetId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.foresee.model.UserApply" >
+    insert into user_apply
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="applyType != null" >
+        apply_type,
+      </if>
+      <if test="applyDesc != null" >
+        apply_desc,
+      </if>
+      <if test="applySts != null" >
+        apply_sts,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="qq != null" >
+        qq,
+      </if>
+      <if test="wechatNum != null" >
+        wechat_num,
+      </if>
+      <if test="createdDate != null" >
+        created_date,
+      </if>
+      <if test="updatedDate != null" >
+        updated_date,
+      </if>
+      <if test="createdBy != null" >
+        created_by,
+      </if>
+      <if test="updatedBy != null" >
+        updated_by,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="applyTargetId != null" >
+        apply_target_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="applyType != null" >
+        #{applyType,jdbcType=CHAR},
+      </if>
+      <if test="applyDesc != null" >
+        #{applyDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="applySts != null" >
+        #{applySts,jdbcType=CHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null" >
+        #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatNum != null" >
+        #{wechatNum,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedDate != null" >
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="applyTargetId != null" >
+        #{applyTargetId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.foresee.model.UserApply" >
+    update user_apply
+    <set >
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="applyType != null" >
+        apply_type = #{applyType,jdbcType=CHAR},
+      </if>
+      <if test="applyDesc != null" >
+        apply_desc = #{applyDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="applySts != null" >
+        apply_sts = #{applySts,jdbcType=CHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null" >
+        qq = #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatNum != null" >
+        wechat_num = #{wechatNum,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedDate != null" >
+        updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="applyTargetId != null" >
+        apply_target_id = #{applyTargetId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.foresee.model.UserApply" >
+    update user_apply
+    set userId = #{userid,jdbcType=INTEGER},
+      apply_type = #{applyType,jdbcType=CHAR},
+      apply_desc = #{applyDesc,jdbcType=VARCHAR},
+      apply_sts = #{applySts,jdbcType=CHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=VARCHAR},
+      wechat_num = #{wechatNum,jdbcType=VARCHAR},
+      created_date = #{createdDate,jdbcType=TIMESTAMP},
+      updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      apply_target_id = #{applyTargetId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

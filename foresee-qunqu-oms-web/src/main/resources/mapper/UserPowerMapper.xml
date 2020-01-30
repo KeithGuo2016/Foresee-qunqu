@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.foresee.dao.UserPowerMapper">
+	<resultMap id="BaseResultMap" type="com.foresee.model.UserPower">
+			<id property="id" column="id" jdbcType="INTEGER"/>
+			<result property="userid" column="userid" jdbcType="VARCHAR"/>
+			<result property="isVip" column="is_vip" jdbcType="CHAR"/>
+			<result property="isAdmin" column="is_admin" jdbcType="CHAR"/>
+			<result property="isCommunity" column="is_community" jdbcType="CHAR"/>
+			<result property="createdDate" column="created_date" jdbcType="TIMESTAMP"/>
+			<result property="updatedDate" column="updated_date" jdbcType="TIMESTAMP"/>
+			<result property="createdBy" column="created_by" jdbcType="VARCHAR"/>
+			<result property="updatedBy" column="updated_by" jdbcType="VARCHAR"/>
+			<result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id,userid,is_vip,is_admin,is_community,created_date,updated_date,created_by,updated_by,is_deleted
+	</sql>
+	
+	<select id="getById" parameterType="int" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from
+			user_power
+		where
+			id = #{id}
+	</select>
+	
+	<select id="getByUserId" parameterType="String" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from
+			user_power
+		where
+			userid = #{userid}
+	</select>
+	
+	<select id="listPage" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from user_power
+		where 1=1
+		<include refid="querysql"></include>
+	</select>
+	
+	<sql id="querysql">
+			<if test="id!=null and id!='' ">
+			  and id = #{ id, jdbcType=INTEGER }
+			</if>
+			<if test="userid!=null and userid!='' ">
+			  and userid = #{ userid, jdbcType=VARCHAR }
+			</if>
+			<if test="isVip!=null and isVip!='' ">
+			  and is_vip = #{ isVip, jdbcType=CHAR }
+			</if>
+			<if test="isAdmin!=null and isAdmin!='' ">
+			  and is_admin = #{ isAdmin, jdbcType=CHAR }
+			</if>
+			<if test="isCommunity!=null and isCommunity!='' ">
+			  and is_community = #{ isCommunity, jdbcType=CHAR }
+			</if>
+			<if test="createdDate!=null  ">
+			  and created_date = #{ createdDate, jdbcType=TIMESTAMP }
+			</if>
+			<if test="updatedDate!=null  ">
+			  and updated_date = #{ updatedDate, jdbcType=TIMESTAMP }
+			</if>
+			<if test="createdBy!=null and createdBy!='' ">
+			  and created_by = #{ createdBy, jdbcType=VARCHAR }
+			</if>
+			<if test="updatedBy!=null and updatedBy!='' ">
+			  and updated_by = #{ updatedBy, jdbcType=VARCHAR }
+			</if>
+			<if test="isDeleted!=null and isDeleted!='' ">
+			  and is_deleted = #{ isDeleted, jdbcType=TINYINT }
+			</if>
+	</sql>
+	
+	
+	<update id="update" parameterType="com.foresee.model.UserPower">
+		update user_power
+		<set>
+			<if test="userid!=null and userid!='' ">
+			  userid = #{userid, jdbcType=VARCHAR },
+			</if>
+			<if test="isVip!=null and isVip!='' ">
+			  is_vip = #{isVip, jdbcType=CHAR },
+			</if>
+			<if test="isAdmin!=null and isAdmin!='' ">
+			  is_admin = #{isAdmin, jdbcType=CHAR },
+			</if>
+			<if test="isCommunity!=null and isCommunity!='' ">
+			  is_community = #{isCommunity, jdbcType=CHAR },
+			</if>
+			<if test="createdDate!=null">
+			  created_date = #{createdDate, jdbcType=TIMESTAMP },
+			</if>
+			<if test="updatedDate!=null ">
+			  updated_date = #{updatedDate, jdbcType=TIMESTAMP },
+			</if>
+			<if test="createdBy!=null and createdBy!='' ">
+			  created_by = #{createdBy, jdbcType=VARCHAR },
+			</if>
+			<if test="updatedBy!=null and updatedBy!='' ">
+			  updated_by = #{updatedBy, jdbcType=VARCHAR },
+			</if>
+			<if test="isDeleted!=null and isDeleted!='' ">
+			  is_deleted = #{isDeleted, jdbcType=TINYINT },
+			</if>
+		</set>
+		where
+			id = #{id}
+	</update>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from user_power 
+		where
+			id = #{id}
+	</delete>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.foresee.model.UserPower">
+		insert into user_power
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id!=null and id!=''">
+				id,
+			</if>
+			<if test="userid!=null and userid!=''">
+				userid,
+			</if>
+			<if test="isVip!=null and isVip!=''">
+				is_vip,
+			</if>
+			<if test="isAdmin!=null and isAdmin!=''">
+				is_admin,
+			</if>
+			<if test="isCommunity!=null and isCommunity!=''">
+				is_community,
+			</if>
+			<if test="createdDate!=null ">
+				created_date,
+			</if>
+			<if test="updatedDate!=null ">
+				updated_date,
+			</if>
+			<if test="createdBy!=null and createdBy!=''">
+				created_by,
+			</if>
+			<if test="updatedBy!=null and updatedBy!=''">
+				updated_by,
+			</if>
+			<if test="isDeleted!=null and isDeleted!=''">
+				is_deleted,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id!=null and id!=''">
+				#{id, jdbcType=INTEGER},
+			</if>
+			<if test="userid!=null and userid!=''">
+				#{userid, jdbcType=VARCHAR},
+			</if>
+			<if test="isVip!=null and isVip!=''">
+				#{isVip, jdbcType=CHAR},
+			</if>
+			<if test="isAdmin!=null and isAdmin!=''">
+				#{isAdmin, jdbcType=CHAR},
+			</if>
+			<if test="isCommunity!=null and isCommunity!=''">
+				#{isCommunity, jdbcType=CHAR},
+			</if>
+			<if test="createdDate!=null ">
+				#{createdDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedDate!=null ">
+				#{updatedDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdBy!=null and createdBy!=''">
+				#{createdBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updatedBy!=null and updatedBy!=''">
+				#{updatedBy, jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted!=null and isDeleted!=''">
+				#{isDeleted, jdbcType=TINYINT},
+			</if>
+		</trim>
+	</insert>
+	
+</mapper>

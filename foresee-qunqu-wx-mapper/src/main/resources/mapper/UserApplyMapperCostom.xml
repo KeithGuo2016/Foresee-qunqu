@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foresee.mapper.UserApplyMapperCostom">
+  <resultMap id="BaseResultMap" type="com.foresee.vo.UserApplyVo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="userId" jdbcType="INTEGER" property="userid" />
+    <result column="apply_type" jdbcType="CHAR" property="applyType" />
+    <result column="apply_desc" jdbcType="VARCHAR" property="applyDesc" />
+    <result column="apply_sts" jdbcType="CHAR" property="applySts" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="qq" jdbcType="VARCHAR" property="qq" />
+    <result column="wechat_num" jdbcType="VARCHAR" property="wechatNum" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="created_date_s" jdbcType="VARCHAR" property="createdDates" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="apply_target_id" jdbcType="INTEGER" property="applyTargetId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="head_url" jdbcType="VARCHAR" property="headUrl" />
+    
+    <result column="target_name" jdbcType="VARCHAR" property="targetName" />
+    <result column="target_icon" jdbcType="VARCHAR" property="targetIcon" />
+    <result column="apply_type_name" jdbcType="VARCHAR" property="applyTypeName" />
+  </resultMap>
+  <select id="selectApplyTargetList" resultMap="BaseResultMap" >
+	  SELECT
+		ap.*,
+		wu.nick_name,
+		wu.open_id,
+		wu.head_url 
+	FROM
+		user_apply ap,
+		wechat_user wu 
+	WHERE
+		ap.apply_type = #{applyType}
+		AND ap.is_deleted = '0' 
+		AND wu.id = ap.userId
+		and ap.apply_target_id=#{applyTargetId}
+		order  by  ap.created_date desc
+  </select>
+  
+  <select id="selectAddCommunityApply" resultMap="BaseResultMap" >
+	  SELECT
+		ap.*
+	FROM
+		user_apply ap, communitys c
+	WHERE
+		ap.apply_type = '2'
+		AND ap.is_deleted = '0' 
+		and ap.apply_sts !='2'
+		and ap.userId = #{userid}
+		and c.is_deleted='0'
+		
+  </select>
+  
+  <select id="selectMeApply" resultMap="BaseResultMap" >
+	  SELECT
+			* 
+		FROM
+			(
+		SELECT
+			ap.*,
+			wu.nick_name,
+			wu.open_id,
+			wu.head_url,
+			wu.nick_name target_name,
+			wu.head_url target_icon 
+		FROM
+			user_apply ap,
+			wechat_user wu 
+		WHERE
+			ap.apply_type IN ( '1', '2', '3' ) 
+			AND ap.is_deleted = '0' 
+			AND wu.id = ap.userId UNION
+		SELECT
+			ap.*,
+			wu.nick_name,
+			wu.open_id,
+			wu.head_url,
+			'' target_name,
+			'' target_icon 
+		FROM
+			user_apply ap,
+			wechat_user wu
+			
+		WHERE
+			ap.apply_type = '4' 
+			AND ap.is_deleted = '0' 
+			AND wu.id = ap.userId  UNION
+		SELECT
+			ap.*,
+			wu.nick_name,
+			wu.open_id,
+			wu.head_url,
+			c.contribute_title target_name,
+			c.contribute_icon target_icon 
+		FROM
+			user_apply ap,
+			wechat_user wu,
+			contributes c 
+		WHERE
+			ap.apply_type = '5' 
+			AND ap.is_deleted = '0' 
+			AND wu.id = ap.userId 
+			AND c.id = apply_target_id UNION
+		SELECT
+			ap.*,
+			wu.nick_name,
+			wu.open_id,
+			wu.head_url,
+			m.magazine_title target_name,
+			m.magazine_icon target_icon 
+		FROM
+			user_apply ap,
+			wechat_user wu,
+			magazines m 
+		WHERE
+			ap.apply_type = '6' 
+			AND ap.is_deleted = '0' 
+			AND wu.id = ap.userId 
+			AND m.id = apply_target_id UNION
+		SELECT
+			ap.*,
+			wu.nick_name,
+			wu.open_id,
+			wu.head_url,
+			m.article_title target_name,
+			m.article_icon target_icon 
+		FROM
+			user_apply ap,
+			wechat_user wu,
+			articles m 
+		WHERE
+			ap.apply_type = '7' 
+			AND ap.is_deleted = '0' 
+			AND wu.id = ap.userId 
+			AND m.id = apply_target_id 
+			) v 
+		WHERE
+			v.userId = #{userid}
+		ORDER BY
+			v.created_date desc
+  </select>
+  <select id="selectMeApplyAll" resultMap="BaseResultMap" >
+  SELECT
+	* 
+FROM
+	(
+SELECT
+	a.id,
+	CASE
+	WHEN to_days( now( ) ) - to_days( a.created_date ) > 0 THEN
+	date_format( a.created_date, '%y-%m-%d %H:%i' ) 
+	when date_format(timediff( now( ), a.created_date ) ,'%H')=0 then '刚刚'
+	ELSE CONCAT(date_format(timediff( now( ), a.created_date ) ,'%H')+'','小时前')
+END created_date_s,
+a.created_date,
+	a.flow_sts apply_sts,
+	a.article_title target_name,
+	a.article_icon target_icon,
+	a.article_outline apply_desc,
+	a.is_deleted,
+	'7' apply_type,
+	'文章首页推荐申请' apply_type_name 
+FROM
+	articles a 
+WHERE
+	a.is_draft = '0' 
+	AND a.is_recommend = '1' 
+	AND a.is_deleted = '0' 
+	AND a.userId =  #{userid} 
+	 UNION
+SELECT
+	c.id,
+	CASE
+	WHEN to_days( now( ) ) - to_days( c.created_date ) > 0 THEN
+	date_format( c.created_date, '%y-%m-%d %H:%i' ) 
+	when date_format(timediff( now( ), c.created_date ) ,'%H')=0 then '刚刚'
+	ELSE CONCAT(date_format(timediff( now( ), c.created_date ) ,'%H')+'','小时前')
+END created_date_s,
+c.created_date,
+	c.flow_sts apply_sts,
+	c.community_name target_name,
+	c.community_icon target_icon,
+	c.community_mark apply_desc,
+	c.is_deleted,
+	'4' apply_type,
+	
+	'新建社群申请' apply_type_name 
+FROM
+	communitys c 
+WHERE
+	c.is_deleted = '0' 
+	AND c.created_by = #{userid}
+	 UNION
+SELECT
+	c.id,
+	CASE
+	WHEN to_days( now( ) ) - to_days( ua.created_date ) > 0 THEN
+	date_format( ua.created_date, '%y-%m-%d %H:%i' ) 
+	when date_format(timediff( now( ), ua.created_date ) ,'%H')=0 then '刚刚'
+	ELSE CONCAT(date_format(timediff( now( ), ua.created_date ) ,'%H')+'','小时前')
+END created_date_s,
+ua.created_date,
+	ua.apply_sts,
+	c.community_name target_name,
+	c.community_icon target_icon,
+	c.community_mark apply_desc,
+	ua.is_deleted,
+	ua.apply_type,
+	'加入社群申请' apply_type_name 
+FROM
+	user_apply ua
+	LEFT JOIN communitys c ON ( ua.apply_target_id = c.id AND c.is_deleted = '0' ) 
+WHERE
+	ua.apply_type = '2' 
+	AND ua.userId =  #{userid} 
+	 UNION
+SELECT
+	ua.id,
+	CASE
+	WHEN to_days( now( ) ) - to_days( ua.created_date ) > 0 THEN
+	date_format( ua.created_date, '%y-%m-%d %H:%i' ) 
+	when date_format(timediff( now( ), ua.created_date ) ,'%H')=0 then '刚刚'
+	ELSE CONCAT(date_format(timediff( now( ), ua.created_date ) ,'%H')+'','小时前')
+END created_date_s,
+ua.created_date,
+	ua.apply_sts,
+	ua.apply_desc apply_desc,
+	'' target_name,
+	wu.head_url target_icon,
+	ua.is_deleted,
+	ua.apply_type,
+	'成为VIP申请' apply_type_name 
+FROM
+	user_apply ua,
+	wechat_user wu 
+WHERE
+	wu.id = ua.userId 
+	AND ua.apply_type = '1' 
+	AND ua.userId =  #{userid} 
+	 UNION
+SELECT
+	ua.id,
+	CASE
+	WHEN to_days( now( ) ) - to_days( ua.created_date ) > 0 THEN
+	date_format( ua.created_date, '%y-%m-%d %H:%i' ) 
+	when date_format(timediff( now( ), ua.created_date ) ,'%H')=0 then '刚刚'
+	ELSE CONCAT(date_format(timediff( now( ), ua.created_date ) ,'%H')+'','小时前')
+END created_date_s,
+ua.created_date,
+	ua.apply_sts,
+	ua.apply_desc,
+	'' target_name,
+	wu.head_url target_icon,
+	ua.is_deleted,
+	ua.apply_type,
+	'成为社群管理员申请' apply_type_name 
+FROM
+	user_apply ua,
+	wechat_user wu 
+WHERE
+	wu.id = ua.userId 
+	AND ua.apply_type = '3' 
+	AND ua.userId =  #{userid}  
+	UNION
+SELECT
+	ua.id,
+	CASE
+	WHEN to_days( now( ) ) - to_days( ua.created_date ) > 0 THEN
+	date_format( ua.created_date, '%y-%m-%d %H:%i' ) 
+	when date_format(timediff( now( ), ua.created_date ) ,'%H')=0 then '刚刚'
+	ELSE CONCAT(date_format(timediff( now( ), ua.created_date ) ,'%H')+'','小时前')
+END created_date_s,
+ua.created_date,
+	ua.apply_sts,
+	ua.apply_desc,
+	CONCAT( ua.user_name, ',', ua.phone ) target_name,
+	wu.head_url target_icon,
+	ua.is_deleted,
+	ua.apply_type,
+	'出版申请' apply_type_name 
+FROM
+	user_apply ua,
+	wechat_user wu 
+WHERE
+	wu.id = ua.userId 
+	AND ua.apply_type = '5' 
+	AND ua.userId = #{userid} 
+	) ta 
+ORDER BY
+	ta.created_date DESC
+  
+  
+  </select>
+</mapper>

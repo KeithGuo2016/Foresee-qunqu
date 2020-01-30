@@ -1,0 +1,11 @@
+<view class='list_box'>
+  <view class='messlist' wx:for="{{news}}" wx:key="this">
+    <view class='messtit'>{{item.newsTitle}}</view>
+    <view class='messtxt'>
+    {{item.newsContent}}
+    </view>
+    <view class='messtime'> {{item.dateString}}</view>
+  </view>
+
+  
+</view>

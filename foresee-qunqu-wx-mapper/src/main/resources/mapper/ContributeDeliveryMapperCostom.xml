@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foresee.mapper.ContributeDeliveryMapperCostom">
+  <resultMap id="BaseResultMap" type="com.foresee.vo.ContributeDeliveryVo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="contributes_id" jdbcType="INTEGER" property="contributesId" />
+    <result column="delivery_title" jdbcType="VARCHAR" property="deliveryTitle" />
+    <result column="delivery_icon" jdbcType="VARCHAR" property="deliveryIcon" />
+    <result column="delivery_content" jdbcType="LONGVARCHAR" property="deliveryContent" />
+    <result column="is_select" jdbcType="CHAR" property="isSelect" />
+    <result column="is_pay" jdbcType="CHAR" property="isPay" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="read_num" jdbcType="INTEGER" property="readNum" />
+     
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_icon" jdbcType="VARCHAR" property="userIcon" />
+    <result column="delivery_date" jdbcType="VARCHAR" property="deliveryDate" />
+    
+  </resultMap>
+  <select id="selectByContributesId" resultMap="BaseResultMap" >
+  
+  SELECT
+	d.*,
+	u.nick_name user_name,
+	u.head_url user_icon,
+CASE
+	WHEN to_days( now( ) ) - to_days( d.created_date ) > 0 THEN
+	date_format( d.created_date, '%y-%m-%d %H:%i' ) 
+	when date_format(timediff( now( ), d.created_date ) ,'%H')=0 then '刚刚'
+	ELSE CONCAT(date_format(timediff( now( ), d.created_date ) ,'%H')+'','小时前')
+END delivery_date
+FROM
+	contribute_delivery d,
+	wechat_user u 
+WHERE
+u.id = d.userid
+and d.is_deleted=0
+and d.contributes_id=#{contributesId}
+  </select>
+  
+  <select id="selectVoById" resultMap="BaseResultMap" >
+  
+  SELECT
+	d.*,
+	u.nick_name user_name,
+	u.head_url user_icon,
+
+CASE
+	WHEN to_days( now( ) ) - to_days( d.created_date ) > 0 THEN
+	date_format( d.created_date, '%y-%m-%d %H:%i' ) 
+	when date_format(timediff( now( ), d.created_date ) ,'%H')=0 then '刚刚'
+	ELSE CONCAT(date_format(timediff( now( ), d.created_date ) ,'%H')+'','小时前')
+END delivery_date
+FROM
+	contribute_delivery d,
+	wechat_user u 
+WHERE
+u.id = d.userid 
+and d.id=#{id}
+  </select>
+</mapper>

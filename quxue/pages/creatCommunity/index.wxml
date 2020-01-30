@@ -1,0 +1,101 @@
+<!-- 引入组件 -->
+<import src="/welCropper/welCropper.wxml" />
+<view class="check" wx:if='{{selTag}}'>
+  <checkbox-group bindchange="checkboxChange">
+    <scroll-view scroll-y="true" style="height:600rpx;">
+      <label class="checkbox" wx:for="{{itemList}}" wx:key='item.id'>
+        <checkbox value="{{item.value}},{{item.id}}" checked="{{item.checked}}" />{{item.value}}
+      </label>
+    </scroll-view>
+  </checkbox-group>
+  <view class='coll_btn tc' bindtap="selok">确定</view>
+</view>
+
+<view class='list_box'>
+  <view class='label labelborder'>
+    <view class='lname'>社群名称</view>
+    <input style="height:{{cropperData.hidden?'1.4rem':'0'}}" placeholder="请输入社群名称（必填）" bindinput="communityName" type='text'></input>
+  </view>
+  <view class='label labelborder'>
+    <view class='lname'>QQ\微信：</view>
+    <input style="height:{{cropperData.hidden?'1.4rem':'0'}}" placeholder="请输入QQ或者微信" bindinput="getQQ" type='text'></input>
+  </view>
+  <!--picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+    <view class="pub_tit">
+      社群分类：{{array[index]}}
+    </view>
+  </picker-->
+  <!--view class='label'>
+    <view class='lname'>社群图标：</view>
+    <view wx:if='{{upicon}}' class="upload_icon" bindtap="chooseImg"><image src="../images/qietu.png"></image></view>
+    <view wx:else class="upload_icon upload_img" bindtap="chooseImg"><image src="{{tempFile}}"></image></view>
+  </view-->
+  <view class='label labelborder'>
+    <view class='lname'>社群图标</view>
+    <input wx:if='{{upicon}}'  placeholder="请上传社群图标（必填）" disabled='true' bindtap='selectTap' data-mode='rectangle'></input>
+    <view wx:else class="upload_icon upload_img" bindtap='selectTap' data-mode='rectangle'>
+      <image src="{{tempFile}}"></image>
+    </view>
+    <view class='ico' wx:if='{{upicon}}'>
+      <image src="../images/jt_icon.png"></image>
+    </view>
+  </view>
+  <!--view class='label'>
+    <view class='lname'>社群公告：</view> <textarea bindinput="communityNotice" type='text'></textarea>
+  </view-->
+  <view class='label labelborder'>
+    <view class='lname'>社群标签</view>
+    <input bindtap="selectTag" style="height:{{cropperData.hidden?'1.4rem':'0'}}" disabled class='tr' type='text' value='{{tag}}'></input>
+    <view class='ico'>
+      <image src="../images/jt_icon.png"></image>
+    </view>
+  </view>
+  <view class='label'>
+    <view class='lname'>社群签名（100字以内）</view>
+  </view>
+  <view class='labeltextarea labelborder'>
+    <view class="textareaout">
+      <textarea class="textarea mt5 ml10" style="height:{{cropperData.hidden?'100px':'0'}}" maxlength="100"  placeholder="请输入社群签名" bindinput="communityMark" type='text'></textarea>
+      <view class="positionview">{{markLength}}/100</view>
+    </view>
+
+  </view>
+  <view class='label'>
+    <view class='lname'>社群说明(300字以内)</view>
+  </view>
+  <view class='labeltextarea'>
+    <view class="textareaoutbg">
+      <textarea class="textareabg  mt10 ml10" style="height:{{cropperData.hidden?'150px':'0'}}" maxlength="300" placeholder="请输入社群说明" bindinput="communityDesc" type='text'></textarea>
+      <view class="positionviewbg">{{desclength}}/300</view>
+    </view>
+
+  </view>
+</view>
+<view class='coll_btn tc' bindtap="pub">申请</view>
+
+
+<!-- 完善手机号码 -->
+<view class="dialog" wx:if='{{getphone}}'>
+  <view class="apply">
+    <view class="apply_top">
+      <view class="ap_can" bindtap="canApply">取消</view>
+      <view class="aptit">手机号码</view>
+      <view class="ap_ok" bindtap="goApply">确定</view>
+    </view>
+    <view class="apply_con">
+      <label>
+        <view class="key">电话：</view>
+        <view class="val">
+          <input type="text" focus='{{true}}' maxlength='11' bindinput='checkPhone'></input>
+        </view>
+      </label>
+      <label>
+        <view class='laba'>验证码：</view>
+        <input class='phone' maxlength="6" bindinput="codeNum"></input>
+        <view wx:if='{{showCode}}' class='code tc {{phoneVerify ? "check":""}}' bindtap='getCode'>获取验证码</view>
+        <view wx:else class='timec'>{{time}} s</view>
+      </label>
+    </view>
+  </view>
+</view>
+<template is="welCropper" data="{{cropperData:cropperData, cropperMovableItems:cropperMovableItems, cropperChangableData:cropperChangableData}}"></template>

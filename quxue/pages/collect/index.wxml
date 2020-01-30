@@ -1,0 +1,45 @@
+<view class='search' bindtap='goSearch'>
+  <image src='../images/search.png'></image>
+  <input placeholder='请输入您想要搜索的内容' disabled='true'></input>
+</view>
+<view class='list_box'>
+
+  <view class='list' wx:for='{{contributes}}' wx:key='this' data-id="{{item.id}}" bindtap='collDetail'>
+
+    <view class='{{item.status ? "status":"statusover"}} '>
+      <block wx:if="{{item.status}}">
+        进行中
+      </block>
+      <block wx:else>
+        已结束
+      </block>
+    </view>
+    <view class="posRel">
+      <image class='dataimg' src='{{item.contributeIcon}}' mode="widthFix"></image>
+      <block wx:if="{{!item.status}}">
+        <view class="zhe"></view>
+      </block>
+    </view>
+    <view class='ltit'>{{item.contributeTitle}}</view>
+    <view class='ltxt1'>
+      <block wx:if="{{item.contributeType == 1}}">
+        <view class='price {{item.status?"":"gr"}}'>
+          <text>¥</text>{{item.minMoney}}-{{item.maxMoney}}</view>
+      </block>
+      <block wx:else>
+        <view class='price {{item.status?"":"gr"}}'>有奖征稿</view>
+      </block>
+      <view class='tag'>{{item.tagName}}</view>
+    </view>
+    <view class='ltxt1'>
+      <view class='time2'>
+        <image src='../images/time2.png'></image>
+        <text decode="{{true}}">&ensp;{{item.countDown}} </text>
+      </view>
+      <view class='info'>欲购稿件量:{{item.buyNum}}篇</view>
+    </view>
+  </view>
+
+  <!-- no data -->
+  <view class="nodata">—— 喂喂，你碰到我的底线了 ——</view>
+</view>

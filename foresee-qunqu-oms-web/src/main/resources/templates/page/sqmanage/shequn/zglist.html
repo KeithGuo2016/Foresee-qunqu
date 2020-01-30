@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html class="iframe-h">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>社群征稿</title>
+		<link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="/css/admin.css" />
+		<link rel="stylesheet" type="text/css" href="/css/page.css" />
+	</head>
+	<body>
+		<div class="pageloading">
+			<img src="/images/loading.png" class="rotation" />
+		</div>
+		<div class="wrap-container clearfix layui-anim layui-anim-fadein">
+			<div class="column-content-detail" id="page" style="padding-right:4px;">
+				<form class="layui-form">
+					<div class="page-search">
+						<!--征稿标题-->
+						<div class="layui-inline">
+							<label class="layui-form-label " for="zgTitle">征稿标题：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="zgTitle" name="zg-title" placeholder="请输入征稿标题" autocomplete="off" class="layui-input" maxlength="200" />
+					        </div>
+						</div>
+						<!--征稿标题-->
+						<!--征稿开始时间-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="zgStartTime">开始时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="zgStartTime" name="zgstart-time" autocomplete="off" class="layui-input" placeholder="请选择开始时间" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--征稿开始时间-->
+						<!--征稿截止时间-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="zgEndTime">截止时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="zgEndTime" name="zgend-time" autocomplete="off" class="layui-input" placeholder="请选择截止时间" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--征稿截止时间-->
+						<!--征稿范围-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="contributeRange">征稿范围：</label>
+					        <div class="layui-input-inline">
+					        	<select id="contributeRange" name="contribute_range">
+									<option value="">请选择征稿范围</option>
+									<option value="0">全部可见</option>
+									<option value="1">社群可见</option>
+								</select>
+					        </div>
+						</div>
+						<!--征稿范围-->
+						<!--投放范围-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="userSeeRange">可见范围：</label>
+					        <div class="layui-input-inline">
+					        	<select id="userSeeRange" name="user_see_range">
+									<option value="">请选择可见范围</option>
+									<option value="0">全部可见</option>
+									<option value="1">仅征稿方</option>
+								</select>
+					        </div>
+						</div>
+						<!--投放范围-->
+						<!--征稿类型-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="contributeType">征稿类型：</label>
+					        <div class="layui-input-inline">
+					        	<select id="contributeType" name="contribute_type">
+									<option value="">请选择征稿类型</option>
+									<option value="1">收费</option>
+									<option value="0">免费</option>
+								</select>
+					        </div>
+						</div>
+						<!--征稿类型-->
+						<!--创建时间-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="lbcjTime">创建时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="lbcjTime" name="lbcj-time" autocomplete="off" class="layui-input" placeholder="请选择创建时间" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--创建时间-->
+						<!--更新时间-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="lbgxTime">更新时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="lbgxTime" name="lbgx-time" autocomplete="off" class="layui-input" placeholder="请选择更新时间" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--更新时间-->
+						<!--创建人-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="createPreson">创建人员：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="createPreson" name="create-preson" placeholder="请输入创建人姓名" autocomplete="off" class="layui-input" maxlength="20" />
+					        </div>
+						</div>
+						<!--创建人-->
+						<!--更新人-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="updatePreson">更新人员：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="updatePreson" name="update-preson" placeholder="请输入更新人姓名" autocomplete="off" class="layui-input" maxlength="20" />
+					        </div>
+						</div>
+						<!--更新人-->
+						<!--删除标志-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="deletedStatus">删除标志：</label>
+					        <div class="layui-input-inline">
+					        	<select id="deletedStatus" name="deleted_status">
+									<option value="">请选择删除标志</option>
+									<option value="0">未删除</option>
+									<option value="1">已删除</option>
+								</select>
+					        </div>
+						</div>
+						<!--删除标志-->
+						<!--审批阶段-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="flowSts">审批阶段：</label>
+					        <div class="layui-input-inline">
+					        	<select id="flowSts" name="flow_sts">
+									<option value="">请选择审批阶段</option>
+									<option value="0">新建</option>
+									<option value="3">审核中</option>
+									<option value="1">审核通过</option>
+									<option value="2">审核拒绝</option>
+								</select>
+					        </div>
+						</div>
+						<!--审批阶段-->
+						<div class="layui-inline search-btn">
+							<button type="button" class="layui-btn layui-btn-sm btn-search bg-blue main-search" id="searchBt" lay-submit="">搜索</button>
+						</div>
+					</div>
+				</form>
+				<div class="">
+					<table class="layui-hide table-box" id="dataList" lay-filter="orderAll"></table>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="/static/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery-1.8.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+	layui.use(['form', 'table', 'laydate', 'laypage', 'layer'], function(){
+	    var form = layui.form, table = layui.table, laypage = layui.laypage, laydate = layui.laydate, layer = layui.layer;  //初始化layui控件
+	    //数据对应表
+	    var contribute_range = ['全部可见', '社群'];  //征稿范围
+	    var user_see_range = ['全部可见', '仅征稿方'];  //投放稿件可见范围
+	    var contribute_type = ['免费', '收费'];  //征稿类型
+	    var is_deleted = ['未删除', '已删除'];  //删除标志
+	    var flow_sts = ['新建', '审核通过', '审核拒绝', '审核中'];  //审批阶段
+	    var parame = public.getParame();
+	    //获取筛选条件
+	    var get_search = function(){
+	    	var search_arr = [];
+	    	search_arr["contribute_title"] = $.trim($("#zgTitle").val());  //征稿标题
+	    	search_arr["start_date_start"] = public.getTime($.trim($("#zgStartTime").val())).start;  //开始起始
+	    	search_arr["start_date_end"] = public.getTime($.trim($("#zgStartTime").val())).end;  //开始终止
+	    	search_arr["end_date_start"] = public.getTime($.trim($("#zgEndTime").val())).start;  //截止时间起始
+	    	search_arr["end_date_end"] = public.getTime($.trim($("#zgEndTime").val())).end;  //截止时间终止
+	    	search_arr["contribute_range"] = $.trim($("#contributeRange").val());  //征稿范围
+	    	search_arr["user_see_range"] = $.trim($("#userSeeRange").val());  //稿件可见范围
+	    	search_arr["contribute_type"] = $.trim($("#contributeType").val());  //稿件类型
+	    	search_arr["created_date_start"] = public.getTime($.trim($("#lbcjTime").val())).start;  //创建时间起始
+	    	search_arr["created_date_end"] = public.getTime($.trim($("#lbcjTime").val())).end;  //创建时间终止
+	    	search_arr["updated_date_start"] = public.getTime($.trim($("#lbgxTime").val())).start;  //更新时间起始
+	    	search_arr["updated_date_end"] = public.getTime($.trim($("#lbgxTime").val())).end;  //更新时间终止
+	    	search_arr["created_by"] = $.trim($("#createPreson").val());  //创建人
+	    	search_arr["updated_by"] = $.trim($("#updatePreson").val());  //更新人
+	    	search_arr["is_deleted"] = $.trim($("#deletedStatus").val());  //删除标志
+	    	search_arr["flow_sts"] = $.trim($("#flowSts").val());  //审批阶段
+	    	return search_arr;
+	    };
+	    //判断征稿状态
+	    var getzgStatus = function(start, end) {
+	    	var left_time = public.getTimeOne(start);
+	    	var right_time = public.getTimeOne(end);
+	    	var now_time = public.getTimeOne(public.nowTime());
+	    	if(now_time < left_time){
+	    		return "未开始";
+	    	}else if(now_time > left_time && now_time < right_time){
+	    		return "进行中";
+	    	}else if(now_time > right_time){
+	    		return "已结束";
+	    	}else{
+	    		return "--";
+	    	}
+	    };
+	    //数据表格渲染控件
+	    table.render({
+	        elem: '#dataList',
+	        url: '/contributes/selectlist',
+	        method: 'post',
+	        id: 'orderAll',
+	        where: {
+	        	'communityId': parame.id
+	        },
+	        cols: [
+	               
+	               [
+
+		            {field: 'id', title: 'id', hide: true},
+		            {field: 'isDeleted', title: 'isDeleted', hide: true},
+		            {field: 'createUserid', title: 'create_user_id', hide: true},
+		            {field: 'contributeUserid', title: 'contribute_user_id', hide: true},
+		            {type: 'numbers', title: '序号', width: 60},
+		            {field: 'contributeTitle', title: '标题', width: 100, event: 'onSelect'},
+		            {field: 'contributeIcon', title: '封面图', width: 150, event: 'onSelect', templet: function(d) {
+		            	return d.contributeIcon == "" ? "--" : public.showImg(d.contributeIcon);
+			        }},
+		            {field: 'communityName', title: '所属社群', width: 120, event: 'onSelect', templet: function(d) {
+		            	return d.communityName == null ? "--" :d.communityName;
+			        }},
+		            {field: 'contributeDesc', title: '征稿描述', width: 150, event: 'onSelect'},
+		            {field: 'orientation', title: '征稿方向', width: 100, event: 'onSelect'},
+		            {field: 'tagNames', title: '标签', width: 200, event: 'onSelect'},
+		            {field: 'buyNum', title: '预购稿件数量', width: 120, event: 'onSelect'},
+		            {field: 'maxMoney', title: '赏金额度最大值', width: 130, event: 'onSelect'},
+		            {field: 'minMoney', title: '赏金最小值', width: 100, event: 'onSelect'},
+		            {field: 'trueMoney', title: '赏金确定额度', width: 120, event: 'onSelect'},
+		            {field: 'startDate', title: '征稿开始时间', width: 170, event: 'onSelect', templet: function(d) {
+		            	return d.startDate == null ? "--" : d.startDate;
+			        }},
+		            {field: 'endDate', title: '征稿截止时间', width: 170, event: 'onSelect', templet: function(d) {
+		            	return d.endDate == null ? "--" : d.endDate;
+			        }},
+			        {field: 'contributeRange', title: '征稿范围', width: 100, event: 'onSelect', templet:function(d){
+		            	return d.contributeRange == null ? "--" : contribute_range[d.contributeRange];
+			        }},
+			        {field: 'userSeeRange', title: '投放稿件可见范围', width: 150, event: 'onSelect', templet:function(d){
+		            	return d.userSeeRange == null ? "--" : user_see_range[d.userSeeRange];
+			        }},
+			        {field: 'contributeType', title: '征稿类型', width: 100, event: 'onSelect', templet:function(d){
+		            	return d.contributeType == null ? "--" : contribute_type[d.contributeType];
+			        }},
+		            {field: 'createdDate', title: '创建时间', width: 170, event: 'onSelect', templet: function(d) {
+		            	return d.createdDate == null ? "--" : d.createdDate;
+			        }},
+		            {field: 'updatedDate', title: '更新时间', width: 170, event: 'onSelect', templet: function(d) {
+		            	return d.updatedDate == null ? "--" : d.updatedDate;
+			        }},
+		            {field: 'createdName', title: '创建人', width: 100, event: 'onSelect', templet: function(d) {
+		            	return d.createdName == null ? "--" : d.createdName;
+			        }},
+		            {field: 'updatedName', title: '更新人', width: 100, event: 'onSelect', templet: function(d) {
+		            	return d.updatedName == null ? "--" : d.updatedName;
+			        }},
+		            {field: 'isDeleted', title: '删除标志', width: 100, event: 'onSelect', templet:function(d){
+		            	return is_deleted[d.isDeleted];
+			        }},
+		            {field: 'flowSts', title: '审批阶段', width: 100, event: 'onSelect', templet:function(d){
+		            	return d.flowSts == null ? "--" : flow_sts[d.flowSts];
+			        }},
+		            {field: 'caseDesc', title: '征稿案例描述', width: 250, event: 'onSelect'},
+		            {field: 'flowSts', title: '征稿状态', width: 100, event: 'onSelect', templet:function(d){
+		            	return getzgStatus(d.startDate, d.endDate);
+			        }}
+		            
+	        		]
+	               
+	              ],
+	        page: true,
+	        limit: 10,
+	        limits: [5, 10, 15, 25, 35],
+	        loading: true,
+	        done: function (res, curr, count) {
+	           if ($(".layui-table-main").find("tr").length != 0) {
+	                $(".layui-table-page").show();
+	           }
+	      	   //图片点击放大
+	      	   $("img").click(function() {
+	      			public.bigImg($(this).parent());
+	      	   });
+	           $(".pageloading").hide();
+	        }
+	    });
+	    public.adaptation();
+	    //点击搜索
+	    $("#searchBt").click(function() {
+	    	var res = get_search();
+	        //请求后台数据表格接口
+	        table.reload("orderAll", {
+	            url: "/contributes/selectlist",
+	            where: {
+	                "contributeTitle": res.contribute_title,  //征稿标题
+	                "startDateStar": res.start_date_start,  //开始时间起始
+	                "startDateEnd": res.start_date_end,  //开始时间终止
+	                "endDateStar": res.end_date_start,  //截止时间起始
+	                "endDateEnd": res.end_date_end,  //截止时间终止
+	                "contributeRange": res.contribute_range,  //征稿范围
+	                "userSeeRange": res.user_see_range,  //稿件可见范围
+	                "contributeType": res.contribute_type,  //稿件类型
+	                "createdDateStar": res.created_date_start,  //创建时间起始
+	                "createdDateEnd": res.created_date_end,  //创建时间终止
+	                "updatedDateStar": res.updated_date_start,  //更新时间起始
+	                "updatedDateEnd": res.updated_date_end,  //更新时间终止
+	                "createdName": res.created_by,  //创建人
+	                "updatedName": res.updated_by,  //更新人
+	                "isDeleted": res.is_deleted,  //删除标志
+	                "flowSts": res.flow_sts  //审批阶段
+	            },
+	            method: "post"
+	        });
+	        public.adaptation();
+	    });
+	});
+	</script>
+</html>    

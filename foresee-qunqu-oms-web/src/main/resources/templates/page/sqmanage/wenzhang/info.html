@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html class="iframe-h">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>文章详情</title>
+		<link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="/css/admin.css" />
+		<link rel="stylesheet" type="text/css" href="/css/formSelects-v4.css" />
+		<link rel="stylesheet" type="text/css" href="/css/page.css" />
+		<style>
+			.layui-form-label{width:100px;}
+			.layui-input,.xm-select-parent .xm-input{width:200px;}
+			.mar-r-s{margin-right:125px;}
+			.layui-edge{display:none;}
+			.layui-input,.xm-select-parent .xm-input{border:none;}
+			.layui-textarea{width:420px;height:200px;border:none;}
+		</style>
+	</head>
+	<body>
+		<div class="pageloading">
+			<img src="/images/loading.png" class="rotation" />
+		</div>
+		<div class="wrap-container clearfix">
+			<div class="column-content-detail">
+				<form class="layui-form">
+					<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="articleTitle">文章标题：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="articleTitle" name="article_title" lay-verify="article_title" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+					    <div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="articleTag">文章标签：</label>
+					        <div class="layui-input-inline">
+					        	<select id="articleTag" name="article_tag" xm-select="xm-articleTag">
+									<option value="">--</option>
+								</select>
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="isRecommend">首页推荐：</label>
+					        <div class="layui-input-inline">
+					        	<select id="isRecommend" name="is_recommend">
+									<option value="">--</option>
+									<option value="1">推荐</option>
+									<option value="0">不推荐</option>
+								</select>
+					        </div>
+					    </div>
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="isDraft">文章类型：</label>
+					        <div class="layui-input-inline">
+					        	<select id="isDraft" name="is_draft">
+									<option value="">--</option>
+									<option value="1">草稿</option>
+									<option value="0">非草稿</option>
+								</select>
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+					    <div class="layui-inline mar-r-s" style="position:relative;top:-20px;">
+					        <label class="layui-form-label" for="recommendDate">显示日期：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="recommendDate" name="recommend_date" autocomplete="off" class="layui-input" placeholder="--" readOnly='readOnly' />
+					        </div>
+					    </div>
+				  		<div class="layui-inline mar-r-s" style="position:relative;top:-5px;">
+					        <label class="layui-form-label" for="logoUp">文章封面：</label>
+					        <div class="layui-input-inline" style="position:relative;">
+					        	<img id="articleIcon" src="/images/up_logo.png" class="up-img" />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline" style="width:100%;">
+					        <label class="layui-form-label" for="articleOutline">文章简述：</label>
+					        <div class="layui-input-inline" style="width:90%;">
+						    	<div id="articleOutline" class="layui-layedit2"></div>
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline" style="width:100%;">
+					        <label class="layui-form-label" for="articleContent">文章内容：</label>
+					        <div class="layui-input-inline" style="width:90%;">
+						    	<div id="articleContent" class="layui-layedit2"></div>
+						    </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline" style="width:100%;">
+					        <label class="layui-form-label" for="articleContent">文章评论：</label>
+					        <div class="layui-input-inline" style="width:90%;">
+						    	<div id="orderList" class="layui-layedit2">
+						    		
+						    		<!-- <div class="talk-box">
+						    			<div class="float-l"><img src="/images/up_logo.png" /></div>
+						    			<div class="float-l float-r">
+						    				<div class="col-999">xiqer</div>
+						    				<div>qwere</div>
+						    				<div class="col-999">2019-09-09 09:50:26</div>
+						    				<div class="talk-about">
+						    					<div>
+						    						<div class="float-l"><img src="/images/up_logo.png" /></div>
+							    					<div class="float-l float-r">
+							    						<div>xiqer</div>
+							    						<div>回复&nbsp;&nbsp;<span class="col-999">李勋</span>&nbsp;&nbsp;<span class="col-999">asdfasdfasdfweva</span></div>
+							    					</div>
+						    					</div>
+						    					<div>
+						    						<div class="float-l"><img src="/images/up_logo.png" /></div>
+						    						<div class="float-l float-r">
+							    						<div>xiqer</div>
+							    						<div>回复&nbsp;&nbsp;<span class="col-999">李勋</span>&nbsp;&nbsp;<span class="col-999">asdfasdfasdfweva</span></div>
+							    					</div>
+						    					</div>
+						    				</div>
+						    			</div>
+						    		</div> -->
+						    		
+						    	</div>
+						    </div>
+					    </div>
+				  	</div>
+      			</form>
+			</div>
+		</div>
+	</body>
+	<script src="/static/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery-1.8.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/formSelects-v4.js"></script>
+	<script type="text/javascript" charset="utf-8">
+	layui.use(['form', 'flow', 'laydate', 'laypage', 'layer'], function(){
+		var form = layui.form, laydate = layui.laydate, laypage = layui.laypage, layer = layui.layer, flow = layui.flow, formSelects = layui.formSelects;  //初始化layui控件
+		var parame = public.getParame();
+		formSelects.btns("xm-articleTag", []);
+	    layui.formSelects.value("xm-articleTag", []);
+	    var img_one = '';
+	    //请求标签
+	    $.ajax({
+	    	type: 'post',
+	    	url: '/tag/selectlist',
+	    	data: {'page': 1, 'limit': 999999999, 'tagType': 1},
+	    	async: false,
+			dataType: 'json',
+			success: function(data) {
+				if(data.code == '0'){
+					var sign_str = "";
+			       	var sign_arr = [];
+		        	//标签管理列表数据
+		        	$.each(data.data,function(k,val){
+		        		sign_str = {"name": val.tagName, "value": val.id};
+		        		sign_arr.push(sign_str);
+			        });
+					formSelects.data('xm-articleTag', 'local', {arr: sign_arr});
+				}else{
+					layer.alert(data.msg, {icon: 5, title: "提示"});
+				}
+			}
+	    });
+	    //流加载
+	    flow.load({
+			elem: '#orderList', //指定列表容器
+			isAuto: true,
+			scrollElem: '#pyq-content',
+			done: function(page, next){ //到达临界点（默认滚动触发），触发下一页
+			      var lis = [];
+			      //请求评论内容
+			      $.ajax({
+			    	  type:"POST",
+			    	  url:"/articlescomment/selectarticlelist",
+			    	  data:{
+						  'page': page,
+						  'limit': 10,
+			    		  'articlesId': parame.id
+			    	  },
+			    	  dataType:"json",
+			    	  success:function(data){
+			    		  if(data.code == "0"){
+			    			  if(data.count > 0){
+			    				  var str = '';
+				    			  var str2 = '';
+				    			  //遍历数据
+				    		  	  layui.each(data.data, function(index, value){
+				    		  		$.each(value.list, function(index2, value2){
+				    		  			str2 += '<div class="del-this-box">'+
+						    						'<div class="float-l"><img src="'+value2.headUrl+'" /></div>'+
+							    					'<div class="float-l float-r">'+
+							    						'<div>'+value2.nickName+'<button class="layui-btn layui-btn-sm layui-btn-danger delpl" style="margin-left:15px;" data-id="'+value2.id+'">删除</button></div>'+
+							    						'<div>回复&nbsp;&nbsp;<span class="col-999">'+value2.toNickName+'</span>&nbsp;&nbsp;<span class="col-999">'+value2.content+'</span></div>'+
+							    					'</div>'+
+						    					'</div>';
+				    		  		});
+				    		  		//console.log(str2);
+				    		  		//console.log(value.one);
+			    		  		    lis.push('<div class="talk-box del-this-box">'+
+						    			'<div class="float-l"><img src="'+value.one.headUrl+'" /></div>'+
+						    			'<div class="float-l float-r">'+
+						    				'<div class="col-999">'+value.one.nickName+'<button class="layui-btn layui-btn-sm layui-btn-danger delpl" style="margin-left:15px;" data-id="'+value.one.id+'">删除</button></div>'+
+						    				'<div>'+value.one.content+'</div>'+
+						    				'<div class="col-999">'+value.one.createdDate+'</div><div class="talk-about">'+str2+'</div></div>'+
+						    		'</div>');
+			    		  		    str2 = "";
+				    		      });
+							      next(lis.join(''), page < Math.ceil(data.count / 10));
+			    			  }else{
+			    				  $("#orderList").html("暂无评论");
+			    			  }
+			    		  }else{
+			    			  layer.alert(data.msg, {icon: 5, title: "提示"});
+			    		  }
+			    	}
+			      });
+			}
+		});
+	    //信息回显
+	    $.ajax({
+	    	type: 'post',
+	    	url: '/articles/select',
+	    	data: {'id': parame.id},
+	    	async: false,
+			dataType: 'json',
+			success: function(data) {
+				if(data.code == '0'){
+					//回显多选项
+					if(data.data.articleTag == '1'){
+						var status = [data.data.articleTag];
+					}else{
+						var status = data.data.articleTag.split(',');
+					}
+					$("#articleTitle").val(data.data.articleTitle);  //文章标题
+					layui.formSelects.value("xm-articleTag", status);  //文章标签
+					//首页推荐
+			    	$("#isRecommend option").each(function(index){
+		            	if($(this).attr("value") == data.data.isRecommend){
+		            		$(this).attr("selected",true);
+		            	}
+		            });
+			    	//是否草稿[文章类型]
+			    	$("#isDraft option").each(function(index){
+		            	if($(this).attr("value") == data.data.isDraft){
+		            		$(this).attr("selected",true);
+		            	}
+		            });
+			    	$("#recommendDate").val(data.data.recommendDate);  //显示日期
+			    	$("#articleOutline").html(data.data.articleOutline);  //文章简述
+			    	$("#articleContent").html(data.data.articleContent);  //文章内容
+			    	img_one = data.data.articleIcon;  //文章封面
+			    	$("#articleIcon").attr("src", data.data.articleIcon);  //文章封面
+					form.render();
+				    $(".layui-layedit").css('disabled','disabled');
+			    	$("input,textarea").attr("readOnly", "readOnly");
+			    	$("select").attr("disabled", "disabled");
+			    	$("div,input").click(function(){
+			    		return false;
+			    	});
+			    	//图片点击放大
+			      	$("img").click(function() {
+			      		public.bigImg($(this).parent());
+			      	});
+					$(".pageloading").hide();
+				}else{
+					layer.alert(data.msg, {icon: 5, title: "提示"});
+				}
+			}
+	    });
+	    //点击删除评论
+	    $("#orderList").on("click", ".delpl", function() {
+	    	var ids = $.trim($(this).attr("data-id"));
+	    	var _that = this;
+	    	$.post('/articlescomment/delete', {'id': ids}, function(data) {
+	    		if(data.code == '0'){
+	    			//删除成功
+	    			$(_that).parent().parent().parent(".del-this-box").remove();
+	    		}else{
+	    			layer.alert(data.msg, {icon: 5, title: "提示"});
+	    		}
+	    	}, 'json');
+	    });
+	});
+	</script>
+</html>

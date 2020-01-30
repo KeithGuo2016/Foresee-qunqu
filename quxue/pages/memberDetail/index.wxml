@@ -1,0 +1,46 @@
+<view class='mebd_top background' style="background-image:url('{{info.headUrl}}');">
+<view class="returnico" bindtap="goBack"></view>
+<view class="zhe">
+  <view class='mebdl'>
+    <view class='mdla'>
+      <view class='avator'>
+      <view class='memtag' wx:if='{{info.isCommunity}}'>
+        <image src='../images/me_l.png'></image>
+      </view>
+        <image class='avaimg' src='{{info.headUrl}}'></image>
+      </view>
+      <view class='mebd_nik'>
+        <text class='nka'>{{info.nickName}}</text>
+        <block wx:if="{{info.userMark.length>0}}">
+          <text class='nkb' >{{info.userMark}}</text>
+        </block>
+      </view>
+    </view>
+    <view class='mdlb'>{{info.userDesc}}</view>
+  </view>
+  <view class='mebdr'>
+    <view class='focus tc' bindtap="followAuthor">{{follText}}</view>
+  </view>
+  </view>
+</view>
+<view class='source' bindtap="goCommunityDetail" data-id='{{info.communityid}}'>
+  <text class='soa'>所在社群</text>
+  <image src='{{info.communityIcon}}'></image>
+  <text class='sob'>{{info.communityName}}</text>
+  <view class="soc arrows mb6"> </view>
+  
+</view>
+<view class='ma_list' wx:for='{{actions}}' wx:key='{{item.id}}'>
+  <view class='mal'>
+    <block>
+    <text>{{item.createdDay}}</text>{{item.createdMonth}}月
+    </block>
+  </view>
+  <view class='{{index==0?"mar mar1":"mar"}}' data-id='{{item.id}}' bindtap="goDetail">
+    <view class='mar_tit'>{{item.articleTitle}}</view>
+    <view class='mar_img'>
+      <image src='{{item.articleIcon}}'></image>
+    </view>
+  </view>
+</view>
+<view class="nodata mt20">—— 喂喂，你碰到我的底线了 ——</view>

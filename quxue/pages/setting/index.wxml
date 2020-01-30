@@ -1,0 +1,69 @@
+<view class='list_box'>
+  <view class='se_label'>
+    <view class='sename'>头像</view>
+    <view class='seval' bindtap="chooseImg"><image src='{{headUrl}}'></image></view>
+    <view class='seicon'><image src='../images/jt_icon.png'></image></view>
+  </view>
+  <view class='se_label'>
+    <view class='sename'>昵称</view>
+    <view class='seval'><input bindinput="getName" value='{{name}}'></input></view>
+    <view class='seicon'><image src='../images/jt_icon.png'></image></view>
+  </view>
+  <view class='se_label'>
+    <view class='sename'>手机号</view>
+    <view class='seval' bindtap="changePhone"  ><input disabled="{{true}}" placeholder='请填写' value="{{phone}}"></input></view>
+    <view class='seicon'><image src='../images/jt_icon.png'></image></view>
+  </view>
+  <view class='se_label'>
+    <view class='sename'>个性签名</view>
+    <view class='seval'><input disabled="{{true}}" bindtap="getcomment" placeholder='请填写' value="{{mark}}"></input></view>
+    <view class='seicon'><image src='../images/jt_icon.png'></image></view>
+  </view>
+
+  <view bindtap="save" class='coll_btn tc'>保存</view>
+</view>
+
+<!-- 展开弹层 -->
+<view class='dialog' wx:if='{{comment}}'>
+  <view class='areabox'>
+    <view class='areabtn'>
+      <view class='cancel' bindtap='cancelComment'>取消</view>
+      <view class='ok' bindtap='doComment'>确定</view>
+    </view>
+    <textarea bindinput="getContent" placeholder='有什么想说的，展开讲讲'></textarea>
+  </view>
+</view>
+
+<!--view class='dialog' wx:if='{{changePhone}}'>
+  <view class='areabox'>
+    <view class='areabtn'>
+      <view class='cancel' bindtap='cancelComment'>取消</view>
+      <view class='ok' bindtap='doComment'>确定</view>
+    </view>
+    <textarea bindinput="getContent" placeholder='有什么想说的，展开讲讲'></textarea>
+  </view>
+</view-->
+<view class="dialog" wx:if='{{changePhone}}'>
+  <view class="apply">
+  <view class="apply_top">
+    <view class="ap_can" bindtap="canApply">取消</view>
+    <view class="aptit">更改手机</view>
+    <view class="ap_ok" bindtap="goApply">确定</view>
+  </view>
+  <view class="apply_con">
+   
+    <label>
+      <view class="key">新手机号码：</view>
+      <view class="val"><input type="text" maxlength='11' bindinput='checkPhone'></input></view>
+    </label>
+    <label>
+      <view class='laba'>验证码：</view>
+      <input class='phone' maxlength="6" bindinput="codeNum"></input>
+      <view wx:if='{{showCode}}' class='code tc {{phoneVerify ? "check":""}}' bindtap='getCode'>获取验证码</view>
+      <view wx:else class='timec'>{{time}} s</view>
+    </label>
+    
+  </view>
+    
+  </view>
+</view>

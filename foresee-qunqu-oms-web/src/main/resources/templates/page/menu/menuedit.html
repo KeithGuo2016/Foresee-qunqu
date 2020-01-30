@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html class="iframe-h">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>编辑菜单</title>
+		<link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="/css/zTreeStyle/zTreeStyle.css" />
+		<link rel="stylesheet" type="text/css" href="/css/admin.css" />
+		<link rel="stylesheet" type="text/css" href="/css/page.css" />
+	</head>
+	<body>
+		<div class="pageloading">
+			<img src="/images/loading.png" class="rotation" />
+		</div>
+		<div class="wrap-container clearfix">
+			<div class="column-content-detail">
+				<form class="layui-form">
+					<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					      <label class="layui-form-label" for="menuName">菜单名称：</label>
+					      <div class="layui-input-inline">
+					        <input type="text" id="menuName" name="menu-name" lay-verify="menu-name" value="" th:value="${menu.menuname}" autocomplete="off" class="layui-input" placeholder="请输入菜单名称">
+					      	<input type="hidden" id="id" value="" th:value="${menu.id}"/>
+					      </div>
+					    </div>
+					    <div class="layui-inline">
+				            <label class="layui-form-label" for="roleFather">父级菜单：</label>
+				            <div class="layui-input-inline">
+				                <input type="text" id="roleFather" readonly name="role-father" lay-verify="role-father" value="" autocomplete="off" class="layui-input" placeholder="请选择父级菜单">
+				            </div>
+				        </div>
+				  	</div>
+				  	<div class="pad-top-b">
+				  		<div class="layui-inline mar-r-s">
+					      <label class="layui-form-label" for="menuRank">菜单等级：</label>
+					      <div class="layui-input-inline">
+					        <select name="menurank" id="menuRank" lay-filter="menurank">
+								<option value="">请选择菜单等级</option>
+								<option th:selected=" ${menu.menulevel == 1}  " value="1" >一级</option>
+								<option th:selected=" ${menu.menulevel == 2} " value="2">二级</option>
+								<option th:selected=" ${menu.menulevel == 3}  " value="3">三级</option>
+								<option th:selected=" ${menu.menulevel == 4}  " value="4">四级</option>
+							</select>
+					      </div>
+					    </div>
+					    <div class="layui-inline">
+				            <label class="layui-form-label" for="menuIcon">菜单图标：</label>
+				            <div class="layui-input-inline">
+				                <input type="text" id="menuIcon" name="menu-icon" lay-verify="menu-icon" value="" th:value="${menu.menuicon}" autocomplete="off" class="layui-input" placeholder="请输入菜单图标">
+				            </div>
+				        </div>
+				  	</div>
+				  	<div class="pad-top-b">
+				  		<div class="layui-inline mar-r-s">
+					      <label class="layui-form-label" for="menuAddress">响应地址：</label>
+					      <div class="layui-input-inline">
+					        <input type="text" id="menuAddress" name="menu-address" lay-verify="menu-address" value="" th:value="${menu.menuurl}" autocomplete="off" class="layui-input" placeholder="请输入菜单响应地址">
+					      </div>
+					    </div>
+					    <div class="layui-inline">
+				            <label class="layui-form-label" for="status">菜单状态：</label>
+				            <div class="layui-input-inline radio-spec">
+				                <input type="radio" name="menustatus" value="1" th:checked=" ${menu.isenable == 1}" title="启用" >
+				                <input type="radio" name="menustatus" value="0" th:checked=" ${menu.isenable == 0}" title="禁用">
+				            </div>
+				        </div>
+				  	</div>
+				  	<div class="pad-top-b">
+				  		<div class="layui-inline">
+					      <button class="layui-btn layui-btn-sm layui-btn-normal mar-left" onClick="return false;" id="yes-submit">确&nbsp;&nbsp;认</button>
+					      <button class="layui-btn layui-btn-sm layui-btn-normal mar-left" onClick="return false;" id="no-submit">取&nbsp;&nbsp;消</button>
+					    </div>
+				  	</div>
+      			</form>
+			</div>
+		</div>
+		<div id="roleContent" class="roleContent layui-anim layui-anim-upbit">
+			<div class="tree-select">请选择角色所属</div>
+			<ul id="roleTree" class="ztree roletree"></ul>
+		</div>
+		<input type="hidden" th:value="${menu.menupid}" id="menuData" />
+	</body>
+	<script src="/static/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery-1.8.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery.ztree.core.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+	layui.use(['jquery', 'form'], function(){
+	    var $ = layui.$,form = layui.form;  //初始化layui控件
+	    var selectedNodes = '';
+        var onClick = function() {
+        	var zTreeObj = $.fn.zTree.getZTreeObj("roleTree");
+        	selectedNodes = zTreeObj.getSelectedNodes()[0].id;
+			$("#roleFather").val(zTreeObj.getSelectedNodes()[0].name);
+			$("#roleContent").hide();
+        };
+	    var setting = {
+	    	view: {dblClickExpand: false},
+			data:{simpleData:{enable:true}},
+			callback:{onClick: onClick}
+		};
+		//请求角色数据
+	    $.ajax({
+	        type:"POST",
+	        url:"/menu/selectmenuslist",
+	        dataType:"json",
+	        success:function(res){
+	            $.fn.zTree.init($("#roleTree"), setting, res.data);
+	            $.each(res.data, function(index, value){
+	            	if(value.id == $("#menuData").val()){
+	            		$("#roleFather").val(value.name);
+	            		selectedNodes = value.id;
+	            	}
+	            	$(".pageloading").hide();
+	            });
+	        }
+	    });
+        //点击选择框
+        $("#roleFather").click(function(){
+        	var cityObj = $("#roleFather");
+			var cityOffset = $("#roleFather").offset();
+			$("#roleContent").css({"left":cityOffset.left + "px", "top":cityOffset.top + cityObj.outerHeight() + 12 + "px"}).slideDown("fast");
+			$("body").bind("mousedown", onBodyDown);
+			return false;
+        });
+        //表单树联动效果
+        $(".wrap-container").click(function(){$("#roleContent").hide();});
+        $("#roleContent").click(function(){return false;});
+        $(".tree-select").click(function(){$("#roleContent").hide();$("#roleFather").val("");selectedNodes="";$(".ztree li a").removeClass("curSelectedNode")});
+        //点击确定
+	    $("#yes-submit").click(function() {
+	    	var id = $.trim($("#id").val());
+	    	var menu_name = $.trim($("#menuName").val());  //菜单名称
+	    	var menu_rank = $.trim($("#menuRank").val());  //菜单等级
+	    	var menu_icon = $.trim($("#menuIcon").val());  //菜单图标
+	    	var menu_address = $.trim($("#menuAddress").val());  //响应地址
+	    	var menu_status = $("input[name='menustatus']:checked").val();  //菜单状态
+	    	var menu_father = selectedNodes;  //父级菜单
+	    	if(menu_father == '' || menu_father == null){menu_father='0';}
+	    	if(id && menu_name && menu_rank && menu_icon && menu_address && menu_status && menu_father != ''){
+	    		//请求菜单添加接口
+		    	$.post('/menu/update',{"id":id,
+		    						 "menuname":menu_name,
+				    			     "menuurl":menu_address,
+				    			     "menuicon":menu_icon,
+				    			     "isenable":menu_status,
+				    			     "menulevel":menu_rank,
+				    			     "menupid":menu_father
+		    		  				},function(data){
+		    				  if(data.code==0){
+		    					  layer.msg('编辑成功', {'icon': 1,time:500},function(){
+		          				      window.parent.location.reload();
+		              	              var index = parent.layer.getFrameIndex(window.name);
+		              	              parent.layer.close(index);
+		                          });
+		    				  }else{
+		    					  layer.alert(data.msg, {icon: 5, title: "提示"});
+		    				  }
+		    	},'json');
+	    	}else{
+	    		layer.alert("请先补充完整菜单信息!", {icon: 5, title: "提示"});
+	    	}
+	    });
+        //点击取消
+        $("#no-submit").click(function() {
+        	var index = parent.layer.getFrameIndex(window.name);
+       		parent.layer.close(index);
+        });
+        function hideMenu() {
+			$("#roleContent").fadeOut("fast");
+			$("body").unbind("mousedown", onBodyDown);
+		}
+        function onBodyDown(event) {
+			if (!(event.target.id == "roleFather" || event.target.id == "roleContent" || $(event.target).parents("#roleContent").length>0)) {
+				hideMenu();
+			}
+		}
+	});
+	</script>
+</html>

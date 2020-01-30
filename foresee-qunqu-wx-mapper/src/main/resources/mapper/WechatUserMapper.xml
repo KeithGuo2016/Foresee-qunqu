@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foresee.mapper.WechatUserMapper">
+  <resultMap id="BaseResultMap" type="com.foresee.pojo.WechatUser">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="app_id" jdbcType="VARCHAR" property="appId" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="union_id" jdbcType="VARCHAR" property="unionId" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="head_url" jdbcType="VARCHAR" property="headUrl" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="communityId" jdbcType="INTEGER" property="communityid" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="user_mark" jdbcType="VARCHAR" property="userMark" />
+    <result column="user_type" jdbcType="VARCHAR" property="userType" />
+    <result column="flow_sts" jdbcType="VARCHAR" property="flowSts" />
+    <result column="user_desc" jdbcType="VARCHAR" property="userDesc" />
+    <result column="bg_icon" jdbcType="VARCHAR" property="bgIcon" />
+    
+  </resultMap>
+  <update id="updateByopenId" parameterType="com.foresee.pojo.WechatUser">
+  	update wechat_user set phone=#{phone} where open_id=#{openId}
+  </update>
+  <update id="updateCommunity" parameterType="com.foresee.pojo.WechatUser">
+  	update wechat_user set communityId = null where open_id=#{openId}
+  </update>
+  
+</mapper>

@@ -1,0 +1,76 @@
+<view class='tabnav'>
+  <view wx:for='{{tabNav}}' class='{{index == curIndex ? "cur":""}}' wx:key='index' data-id='{{index}}' bindtap='tabSwitch'>{{item}}</view>
+</view>
+
+<view class='list_box' wx:if="{{curIndex == 0}}">
+  <view class='artical'>
+  <view class="sc_sq arc" wx:for='{{productList}}' wx:key='{{item.id}}' >
+  
+    <movable-area>
+      <movable-view out-of-bounds="true" direction="horizontal" x="{{item.xmove}}"
+          inertia="true"
+          data-productIndex="{{index}}"
+          bindtouchstart="handleTouchStart"
+          bindtouchend="handleTouchEnd"
+          bindchange="handleMovableChange">
+          <view class='arlist' data-id="{{item.id}}" bindtap='goArticleDetail'>
+              <view class='arlist_l'>
+                <view class='atit'>{{item.articleTitle}}</view>
+                <view class='ainfo'>
+                  <text class='fl'>{{item.nickName}}.{{item.recommendDate}}</text>
+                </view>
+              </view>
+              <view class='arlist_r'><image src='{{item.articleIcon}}'></image></view>
+            </view>
+        </movable-view>
+    </movable-area>
+    <view class="canFo" bindtap='canArticleFocus' data-index="{{index}}" data-id="{{item.id}}">取消关注</view>
+</view>
+  </view>
+</view>
+
+<view class='list_box' wx:if="{{curIndex == 1}}">
+  <view class="sc_sq mem" wx:for='{{productList}}' wx:key='{{item.id}}' wx:key='{{item.id}}' >
+    <movable-area>
+      <movable-view out-of-bounds="true" direction="horizontal" x="{{item.xmove}}"
+          inertia="true"
+          data-productIndex="{{index}}"
+          bindtouchstart="handleTouchStart"
+          bindtouchend="handleTouchEnd"
+          bindchange="handleMovableChange">
+        <view class='memlist' data-id="{{item.openId}}" bindtap='goAuthorDetail'>
+          <view class='memimg'><image src='{{item.headUrl}}'></image></view>
+          <view class='memname'>{{item.nickName}}</view>
+        </view>
+      </movable-view>
+    </movable-area>
+    <view class="canFo" bindtap='canAuthFocus' data-index="{{index}}" data-id="{{item.authorId}}">取消关注</view>
+  </view>
+</view>
+
+<view class='list_box' wx:if="{{curIndex == 2}}">
+  <view class="sc_sq" wx:for='{{productList}}' wx:key='{{item.id}}' wx:key='{{item.id}}' >
+    <movable-area>
+      <movable-view out-of-bounds="true" direction="horizontal" x="{{item.xmove}}"
+          inertia="true"
+          data-productIndex="{{index}}"
+          bindtouchstart="handleTouchStart"
+          bindtouchend="handleTouchEnd"
+          bindchange="handleMovableChange">
+  <view class='list_un'  data-id="{{item.id}}" bindtap='goCommunityDetail'>
+    <view class='listl listla'><image src='{{item.communityIcon}}'></image></view>
+    <view class='listr'>
+      <view class='tita'>{{item.communityName}}</view>
+      <view class='des desa'>{{item.communityDesc}}</view>
+      <view class='num clear'>{{item.memberCount}}人</view>
+      <view class='source sourcea'>
+        <text>{{item.workCount}}</text>篇/作品发表
+        <view class='count'>{{item.readCount}}人阅读</view>
+      </view>
+    </view>
+  </view>
+  </movable-view>
+  </movable-area>
+  <view class="canFo" bindtap='canFocus' data-index="{{index}}" data-id="{{item.id}}">取消关注</view>
+  </view>
+</view>

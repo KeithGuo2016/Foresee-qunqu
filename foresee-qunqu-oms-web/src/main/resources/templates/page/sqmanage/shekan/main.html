@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html class="iframe-h">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>社刊列表</title>
+		<link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="/css/admin.css" />
+		<link rel="stylesheet" type="text/css" href="/css/page.css" />
+	</head>
+	<body>
+		<div class="pageloading">
+			<img src="/images/loading.png" class="rotation" />
+		</div>
+		<div class="wrap-container clearfix layui-anim layui-anim-fadein">
+			<div class="column-content-detail" id="page" style="padding-right:4px;">
+				<div class="layui-form-item page-btn" action="">
+					<!--顶部按钮-->
+					<div class="layui-inline tool-btn" id="menuBtn"></div>
+					<!--顶部按钮-->
+				</div>
+				<form class="layui-form">
+					<div class="page-search">
+						<!--社刊标题-->
+						<div class="layui-inline">
+							<label class="layui-form-label " for="magazineTitle">社刊标题：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="magazineTitle" name="magazine_title" placeholder="请输入社刊标题" autocomplete="off" class="layui-input" maxlength="200" />
+					        </div>
+						</div>
+						<!--社刊标题-->
+						<!-- 所属社群 -->
+						<div class="layui-inline">
+					        <label class="layui-form-label" for="communityId">所属社群：</label>
+					        <div class="layui-input-inline">
+					        	<select id="communityId" name="community_id">
+									<option value="">请选择所属社群</option>
+								</select>
+					        </div>
+					    </div>
+						<!-- 所属社群 -->
+						<!--创建时间-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="createdDate">创建时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="createdDate" name="created_date" autocomplete="off" class="layui-input" placeholder="请选择创建时间" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--创建时间-->
+						<!--更新时间-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="updatedDate">更新时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="updatedDate" name="updated_date" autocomplete="off" class="layui-input" placeholder="请选择更新时间" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--更新时间-->
+						<!--创建人-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="createdName">创建人员：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="createdName" name="create-by" placeholder="请输入创建人姓名" autocomplete="off" class="layui-input" maxlength="20" />
+					        </div>
+						</div>
+						<!--创建人-->
+						<!--更新人-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="updatedName">更新人员：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="updatedName" name="updated_by" placeholder="请输入更新人姓名" autocomplete="off" class="layui-input" maxlength="20" />
+					        </div>
+						</div>
+						<!--更新人-->
+						<!--删除标志-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="isDeleted">删除标志：</label>
+					        <div class="layui-input-inline">
+					        	<select id="isDeleted" name="is_deleted">
+									<option value="">请选择删除标志</option>
+									<option value="0">未删除</option>
+									<option value="1">已删除</option>
+								</select>
+					        </div>
+						</div>
+						<!--删除标志-->
+						<!--审批阶段-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="flowSts">审批阶段：</label>
+					        <div class="layui-input-inline">
+					        	<select id="flowSts" name="flow_sts">
+									<option value="">请选择删除标志</option>
+									<option value="0">新建</option>
+									<option value="3">审核中</option>
+									<option value="1">审核通过</option>
+									<option value="2">审核拒绝</option>
+								</select>
+					        </div>
+						</div>
+						<!--审批阶段-->
+						<!--发布时间-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="startDate">发布时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="startDate" name="start_date" autocomplete="off" class="layui-input" placeholder="请选择发布时间" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--发布时间-->
+						<div class="layui-inline search-btn">
+							<button type="button" class="layui-btn layui-btn-sm btn-search bg-blue main-search" id="searchBt" lay-submit="">搜索</button>
+						</div>
+					</div>
+				</form>
+				<div class="">
+					<table class="layui-hide table-box" id="dataList" lay-filter="orderAll"></table>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="/static/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery-1.8.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+	layui.use(['form', 'table', 'laydate', 'laypage', 'layer'], function(){
+	    var form = layui.form, table = layui.table, laypage = layui.laypage, laydate = layui.laydate, layer = layui.layer;  //初始化layui控件
+	    //数据对应表
+	    var is_deleted = ['未删除', '已删除'];  //删除标志
+	    var flow_sts = ['新建', '审核通过', '审核拒绝', '审核中'];  //审批阶段
+	    //获取筛选条件
+	    var get_search = function(){
+	    	var search_arr = [];
+	    	search_arr["magazine_title"] = $.trim($("#magazineTitle").val());  //社刊标题
+	    	search_arr["created_date_start"] = public.getTime($.trim($("#createdDate").val())).start;  //创建时间起始
+	    	search_arr["created_date_end"] = public.getTime($.trim($("#createdDate").val())).end;  //创建时间终止
+	    	search_arr["updated_date_start"] = public.getTime($.trim($("#updatedDate").val())).start;  //更新时间起始
+	    	search_arr["updated_date_end"] = public.getTime($.trim($("#updatedDate").val())).end;  //更新时间终止
+	    	search_arr["created_by"] = $.trim($("#createdName").val());  //创建人
+	    	search_arr["updated_by"] = $.trim($("#updatedName").val());  //更新人
+	    	search_arr["is_deleted"] = $.trim($("#isDeleted").val());  //删除标志
+	    	search_arr["flow_sts"] = $.trim($("#flowSts").val());  //审批阶段
+	    	search_arr["start_date_start"] = public.getTime($.trim($("#startDate").val())).start;  //发布时间起始
+	    	search_arr["start_date_end"] = public.getTime($.trim($("#startDate").val())).end;  //发布时间终止
+	    	search_arr["community_id"] = $.trim($("#communityId").val());  //所属社群
+	    	return search_arr;
+	    };
+	    //请求社群
+	    $.ajax({
+	    	type: 'post',
+	    	url: '/communitys/selectlist',
+	    	data: {'page': 1, 'limit': 999999999},
+	    	async: false,
+			dataType: 'json',
+			success: function(data) {
+				if(data.code == '0' && data.data.length > 0){
+					var str = '';
+					//回显社群列表
+					$.each(data.data, function (k, val) {
+						str += '<option value="' + val.id + '">' + val.communityName + '</option>';
+					});
+					$("#communityId").html("");
+					$("#communityId").append("<option value=''>请选择所属社群</option>"+ str);
+					form.render();
+				}
+			}
+	    });
+	    //数据表格渲染控件
+	    table.render({
+	        elem: '#dataList',
+	        url: '/magazines/selectlist',
+	        method: 'post',
+	        id: 'orderAll',
+	        where: {
+	            //初始化发送至后台数据
+	        },
+	        cols: [
+	               
+	               [
+
+		            {field: 'id', title: 'id', hide: true},
+		            {field: 'isDeleted', title: 'isDeleted', hide: true},
+		            {field: 'createUserId', title: 'createUserId', hide: true},
+		            {field: 'communitysId', title: 'communitysId', hide: true},
+		            {type: 'numbers', title: '序号', width: 60},
+		            {field: 'magazineTitle', title: '社刊标题', width: 150, event: 'onSelect'},
+		            {field: 'magazineIcon', title: '封面图', width: 150, event: 'onSelect', templet: function(d) {
+		            	return d.magazineIcon == "" ? "--" : public.showImg(d.magazineIcon);
+			        }},
+		            {field: 'communityName', title: '所属社群', width: 120, event: 'onSelect', templet: function(d) {
+		            	return d.communityName == null ? "--" :d.communityName;
+			        }},
+		            {field: 'magazineDesc', title: '社刊简介', width: 200, event: 'onSelect'},
+		            {field: 'readCount', title: '社刊阅读量', width: 120, event: 'onSelect'},
+		            {field: 'followCount', title: '社刊收藏量', width: 120, event: 'onSelect'},
+		            {field: 'tagNames', title: '社刊标签', width: 250, event: 'onSelect'},
+		            {field: 'createdDate', title: '创建时间', width: 170, event: 'onSelect', templet: function(d) {
+		            	return d.createdDate == '' ? "--" : d.createdDate;
+			        }},
+		            {field: 'updatedDate', title: '更新时间', width: 170, event: 'onSelect', templet: function(d) {
+		            	return d.updatedDate == '' ? "--" : d.updatedDate;
+			        }},
+		            {field: 'createdName', title: '创建人', width: 100, event: 'onSelect', templet:function(d){
+		            	return d.createdName == null ? "--" : d.createdName;
+			        }},
+		            {field: 'updatedName', title: '更新人', width: 100, event: 'onSelect', templet:function(d){
+		            	return d.updatedName == null ? "--" : d.updatedName;
+			        }},
+		            {field: 'isDeleted', title: '删除标志', width: 100, event: 'onSelect', templet:function(d){
+		            	return is_deleted[d.isDeleted];
+			        }},
+			        {field: 'flowSts', title: '审批阶段', width: 100, event: 'onSelect', templet:function(d){
+		            	return d.flowSts == null ? "--" : flow_sts[d.flowSts];
+			        }},
+		            {field: 'startDate', title: '计划发布时间', width: 170, event: 'onSelect', templet: function(d) {
+		            	return d.startDate == '' ? "--" : d.startDate;
+			        }}
+		            
+	        		]
+	               
+	              ],
+	        page: true,
+	        limit: 10,
+	        limits: [5, 10, 15, 25, 35],
+	        loading: true,
+	        done: function (res, curr, count) {
+	            if ($(".layui-table-main").find("tr").length != 0) {
+	                $(".layui-table-page").show();
+	            }
+	      		//图片点击放大
+	      		$("img").click(function() {
+	      			public.bigImg($(this).parent());
+	      		});
+	           $(".pageloading").hide();
+	        }
+	    });
+	    public.adaptation();
+	    //请求三级菜单
+		public.getmenu();
+	    //点击搜索
+	    $("#searchBt").click(function() {
+	    	var res = get_search();
+	        //请求后台数据表格接口
+	        table.reload("orderAll", {
+	            url: "/magazines/selectlist",
+	            where: {
+	                "magazineTitle": res.magazine_title,  //类别名称
+	                "createdDateStar": res.created_date_start,  //创建时间起始
+	                "createdDateEnd": res.created_date_end,  //创建时间终止
+	                "updatedDateStar": res.updated_date_start,  //更新时间起始
+	                "updatedDateEnd": res.updated_date_end,  //更新时间终止
+	                "createdName": res.created_by,  //创建人
+	                "updatedName": res.updated_by,  //更新人
+	                "isDeleted": res.is_deleted,  //删除标志
+	                "flowSts": res.flow_sts,  //审批阶段
+	                "startDateStar": res.start_date_start,  //发布时间起始
+	                "startDateEnd": res.start_date_end,  //发布时间终止
+	                "communitysId": res.community_id  //所属社群
+	            },
+	            method: "post"
+	        });
+	        public.adaptation();
+	    });
+	    //点击添加
+	    $("#page").on("click", ".btn-add", function () {
+	        public.dialogLayer(2,"添加社刊","shekanlbadd.html","100%","100%");
+   		});
+   		//点击编辑
+	    $("#page").on("click", ".btn-bj", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	var isdeleate = $("tr.layui-table-click").find("td:eq(1) div").text();
+	    	var isspjs = $("tr.layui-table-click").find("td:eq(17) div").text();  //审批阶段
+	    	if(ids != '' && ids != undefined){
+		    	if(isdeleate == "1"){layer.alert("您只能操作未删除的数据项！", {icon: 5, title: "提示"});return false;}
+		    	if(isspjs.trim() == "审核通过"){layer.alert("审核通过的数据不能编辑！", {icon: 5, title: "提示"});return false;}
+	    		public.dialogLayer(2,"编辑社刊","shekanlbedit.html?id=" + ids,"100%","100%");
+        	}else {
+        		layer.alert("请先选中要编辑的社刊", {icon: 5, title: "提示"});
+        	}
+   		});
+	    //点击详情
+	    $("#page").on("click", ".btn-info", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	if(ids != '' && ids != undefined){
+	    		public.dialogLayer(2,"社刊详情","shekanliebiaoinfo.html?id=" + ids,"100%","100%");
+        	}else {
+        		layer.alert("请先选中要操作的数据项！", {icon: 5, title: "提示"});
+        	}
+   		});
+	    //点击设置轮播
+	    $("#page").on("click", ".btn-carousel", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	var isdeleate = $("tr.layui-table-click").find("td:eq(1) div").text();
+	    	if(ids != '' && ids != undefined){
+		    	if(isdeleate == "1"){layer.alert("您只能操作未删除的数据项！", {icon: 5, title: "提示"});return false;}
+	    		public.dialogLayer(2,"设置轮播","shekanlbcarousels.html?id=" + ids,"530px","300px");
+        	}else {
+        		layer.alert("请先选中要操作的数据项！", {icon: 5, title: "提示"});
+        	}
+   		});
+	    //点击删除
+	    $("#page").on("click", ".btn-del", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	var status = $("tr.layui-table-click").find("td:eq(1) div").text();
+	    	if(ids != '' && ids != undefined){
+	    		if(status != '1'){
+	    			layer.confirm('您确认删除该数据吗？', {icon: 3, title:'提示'}, function(index){
+		        		//删除申请
+			    		$.post('/magazines/updateisdeleted', {'id': ids}, function(data) {
+			    			if(data.code == '0'){
+			    				layer.msg('删除成功', {'icon': 1,time:1000},function(){
+			    					layer.closeAll();
+			        	            $("#searchBt").click();
+		                        });
+			    			}else{
+			    				layer.alert(data.msg, {icon: 5, title: "提示"});
+			    			}
+			    		});
+	        		});
+	    		}else{
+	    			layer.alert("您只能操作未删除的数据！", {icon: 5, title: "提示"});
+	    		}
+        	}else {
+        		layer.alert("请先选中要操作的数据项！", {icon: 5, title: "提示"});
+        	}
+   		});
+	    //点击发送审核
+	    $("#page").on("click", ".btn-fssh", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	if(ids != '' && ids != undefined){
+	    		$.post('/magazines/apply', {'id': ids}, function(data) {
+	    			if(data.code == '0'){
+	    				layer.msg('发送审核成功', {'icon': 1,time:1000},function(){
+	    					layer.closeAll();
+	        	            $("#searchBt").click();
+                        });
+	    			}else{
+	    				layer.alert(data.msg, {icon: 5, title: "提示"});
+	    			}
+	    		}, 'json');
+        	}else {
+        		layer.alert("请先选中要操作的数据项！", {icon: 5, title: "提示"});
+        	}
+   		});
+   		//点击刷新
+	    /*$("#page").on("click", ".refreshBtn", function () {
+	    	$('.iframe', window.parent.document).attr('src', $('.iframe', window.parent.document).attr('src'));
+   		});*/
+	    //创建时间
+	    laydate.render({
+	        elem: '#createdDate',
+	        range: true
+	    });
+	    //更新时间
+	    laydate.render({
+	        elem: '#updatedDate',
+	        range: true
+	    });
+	    //发布时间
+	    laydate.render({
+	        elem: '#startDate',
+	        range: true
+	    });
+	});
+	</script>
+</html>    

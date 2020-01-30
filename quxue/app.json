@@ -1,0 +1,72 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/gather/index",
+    "pages/auth/index",
+    "pages/detail/index",
+    "pages/collect/index",
+    "pages/community/index",
+    "pages/search/index",
+    "pages/me/index",
+    "pages/commentDetail/index",
+    "pages/communityDetail/index",
+    "pages/message/index",
+    "pages/collectDetail/index",
+    "pages/memberDetail/index",
+    "pages/members/index",
+    "pages/temp/index",
+    "pages/writing/index",
+    "pages/focus/index",
+    "pages/myComment/index",
+    "pages/setting/index",
+    "pages/journalDetail/index",
+    "pages/pub/index",
+    "pages/putCollect/index",
+    "pages/fans/index",
+    "pages/creatCommunity/index",
+    "pages/examine/index",
+    "pages/deliveryList/index",
+    "pages/addArticle/index",
+    "pages/artticleSeach/index",
+    "pages/commSeach/index",
+    "pages/gatherDetail/index"
+    
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "群趣创作",
+    "navigationBarTextStyle": "black"
+    
+  },
+  "tabBar": {
+    "selectedColor": "#38bab8",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "pages/images/icon1.png",
+        "selectedIconPath": "pages/images/icon11.png"
+      },
+      {
+        "pagePath": "pages/community/index",
+        "text": "社群",
+        "iconPath": "pages/images/icon2.png",
+        "selectedIconPath": "pages/images/icon22.png"
+      },
+      {
+        "pagePath": "pages/collect/index",
+        "text": "征稿",
+        "iconPath": "pages/images/icon3.png",
+        "selectedIconPath": "pages/images/icon33.png"
+      },
+      {
+        "pagePath": "pages/me/index",
+        "text": "我的",
+        "iconPath": "pages/images/icon4.png",
+        "selectedIconPath": "pages/images/icon44.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

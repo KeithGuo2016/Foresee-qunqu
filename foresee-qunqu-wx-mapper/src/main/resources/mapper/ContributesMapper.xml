@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foresee.mapper.ContributesMapper">
+  <resultMap id="BaseResultMap" type="com.foresee.pojo.Contributes">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_userId" jdbcType="INTEGER" property="createUserid" />
+    <result column="contribute_userId" jdbcType="INTEGER" property="contributeUserid" />
+    <result column="contribute_title" jdbcType="VARCHAR" property="contributeTitle" />
+    <result column="contribute_icon" jdbcType="VARCHAR" property="contributeIcon" />
+    <result column="orientation" jdbcType="VARCHAR" property="orientation" />
+    <result column="contribute_tag" jdbcType="VARCHAR" property="contributeTag" />
+    <result column="buy_num" jdbcType="INTEGER" property="buyNum" />
+    <result column="max_money" jdbcType="VARCHAR" property="maxMoney" />
+    <result column="min_money" jdbcType="VARCHAR" property="minMoney" />
+    <result column="true_money" jdbcType="VARCHAR" property="trueMoney" />
+    <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="contribute_range" jdbcType="CHAR" property="contributeRange" />
+    <result column="user_see_range" jdbcType="CHAR" property="userSeeRange" />
+    <result column="contribute_type" jdbcType="CHAR" property="contributeType" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="flow_sts" jdbcType="CHAR" property="flowSts" />
+    <result column="contribute_desc" jdbcType="LONGVARCHAR" property="contributeDesc" />
+    <result column="case_desc" jdbcType="LONGVARCHAR" property="caseDesc" />
+    <result column="community_id" jdbcType="INTEGER" property="communityId" />
+    
+  </resultMap>
+  <select id="selectAllList" resultMap="BaseResultMap" >
+  <if test="communityId!=null and communityId!=''">
+  select * from (
+	SELECT
+		c.* 
+	FROM
+		contributes c 
+	WHERE
+		c.contribute_range = '0' 
+		AND flow_sts = '1' 
+		AND is_deleted = '0' 
+		
+		UNION
+	SELECT
+		* 
+	FROM
+		contributes c 
+	WHERE
+		c.contribute_range = '1' 
+		AND flow_sts = '1' 
+		AND is_deleted = '0' 
+		AND c.community_id = #{communityId}
+		) v order by v.end_date desc
+  </if>
+  <if test="communityId==null or communityId==''">
+  SELECT
+		c.* 
+	FROM
+		contributes c 
+	WHERE
+		c.contribute_range = '0' 
+		AND flow_sts = '1' 
+		AND is_deleted = '0' 
+	order by c.end_date desc
+  </if>
+  </select>
+</mapper>

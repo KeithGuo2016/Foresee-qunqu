@@ -1,0 +1,17 @@
+<!--pages/deliveryList/index.wxml-->
+<view class='list_box'>
+  <block wx:for='{{deliveryList}}' wx:key='this' >
+    <view class='arlist' data-id="{{item.id}}" bindtap='detail'>
+      <view class='arlist_l'>
+        <view class='atit'>{{item.deliveryTitle}}</view>
+        <view class='ainfo'>
+          <text class='fl'>{{item.userName}} ·{{item.deliveryDate}}</text>
+          <text class='fr'>{{item.readNum}}人阅读</text>
+        </view>
+      </view>
+      <view class='arlist_r'><image src='{{item.deliveryIcon}}'></image></view>
+    </view>
+  </block>
+  <view class="nodata">—— 喂喂，你碰到我的底线了 ——</view>
+</view>
+

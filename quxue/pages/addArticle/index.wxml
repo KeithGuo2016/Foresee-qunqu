@@ -1,0 +1,13 @@
+<view class='list_box' >      
+  <view class='arlist' wx:for="{{list}}" wx:key="this">
+    <view class="radio {{item.isFollow==1 ? 'radio_check':''}}" data-index="{{index}}" bindtap='add' ></view> 
+    <view class='arlist_l'>
+      <view class='atit'>{{item.articleTitle}}</view>
+      <view class='ainfo'>
+        <text class='fl'>{{item.recommendDate}}</text>
+      </view>
+    </view>
+    <view class='arlist_r'><image src='{{item.articleIcon}}'></image></view>
+  </view>
+</view>
+<view bindtap="pub" class='coll_btn tc'>确定</view>

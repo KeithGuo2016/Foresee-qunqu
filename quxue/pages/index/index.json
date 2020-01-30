@@ -1,0 +1,6 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "群趣创作",
+  "disableScroll": true,
+  "enablePullDownRefresh" :true
+}

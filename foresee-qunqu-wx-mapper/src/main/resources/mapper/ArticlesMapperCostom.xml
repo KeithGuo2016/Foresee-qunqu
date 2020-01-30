@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foresee.mapper.ArticlesMapperCostom">
+  <resultMap id="BaseResultMap" type="com.foresee.vo.ArticleVo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+     <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="article_title" jdbcType="VARCHAR" property="articleTitle" />
+    <result column="userId" jdbcType="INTEGER" property="userid" />
+    <result column="article_icon" jdbcType="VARCHAR" property="articleIcon" />
+    <result column="article_outline" jdbcType="VARCHAR" property="articleOutline" />
+    <result column="is_recommend" jdbcType="CHAR" property="isRecommend" />
+    <result column="article_tag" jdbcType="VARCHAR" property="articleTag" />
+    <result column="community_id" jdbcType="INTEGER" property="communityId" />
+    <result column="is_draft" jdbcType="VARCHAR" property="isDraft" />
+    <result column="read_count" jdbcType="INTEGER" property="readCount" />
+    <result column="follow_count" jdbcType="INTEGER" property="followCount" />
+    <result column="article_zan" jdbcType="INTEGER" property="articleZan" />
+    <result column="flow_date" jdbcType="TIMESTAMP" property="flowDate" />
+    <result column="flow_sts" jdbcType="CHAR" property="flowSts" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="gather_id" jdbcType="INTEGER" property="gatherId" />
+    <result column="recommend_date" jdbcType="VARCHAR" property="recommendDate" />
+    <result column="article_content" jdbcType="LONGVARCHAR" property="articleContent" />
+    
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="head_url" jdbcType="VARCHAR" property="headUrl" />
+    
+    <result column="community_name" jdbcType="VARCHAR" property="communityName" />
+    <result column="community_icon" jdbcType="VARCHAR" property="communityIcon" />
+    <result column="community_mark" jdbcType="VARCHAR" property="communityMark" />
+    <result column="community_tag" jdbcType="VARCHAR" property="communityTag" />
+    
+    <result column="isFollow" jdbcType="INTEGER" property="isFollow" />
+    <result column="commentNum" jdbcType="INTEGER" property="commentNum" />
+    <result column="isFollowAuthor" jdbcType="INTEGER" property="isFollowAuthor" />
+    <result column="community_user_num" jdbcType="INTEGER" property="userNum" />
+    
+    <result column="created_year" jdbcType="VARCHAR" property="createdYear" />
+    <result column="created_month" jdbcType="VARCHAR" property="createdMonth" />
+    <result column="created_day" jdbcType="VARCHAR" property="createdDay" />
+    <result column="article_tag_nmae" jdbcType="VARCHAR" property="articleTagNmae" />
+    <result column="article_iconbg" property="articleIconBg" jdbcType="VARCHAR" />
+    
+  </resultMap>
+ <select id="selectListByFollowUserId" resultMap="BaseResultMap" >
+ SELECT
+	a.id,
+	a.userId,
+	IFNULL(a.article_iconbg,'') article_iconbg,
+	CASE
+	WHEN to_days( now( ) ) - to_days( a.created_date ) > 0 THEN
+	date_format( a.created_date, '%y-%m-%d' ) 
+	when date_format(timediff( now( ), a.created_date ) ,'%H')=0 then '刚刚'
+	ELSE CONCAT(date_format(timediff( now( ), a.created_date ) ,'%H')+'','小时前')
+END  recommend_date,
+	a.read_count,
+	a.is_recommend,
+	a.is_draft,
+	a.gather_id,
+	a.follow_count,
+	a.flow_sts,
+	a.flow_date,
+	a.created_date,
+	a.community_id,
+	a.article_title,
+	a.article_tag,
+	IFNULL(a.article_outline,'') article_outline,
+	a.article_icon,
+	a.article_content,
+	a.article_zan,
+	u.open_id,
+	u.nick_name,
+	u.head_url,
+	c.community_tag,
+	c.community_name,
+	c.community_mark,
+	c.community_icon 
+FROM
+	articles a,
+	wechat_user u,
+	communitys c ,
+	articles_follow f
+WHERE
+	a.userId = u.id 
+	AND a.community_id = c.id 
+	and c.is_deleted = '0' 
+	AND a.is_deleted = '0' 
+	and f.article_id = a.id
+	and f.is_deleted = '0'
+	and f.userId = #{userid}
+ORDER BY
+	f.created_date desc
+ 
+ </select>
+  
+   <select id="selectVoById" resultMap="BaseResultMap" >
+  SELECT
+	a.id,
+	a.userId,
+	IFNULL(a.article_iconbg,'') article_iconbg,
+	CASE
+	WHEN to_days( now( ) ) - to_days( a.created_date ) > 0 THEN date_format(a.created_date,'%Y-%m-%d')
+	when date_format(timediff( now( ), a.created_date ) ,'%H')=0 then '刚刚'
+	ELSE CONCAT(date_format(timediff( now( ), a.created_date ) ,'%H')+'','小时前')
+END  recommend_date,
+	a.read_count,
+	a.is_recommend,
+	a.is_draft,
+	a.gather_id,
+	a.follow_count,
+	a.flow_sts,
+	a.flow_date,
+	a.article_zan,
+	a.created_date,
+	a.community_id,
+	a.article_title,
+	a.article_tag,
+	IFNULL(a.article_outline,'') article_outline,
+	a.article_icon,
+	a.article_content,
+	u.open_id,
+	u.nick_name,
+	u.head_url,
+	c.community_tag,
+	c.community_name,
+	c.community_mark,
+	c.community_icon,
+	GROUP_CONCAT( b.tag_name ) article_tag_nmae,
+	<if test="userid!=null and userid!=''">
+	count( f.id ) isFollow,
+	</if> 
+	<if test="userid==null or userid==''">
+	  0 isFollow,
+	</if> 
+	
+	IFNULL(c_num,0) commentNum,
+	<if test="userid!=null and userid!=''">
+	count( af.id ) isFollowAuthor,
+	</if> 
+	<if test="userid==null or userid==''">
+	  0 isFollowAuthor,
+	</if> 
+	c.community_user_num 
+FROM
+	articles a
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, a.article_tag ) 
+	JOIN wechat_user u ON a.userId = u.id
+	JOIN (
+SELECT
+	ct.*,
+	count( wu.id ) community_user_num 
+FROM
+	communitys ct
+	LEFT JOIN wechat_user wu ON wu.communityId = ct.id 
+	AND wu.is_deleted = '0' 
+GROUP BY
+	ct.id 
+	) c ON a.community_id = c.id
+	<if test="userid!=null and userid!=''">
+	LEFT JOIN articles_follow f ON ( a.id = f.article_id AND  f.userId =#{userid} and f.is_deleted = '0')
+	</if> 
+	left JOIN (
+SELECT
+	count( atc.id ) c_num,
+	atc.articles_id 
+FROM
+	articles_comment atc 
+WHERE
+	atc.pid IS NULL 
+	AND atc.is_deleted = '0' 
+GROUP BY
+	atc.articles_id 
+	) ac ON a.id = ac.articles_id
+	<if test="userid!=null and userid!=''">
+	LEFT JOIN author_follow af ON ( a.userId = af.author_id AND af.is_deleted = '0' AND af.userId = #{userid})
+	</if> 
+	
+WHERE
+	a.id = #{id}
+  </select>
+  <select id="selectHome" resultMap="BaseResultMap">
+   SELECT
+		a.id,
+	a.userId,
+	IFNULL(a.article_iconbg,'') article_iconbg,
+	CASE
+	WHEN to_days( now( ) ) - to_days( a.created_date ) > 0 THEN
+	date_format( a.created_date, '%y-%m-%d' ) 
+	when date_format(timediff( now( ), a.created_date ) ,'%H')=0 then '刚刚'
+	ELSE CONCAT(date_format(timediff( now( ), a.created_date ) ,'%H')+'','小时前')
+END  recommend_date,
+	a.read_count,
+	a.is_recommend,
+	a.is_draft,
+	a.gather_id,
+	a.article_zan,
+	a.follow_count,
+	a.flow_sts,
+	a.flow_date,
+	a.created_date,
+	a.community_id,
+	a.article_title,
+	a.article_tag,
+	a.article_outline,
+	a.article_icon,
+	a.article_content,
+	u.open_id,
+	u.nick_name,
+	u.head_url,
+	c.community_tag,
+	c.community_name,
+	c.community_mark,
+	c.community_icon
+	FROM
+		articles a,
+		wechat_user u,
+		communitys c 
+	WHERE
+		a.userId = u.id 
+		AND a.community_id = c.id
+		and a.is_deleted = '0'
+		and c.is_deleted = '0'
+		and date_format(a.recommend_date,'%y-%m-%d') = date_format(now(),'%y-%m-%d')
+		and a.flow_sts = '4'
+		and a.is_recommend = '1'
+		AND a.is_draft = '0' 
+  order by a.created_date
+  </select>
+  
+   <select id="selectHomeByDate" resultMap="BaseResultMap">
+   SELECT
+		a.id,
+	a.userId,
+	IFNULL(a.article_iconbg,'') article_iconbg,
+	CASE
+	WHEN to_days( now( ) ) - to_days( a.created_date ) > 0 THEN
+	date_format( a.created_date, '%y-%m-%d' ) 
+	when date_format(timediff( now( ), a.created_date ) ,'%H')=0 then '刚刚'
+	ELSE CONCAT(date_format(timediff( now( ), a.created_date ) ,'%H')+'','小时前')
+END  recommend_date,
+	a.read_count,
+	a.is_recommend,
+	a.is_draft,
+	a.gather_id,
+	a.follow_count,
+	a.flow_sts,
+	a.article_zan,
+	a.flow_date,
+	a.created_date,
+	a.community_id,
+	a.article_title,
+	a.article_tag,
+	a.article_outline,
+	a.article_icon,
+	a.article_content,
+	u.open_id,
+	u.nick_name,
+	u.head_url,
+	c.community_tag,
+	c.community_name,
+	c.community_mark,
+	c.community_icon
+	FROM
+		articles a,
+		wechat_user u,
+		communitys c 
+	WHERE
+		a.userId = u.id 
+		AND a.community_id = c.id
+		and a.is_deleted = '0'
+		and c.is_deleted = '0'
+		and date_format(a.recommend_date,'%y-%m-%d') = date_format(#{date},'%y-%m-%d')
+		and a.flow_sts = '4'
+		and a.is_recommend = '1'
+		AND a.is_draft = '0' 
+  order by a.created_date
+  </select>
+  
+  <select id="selectRecommendList" resultMap="BaseResultMap">
+   SELECT
+		a.id,
+	a.userId,
+	IFNULL(a.article_iconbg,'') article_iconbg,
+	CASE
+	WHEN to_days( now( ) ) - to_days( a.created_date ) > 0 THEN
+	date_format( a.created_date, '%y-%m-%d' ) 
+	when date_format(timediff( now( ), a.created_date ) ,'%H')=0 then '刚刚'
+	ELSE CONCAT(date_format(timediff( now( ), a.created_date ) ,'%H')+'','小时前')
+END  recommend_date,
+	a.read_count,
+	a.is_recommend,
+	a.is_draft,
+	a.gather_id,
+	a.follow_count,
+	a.flow_sts,
+	a.article_zan,
+	a.flow_date,
+	a.created_date,
+	a.community_id,
+	a.article_title,
+	a.article_tag,
+	a.article_outline,
+	a.article_icon,
+	a.article_content,
+	u.open_id,
+	u.nick_name,
+	u.head_url,
+	c.community_tag,
+	c.community_name,
+	c.community_mark,
+	c.community_icon
+	FROM
+		articles a,
+		wechat_user u,
+		communitys c 
+	WHERE
+		a.userId = u.id 
+		AND a.community_id = c.id 
+		and c.is_deleted='0'
+		and a.is_deleted = '0'
+		and a.flow_sts = '4'
+		and a.is_recommend = '1'
+		AND a.is_draft = '0' 
+  order by a.recommend_date desc
+  </select>
+  <!-- 根据用户id查询文章 -->
+  <select id="selectListByUserId" resultMap="BaseResultMap" >
+  SELECT
+	a.id,
+	a.userId,
+	IFNULL(a.article_iconbg,'') article_iconbg,
+	CASE
+	WHEN to_days( now( ) ) - to_days( a.created_date ) > 0 THEN
+	date_format( a.created_date, '%y-%m-%d' ) 
+	when date_format(timediff( now( ), a.created_date ) ,'%H')=0 then '刚刚'
+	ELSE CONCAT(date_format(timediff( now( ), a.created_date ) ,'%H')+'','小时前')
+END  recommend_date,
+	a.read_count,
+	a.is_recommend,
+	a.is_draft,
+	a.gather_id,
+	a.follow_count,
+	a.flow_sts,
+	a.flow_date,
+	a.created_date,
+	a.community_id,
+	a.article_title,
+	a.article_tag,
+	a.article_outline,
+	a.article_icon,
+	a.article_zan,
+	year(created_date) created_year,
+	month(created_date) created_month,
+	DAY(created_date) created_day
+FROM
+	articles a
+	where  a.is_deleted = '0'
+	and a.is_draft = '0'
+	and a.userId = #{userid}
+	order by a.created_date desc
+ </select>
+ <!-- 根据社群id查询文章列表 -->
+ <select id="selectListByCommunityId" resultMap="BaseResultMap" >
+  SELECT
+	a.id,
+	a.userId,
+	IFNULL(a.article_iconbg,'') article_iconbg,
+CASE
+	
+	WHEN to_days( now( ) ) - to_days( a.created_date ) > 0 THEN
+	date_format( a.created_date, '%y-%m-%d' ) 
+	WHEN date_format( timediff( now( ), a.created_date ), '%H' ) = 0 THEN
+	'刚刚' ELSE CONCAT( date_format( timediff( now( ), a.created_date ), '%H' ) + '', '小时前' ) 
+	END recommend_date,
+	a.read_count,
+	a.is_recommend,
+	a.is_draft,
+	a.gather_id,
+	a.follow_count,
+	a.flow_sts,
+	a.flow_date,
+	a.created_date,
+	a.community_id,
+	a.article_title,
+	a.article_tag,
+	a.article_outline,
+	a.article_icon,
+	a.article_zan,
+	u.nick_name,
+	u.head_url 
+FROM
+	articles a,
+	wechat_user u 
+WHERE
+	a.userId = u.id 
+	AND a.is_deleted = '0' 
+	AND a.is_draft = '0' 
+	AND a.community_id = #{communityid}
+ORDER BY
+a.created_date DESC
+ </select>
+ <!-- 搜索推荐的文章 -->
+ <select id="searchRecommendArticles" resultMap="BaseResultMap" >
+ SELECT
+	* 
+FROM
+	(
+SELECT
+	a.id,
+	IFNULL(a.article_iconbg,'') article_iconbg,
+	a.userId,
+	CASE
+	WHEN to_days( now( ) ) - to_days( a.created_date ) > 0 THEN
+	date_format( a.created_date, '%y-%m-%d' ) 
+	when date_format(timediff( now( ), a.created_date ) ,'%H')=0 then '刚刚'
+	ELSE CONCAT(date_format(timediff( now( ), a.created_date ) ,'%H')+'','小时前')
+END  recommend_date,
+	a.read_count,
+	a.is_recommend,
+	a.is_draft,
+	a.gather_id,
+	a.article_zan,
+	a.follow_count,
+	a.flow_sts,
+	a.flow_date,
+	a.created_date,
+	a.community_id,
+	a.article_title,
+	GROUP_CONCAT( b.tag_name ) article_tag,
+	a.article_outline,
+	a.article_icon,
+	a.article_content,
+	u.open_id,
+	u.nick_name,
+	u.head_url,
+	c.community_tag,
+	c.community_name,
+	c.community_mark,
+	c.community_icon,
+	a.article_tag tagId 
+FROM
+	articles a
+	JOIN wechat_user u ON (a.userId = u.id and u.is_deleted='0')
+	JOIN communitys c ON (a.community_id = c.id and c.is_deleted='0')
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, a.article_tag ) 
+WHERE
+	a.is_deleted = '0' 
+	AND a.flow_sts = '4' 
+	AND a.is_recommend = '1' 
+	and a.is_draft ='0'
+GROUP BY
+	a.id 
+	) ta 
+WHERE 1=1
+
+ <if test="tagId!=null and tagId!=''">
+	and FIND_IN_SET( #{tagId}, ta.tagId ) 
+</if> 
+ <if test="searchDesc!=null and searchDesc!=''">
+	AND ( ta.article_content LIKE '%${searchDesc}%' OR ta.article_outline LIKE '%${searchDesc}%' OR ta.article_title LIKE '%${searchDesc}%' OR ta.article_tag LIKE '%${searchDesc}%' or ta.nick_name like '%${searchDesc}%' )
+</if> 
+ORDER BY
+	ta.created_date desc
+ </select>
+ <!-- 搜索文章 -->
+ <select id="searchArticles" resultMap="BaseResultMap" >
+ SELECT
+	* 
+FROM
+	(
+SELECT
+	a.id,
+	a.userId,
+	IFNULL(a.article_iconbg,'') article_iconbg,
+	CASE
+	WHEN to_days( now( ) ) - to_days( a.created_date ) > 0 THEN
+	date_format( a.created_date, '%y-%m-%d' ) 
+	when date_format(timediff( now( ), a.created_date ) ,'%H')=0 then '刚刚'
+	ELSE CONCAT(date_format(timediff( now( ), a.created_date ) ,'%H')+'','小时前')
+END  recommend_date,
+	a.read_count,
+	a.is_recommend,
+	a.is_draft,
+	a.gather_id,
+	a.article_zan,
+	a.follow_count,
+	a.flow_sts,
+	a.flow_date,
+	a.created_date,
+	a.community_id,
+	a.article_title,
+	GROUP_CONCAT( b.tag_name ) article_tag,
+	a.article_outline,
+	a.article_icon,
+	a.article_content,
+	u.open_id,
+	u.nick_name,
+	u.head_url,
+	c.community_tag,
+	c.community_name,
+	c.community_mark,
+	c.community_icon,
+	a.article_tag tagId 
+FROM
+	articles a
+	JOIN wechat_user u ON (a.userId = u.id and u.is_deleted='0')
+	JOIN communitys c ON (a.community_id = c.id and c.is_deleted='0')
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, a.article_tag ) 
+WHERE
+	a.is_deleted = '0'  
+	and a.is_draft ='0'
+GROUP BY
+	a.id 
+	) ta 
+WHERE 1=1
+<if test="tagId!=null and tagId!=''">
+	and FIND_IN_SET( #{tagId}, ta.tagId ) 
+</if> 
+ <if test="searchDesc!=null and searchDesc!=''">
+	AND ( ta.article_content LIKE '%${searchDesc}%' OR ta.article_outline LIKE '%${searchDesc}%' OR ta.article_title LIKE '%${searchDesc}%' OR ta.article_tag LIKE '%${searchDesc}%' or ta.nick_name like '%${searchDesc}%' )
+</if> 
+ORDER BY
+	ta.created_date desc
+ </select>
+ <!-- 查询草稿箱列表 -->
+ <select id="selectTempList" resultMap="BaseResultMap" >
+ SELECT
+	a.id,
+CASE
+	
+	WHEN to_days( now( ) ) - to_days( a.created_date ) > 0 THEN
+	date_format( a.created_date, '%y-%m-%d' ) 
+	WHEN date_format( timediff( now( ), a.created_date ), '%H' ) = 0 THEN
+	'刚刚' ELSE CONCAT( date_format( timediff( now( ), a.created_date ), '%H' ) + '', '小时前' ) 
+	END recommend_date,
+	a.article_title,
+	IFNULL(a.article_outline,'您还没有编辑文章内容') article_outline,
+	IFNULL(a.article_content,'') article_content,
+	a.article_icon 
+FROM
+	articles a 
+WHERE
+	a.is_draft = '1' 
+	AND a.is_deleted = '0' 
+	AND a.userId = #{userid} 
+ORDER BY
+a.created_date DESC
+ </select>
+ <!-- 文集添加文章的时候调用该查询 -->
+ <select id="selectByGetherList" resultMap="BaseResultMap" >
+ SELECT
+	* 
+FROM
+	(
+SELECT
+	a.id,
+	a.article_title,
+	a.article_outline,
+	date_format( a.created_date, '%y-%m-%d' ) recommend_date,
+	a.article_icon,
+	a.gather_id,
+CASE
+	
+	WHEN a.gather_id IS NOT NULL THEN
+	1 ELSE 0 
+	END isFollow 
+FROM
+	articles a 
+WHERE
+	a.is_draft = '0' 
+	AND a.is_deleted = '0' 
+	AND a.gather_id = #{gatherId} 
+	AND a.userId = #{userid} 
+	UNION
+SELECT
+	a.id,
+	a.article_title,
+	a.article_outline,
+	date_format( a.created_date, '%y-%m-%d' ) recommend_date,
+	a.article_icon,
+	a.gather_id,
+CASE
+		
+		WHEN a.gather_id IS NOT NULL THEN
+		1 ELSE 0 
+	END isFollow 
+FROM
+	articles a 
+WHERE
+	a.is_draft = '0' 
+	AND a.is_deleted = '0' 
+	AND a.gather_id IS NULL 
+	AND a.userId = #{userid} 
+	) t 
+ORDER BY
+t.gather_id
+ </select>
+ <select id="selectGetherDetail" resultMap="BaseResultMap" >
+SELECT
+	a.id,
+	a.article_title,
+	a.article_outline,
+	date_format( a.created_date, '%y-%m-%d' ) recommend_date,
+	a.article_icon,
+	a.gather_id,
+CASE
+	WHEN a.gather_id IS NOT NULL THEN
+	1 ELSE 0 
+	END isFollow 
+FROM
+	articles a 
+WHERE
+	a.is_draft = '0' 
+	AND a.is_deleted = '0' 
+	AND a.gather_id = #{gatherId} 
+ </select>
+ <!-- 查看不在文集中的文章 -->
+ <select id="selectNotGether" resultMap="BaseResultMap" >
+SELECT
+	a.id,
+	a.article_title,
+	a.article_outline,
+	date_format( a.created_date, '%y-%m-%d' ) recommend_date,
+	a.article_icon,
+	a.gather_id,
+CASE
+		WHEN a.gather_id IS NOT NULL THEN
+		1 ELSE 0 
+	END isFollow 
+FROM
+	articles a 
+WHERE
+	a.is_draft = '0' 
+	AND a.is_deleted = '0' 
+	AND a.gather_id IS NULL 
+	AND a.userId = #{userid} 
+	order by a.created_date desc
+ </select>
+ 
+</mapper>

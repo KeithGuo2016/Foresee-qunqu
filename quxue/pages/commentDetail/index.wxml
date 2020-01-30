@@ -1,0 +1,100 @@
+ <block wx:if="{{ismore}}">
+ <view class='comlist' wx:for="{{commentList}}" wx:key="this">
+    <view class='comimg'><image src='{{item.userIcon}}'></image></view>
+    <view class='comtxt'>
+      <view class='name'>{{item.userName}}</view>
+      <view class='txt'>
+        {{item.content}}
+      </view>
+      <view class='compub'>
+        <view class='pubtime'> {{item.countDown}}</view>
+        <view class='comicon' data-id="{{item.userid}}" data-pid="{{item.id}}"  bindtap='goComment'><image src='../images/com_icon.png'></image></view>
+      </view>
+      <!--评论楼-->
+       <view class='com_floor'>
+        <view class='flist' wx:for="{{item.list}}"  wx:for-item="list" wx:key="this">
+          <view class='flimg'><image src='{{list.userIcon}}'></image></view>
+          <view class='fltxt' bindtap="goComment" data-id="{{list.userid}}"  data-pid="{{item.id}}">
+            <view class='fltxta'>
+              <view class='flname'>{{list.userName}}</view>
+              <view class='fltime'>{{list.countDown}}</view>
+            </view>
+            <block wx:if="{{list.touserName == null}}">
+            <view class='fltxtb'>{{list.content}}</view>
+            </block>
+            <block wx:else>
+              <view class='fltxtb'><text>回复</text>{{list.touserName}}  {{list.content}}</view>
+              <!--view bindtap="goComment" data-id="{{list.userid}}"  data-pid="{{item.id}}" class="comtocom">回复 ></view-->
+            </block> 
+          </view>
+        </view>
+        <block wx:if="{{ismore}}">
+           <block wx:if="{{item.toCommentNum > 2}}">
+            <view class='more' data-id="{{item.id}}" data-type="comment" bindtap='moreData'>{{item.toCommentNum}}条回复 展开 》</view>
+          </block>
+        </block>
+       
+      </view>
+      <!--评论楼-->
+    </view>
+  </view>
+
+ </block>
+ <block wx:else>
+<view class='comlist'>
+    <view class='comimg'><image src='{{commentList.userIcon}}'></image></view>
+    <view class='comtxt'>
+      <view class='name'>{{commentList.userName}}</view>
+      <view class='txt'>
+        {{commentList.content}}
+      </view>
+      <view class='compub'>
+        <view class='pubtime'> {{commentList.countDown}}</view>
+        <view class='comicon' data-id="{{commentList.userid}}" data-pid="{{commentList.id}}"  bindtap='goComment'><image src='../images/com_icon.png'></image></view>
+      </view>
+      <!--评论楼-->
+       <view class='com_floor'>
+        <view class='flist' wx:for="{{commentList.list}}"  wx:for-item="list" wx:key="this">
+          <view class='flimg'><image src='{{list.userIcon}}'></image></view>
+          <view class='fltxt'  bindtap="goComment" data-id="{{list.userid}}"  data-pid="{{commentList.id}}">
+            <view class='fltxta'>
+              <view class='flname'>{{list.userName}}</view>
+              <view class='fltime'>{{list.countDown}}</view>
+            </view>
+            <block wx:if="{{list.touserName == null}}">
+            <view class='fltxtb'>{{list.content}}</view>
+            </block>
+            <block wx:else>
+              <view class='fltxtb'><text>回复</text>{{list.touserName}}  {{list.content}}</view>
+              <!--view bindtap="goComment" data-id="{{list.userid}}"  data-pid="{{commentList.id}}" class="comtocom">回复 ></view-->
+            </block> 
+          </view>
+        </view>
+       
+      </view>
+      <!--评论楼-->
+    </view>
+  </view>
+
+ </block>
+
+
+<view class='foot'>
+<block wx:if="{{ismore}}">
+<view class='foota' data-id="{{0}}"  data-pid="" bindtap='goComment'>有什么想说的，展开讲讲</view> 
+</block>
+<block wx:else>
+<view class='foota' data-id="{{commentList.userid}}"  data-pid="{{commentList.id}}" bindtap='goComment'>有什么想说的，展开讲讲</view> 
+</block>
+  
+</view>
+<!-- 展开弹层 -->
+<view class='dialog' wx:if='{{comment}}'>
+  <view class='areabox'>
+    <view class='areabtn'>
+      <view class='cancel' bindtap='cancelComment'>取消</view>
+      <view class='ok' bindtap='doComment'>发布</view>
+    </view>
+    <textarea bindinput="getContent" placeholder='有什么想说的，展开讲讲'></textarea>
+  </view>
+</view>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.foresee.dao.UserNewsMapper">
+	<resultMap id="BaseResultMap" type="com.foresee.model.UserNews">
+			<id property="id" column="id" jdbcType="INTEGER"/>
+			<result property="userId" column="userId" jdbcType="INTEGER"/>
+			<result property="newsTitle" column="news_title" jdbcType="VARCHAR"/>
+			<result property="newsType" column="news_type" jdbcType="CHAR"/>
+			<result property="newsContent" column="news_content" jdbcType="VARCHAR"/>
+			<result property="newsSts" column="news_sts" jdbcType="CHAR"/>
+			<result property="createdDate" column="created_date" jdbcType="TIMESTAMP"/>
+			<result property="updatedDate" column="updated_date" jdbcType="TIMESTAMP"/>
+			<result property="createdBy" column="created_by" jdbcType="VARCHAR"/>
+			<result property="updatedBy" column="updated_by" jdbcType="VARCHAR"/>
+			<result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id,userId,news_title,news_type,news_content,news_sts,created_date,updated_date,created_by,updated_by,is_deleted
+	</sql>
+	
+	<select id="getById" parameterType="int" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from
+			user_news
+		where
+			id = #{id}
+	</select>
+	<select id="listPage" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from user_news
+		where 1=1
+		<include refid="querysql"></include>
+	</select>
+	
+	<sql id="querysql">
+			<if test="id!=null and id!='' ">
+			  and id = #{ id, jdbcType=INTEGER }
+			</if>
+			<if test="userId!=null and userId!='' ">
+			  and userId = #{ userId, jdbcType=INTEGER }
+			</if>
+			<if test="newsTitle!=null and newsTitle!='' ">
+			  and news_title = #{ newsTitle, jdbcType=VARCHAR }
+			</if>
+			<if test="newsType!=null and newsType!='' ">
+			  and news_type = #{ newsType, jdbcType=CHAR }
+			</if>
+			<if test="newsContent!=null and newsContent!='' ">
+			  and news_content = #{ newsContent, jdbcType=VARCHAR }
+			</if>
+			<if test="newsSts!=null and newsSts!='' ">
+			  and news_sts = #{ newsSts, jdbcType=CHAR }
+			</if>
+			<if test="createdDate!=null  ">
+			  and created_date = #{ createdDate, jdbcType=TIMESTAMP }
+			</if>
+			<if test="updatedDate!=null  ">
+			  and updated_date = #{ updatedDate, jdbcType=TIMESTAMP }
+			</if>
+			<if test="createdBy!=null and createdBy!='' ">
+			  and created_by = #{ createdBy, jdbcType=VARCHAR }
+			</if>
+			<if test="updatedBy!=null and updatedBy!='' ">
+			  and updated_by = #{ updatedBy, jdbcType=VARCHAR }
+			</if>
+			<if test="isDeleted!=null and isDeleted!='' ">
+			  and is_deleted = #{ isDeleted, jdbcType=TINYINT }
+			</if>
+	</sql>
+	
+	
+	<update id="update" parameterType="com.foresee.model.UserNews">
+		update user_news
+		<set>
+			<if test="userId!=null and userId!='' ">
+			  userId = #{userId, jdbcType=INTEGER },
+			</if>
+			<if test="newsTitle!=null and newsTitle!='' ">
+			  news_title = #{newsTitle, jdbcType=VARCHAR },
+			</if>
+			<if test="newsType!=null and newsType!='' ">
+			  news_type = #{newsType, jdbcType=CHAR },
+			</if>
+			<if test="newsContent!=null and newsContent!='' ">
+			  news_content = #{newsContent, jdbcType=VARCHAR },
+			</if>
+			<if test="newsSts!=null and newsSts!='' ">
+			  news_sts = #{newsSts, jdbcType=CHAR },
+			</if>
+			<if test="createdDate!=null  ">
+			  created_date = #{createdDate, jdbcType=TIMESTAMP },
+			</if>
+			<if test="updatedDate!=null  ">
+			  updated_date = #{updatedDate, jdbcType=TIMESTAMP },
+			</if>
+			<if test="createdBy!=null and createdBy!='' ">
+			  created_by = #{createdBy, jdbcType=VARCHAR },
+			</if>
+			<if test="updatedBy!=null and updatedBy!='' ">
+			  updated_by = #{updatedBy, jdbcType=VARCHAR },
+			</if>
+			<if test="isDeleted!=null and isDeleted!='' ">
+			  is_deleted = #{isDeleted, jdbcType=TINYINT },
+			</if>
+		</set>
+		where
+			id = #{id}
+	</update>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from user_news 
+		where
+			id = #{id}
+	</delete>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.foresee.model.UserNews">
+		insert into user_news
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id!=null and id!=''">
+				id,
+			</if>
+			<if test="userId!=null and userId!=''">
+				userId,
+			</if>
+			<if test="newsTitle!=null and newsTitle!=''">
+				news_title,
+			</if>
+			<if test="newsType!=null and newsType!=''">
+				news_type,
+			</if>
+			<if test="newsContent!=null and newsContent!=''">
+				news_content,
+			</if>
+			<if test="newsSts!=null and newsSts!=''">
+				news_sts,
+			</if>
+			<if test="createdDate!=null ">
+				created_date,
+			</if>
+			<if test="updatedDate!=null ">
+				updated_date,
+			</if>
+			<if test="createdBy!=null and createdBy!=''">
+				created_by,
+			</if>
+			<if test="updatedBy!=null and updatedBy!=''">
+				updated_by,
+			</if>
+			<if test="isDeleted!=null and isDeleted!=''">
+				is_deleted,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id!=null and id!=''">
+				#{id, jdbcType=INTEGER},
+			</if>
+			<if test="userId!=null and userId!=''">
+				#{userId, jdbcType=INTEGER},
+			</if>
+			<if test="newsTitle!=null and newsTitle!=''">
+				#{newsTitle, jdbcType=VARCHAR},
+			</if>
+			<if test="newsType!=null and newsType!=''">
+				#{newsType, jdbcType=CHAR},
+			</if>
+			<if test="newsContent!=null and newsContent!=''">
+				#{newsContent, jdbcType=VARCHAR},
+			</if>
+			<if test="newsSts!=null and newsSts!=''">
+				#{newsSts, jdbcType=CHAR},
+			</if>
+			<if test="createdDate!=null ">
+				#{createdDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedDate!=null ">
+				#{updatedDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdBy!=null and createdBy!=''">
+				#{createdBy, jdbcType=VARCHAR},
+			</if>
+			<if test="updatedBy!=null and updatedBy!=''">
+				#{updatedBy, jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted!=null and isDeleted!=''">
+				#{isDeleted, jdbcType=TINYINT},
+			</if>
+		</trim>
+	</insert>
+	
+</mapper>

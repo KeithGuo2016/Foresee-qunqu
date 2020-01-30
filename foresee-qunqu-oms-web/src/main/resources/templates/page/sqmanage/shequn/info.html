@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html class="iframe-h">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>社群详情</title>
+		<link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="/css/admin.css" />
+		<link rel="stylesheet" type="text/css" href="/css/formSelects-v4.css" />
+		<link rel="stylesheet" type="text/css" href="/css/page.css" />
+		<style>
+			.layui-form-label{width:100px;}
+			.layui-input{width:200px;}
+			.mar-r-s{margin-right:125px;}
+			.layer-textarea{width:420px;}
+			.layui-form-label{width:100px;}
+			.layui-input{width:170px;}
+			.layui-edge{display:none;}
+			.layui-input,.xm-select-parent .xm-input{border:none;}
+			.layui-textarea{width:420px;height:200px;border:none;}
+		</style>
+	</head>
+	<body>
+		<div class="pageloading">
+			<img src="/images/loading.png" class="rotation" />
+		</div>
+		<div class="wrap-container clearfix">
+			<div class="column-content-detail">
+				<div class="layui-form-item page-btn pad-top" action="">
+					<!--顶部按钮-->
+					<div class="layui-inline tool-btn" id="menuBtn">
+						<button class="layui-btn layui-btn-sm" id="sqcy">社群成员</button>
+						<button class="layui-btn layui-btn-sm" id="sqwz">社群文章</button>
+						<button class="layui-btn layui-btn-sm" id="sqfs">社群粉丝</button>
+						<button class="layui-btn layui-btn-sm" id="sqsk">社群社刊</button>
+						<button class="layui-btn layui-btn-sm" id="sqzg">社群征稿</button>
+					</div>
+					<!--顶部按钮-->
+				</div>
+				<form class="layui-form">
+					<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="communityName">社群名称：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="communityName" name="community_name" lay-verify="community_name" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+					    <div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="communityMark">社群签名：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="communityMark" name="community_mark" lay-verify="community_mark" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="communityTag">社群标签：</label>
+					        <div class="layui-input-inline">
+					        	<select id="communityTag" name="community_tag" xm-select="xm-communityTag">
+									<option value="">--</option>
+								</select>
+					        </div>
+					    </div>
+					    <div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="authDesc">认证信息：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="authDesc" name="auth_desc" lay-verify="auth_desc" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="communityType">社群类别：</label>
+					        <div class="layui-input-inline">
+					        	<select id="communityType" name="community_type">
+									<option value="">--</option>
+								</select>
+					        </div>
+					    </div>
+					    <div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="communitySts">社群状态：</label>
+					        <div class="layui-input-inline">
+					        	<select id="communitySts" name="community_sts">
+									<option value="">--</option>
+									<option value="1">正常</option>
+									<option value="0">非正常</option>
+								</select>
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="adminId">所属社长：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="adminId" rel="" name="admin_id" lay-verify="admin_id" value="" autocomplete="off" class="layui-input" placeholder="--" readOnly='readOnly' />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+					    <div class="layui-inline mar-r-s" style="width:270px;">
+					        <label class="layui-form-label" for="logoUpOne">社群图标：</label>
+					        <div class="layui-input-inline" style="position:relative;">
+					        	<img id="communityIcon" src="/images/up_logo.png" class="up-img" />
+					        </div>
+					    </div>
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="logoUpTwo">社群背景：</label>
+					        <div class="layui-input-inline" style="position:relative;">
+					        	<img id="bgIcon" src="/images/up_logo.png" class="up-img" />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="communityNotice">社群公告：</label>
+					        <div class="layui-input-inline">
+						    	<textarea placeholder="" id="communityNotice" class="layui-textarea layer-textarea"></textarea>
+						    </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="communityDesc">社群说明：</label>
+					        <div class="layui-input-inline">
+						    	<textarea placeholder="" id="communityDesc" class="layui-textarea layer-textarea"></textarea>
+						    </div>
+					    </div>
+				  	</div>
+      			</form>
+			</div>
+		</div>
+	</body>
+	<script src="/static/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery-1.8.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/formSelects-v4.js"></script>
+	<script type="text/javascript" charset="utf-8">
+	layui.use(['form', 'laydate', 'laypage', 'layer'], function(){
+		var form = layui.form, laydate = layui.laydate, laypage = layui.laypage, layer = layui.layer,formSelects = layui.formSelects;  //初始化layui控件
+		var parame = public.getParame();
+		formSelects.btns("xm-communityTag", []);
+		var img_one = '';  //社群图标
+		var img_two = '';  //社群背景
+		//请求标签
+	    $.ajax({
+	    	type: 'post',
+	    	url: '/tag/selectlist',
+	    	data: {'page': 1, 'limit': 999999999, 'tagType': 0},
+	    	async: false,
+			dataType: 'json',
+			success: function(data) {
+				if(data.code == '0'){
+					var sign_str = "";
+			       	var sign_arr = [];
+		        	//标签管理列表数据
+		        	$.each(data.data,function(k,val){
+		        		sign_str = {"name": val.tagName, "value": val.id};
+		        		sign_arr.push(sign_str);
+			        });
+					formSelects.data('xm-communityTag', 'local', {arr: sign_arr});
+				}else{
+					layer.alert(data.msg, {icon: 5, title: "提示"});
+				}
+			}
+	    });
+	    //请求类别
+	    $.ajax({
+	    	type: 'post',
+	    	url: '/communityfamily/selectlist',
+	    	data: {'page': 1, 'limit': 999999999},
+	    	async: false,
+			dataType: 'json',
+			success: function(data) {
+				if(data.code == '0'){
+					var str = '';
+					//回显社群类别
+					$.each(data.data, function (k, val) {
+						str += '<option value="' + val.id + '">' + val.familyName + '</option>';
+					});
+					$("#communityType").html("");
+					$("#communityType").append("<option value=''>--</option>"+ str);
+					form.render();
+				}else{
+					layer.alert(data.msg, {icon: 5, title: "提示"});
+				}
+			}
+	    });
+	    //信息回显
+	    $.ajax({
+	    	type: 'post',
+	    	url: '/communitys/select',
+	    	data: {'id': parame.id},
+	    	async: false,
+			dataType: 'json',
+			success: function(data) {
+				if(data.code == '0'){
+					//回显多选项
+					if(data.data.communityTag == '1'){
+						var status = [data.data.communityTag];
+					}else{
+						var status = data.data.communityTag.split(',');
+					}
+					$("#communityName").val(data.data.communityName);  //社群名称
+			    	$("#communityMark").val(data.data.communityMark);  //社群签名
+			    	layui.formSelects.value("xm-communityTag", status);  //社群标签
+			    	$("#authDesc").val(data.data.authDesc);  //认证信息
+			    	//社群类别
+			    	$("#communityType option").each(function(index){
+		            	if($(this).attr("value") == data.data.communityType){
+		            		$(this).attr("selected",true);
+		            	}
+		            });
+			    	//社群状态
+			    	$("#communitySts option").each(function(index){
+		            	if($(this).attr("value") == data.data.communitySts){
+		            		$(this).attr("selected",true);
+		            	}
+		            });
+			    	$("#communityNotice").val(data.data.communityNotice);  //社群公告
+			    	$("#communityDesc").val(data.data.communityDesc);  //社群说明
+			    	img_one = data.data.communityIcon;
+			    	$("#communityIcon").attr("src", data.data.communityIcon);  //社群图标
+			    	img_two = data.data.bgIcon;
+			    	$("#bgIcon").attr("src", data.data.bgIcon);  //社群背景
+			    	var admin_id = data.data.adminId;  //存储社长id
+			    	/*if(admin_id == 0 || admin_id == "" || admin_id == null){
+			    		admin_id = -1;
+			    	}*/
+			    	$.ajax({
+				    	type: 'post',
+				    	url: '/wechatuser/select',
+				    	data: {'id': admin_id},
+				    	async: false,
+						dataType: 'json',
+						success: function(data) {
+							if(data.code == '0'){
+						    	//所属社长
+						    	if(data.data != undefined && data.data != null){
+						    		$("#adminId").attr("rel", data.data.id);
+				    				$("#adminId").val(data.data.nickName);
+						    	}
+							}
+					    	form.render();
+							$("input,textarea").attr("readOnly", "readOnly");
+					    	$("select").attr("disabled", "disabled");
+					    	$("div,input").click(function(){
+					    		return false;
+					    	});
+					    	//图片点击放大
+					      	   $("img").click(function() {
+					      			public.bigImg($(this).parent());
+					      	   });
+						    $(".pageloading").hide();
+						}
+				    });
+				}else{
+					layer.alert(data.msg, {icon: 5, title: "提示"});
+				}
+			}
+	    });
+	    //点击社群成员
+	    $("#sqcy").click(function() {
+	    	public.dialogLayer(2,"社群成员","/view/communitys/shequncylist.html?id=" + parame.id,"100%","100%");
+	    });
+	    //点击社群文章
+	    $("#sqwz").click(function() {
+	    	public.dialogLayer(2,"社群文章","/view/communitys/shequnwzlist.html?id=" + parame.id,"100%","100%");
+	    });
+	    //点击社群粉丝
+	    $("#sqfs").click(function() {
+	    	public.dialogLayer(2,"社群粉丝","/view/communitys/shequnfslist.html?id=" + parame.id,"100%","100%");
+	    });
+	    //点击社群社刊
+	    $("#sqsk").click(function() {
+	    	public.dialogLayer(2,"社群社刊","/view/communitys/shequnsklist.html?id=" + parame.id,"100%","100%");
+	    });
+	    //点击社群征稿
+	    $("#sqzg").click(function() {
+	    	public.dialogLayer(2,"社群征稿","/view/communitys/shequnzglist.html?id=" + parame.id,"100%","100%");
+	    });
+	});
+	</script>
+</html>

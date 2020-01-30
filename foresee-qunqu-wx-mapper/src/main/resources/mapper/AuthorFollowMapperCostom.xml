@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foresee.mapper.AuthorFollowMapperCostom">
+  <resultMap id="BaseResultMap" type="com.foresee.vo.AuthorFollowVo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="userId" jdbcType="INTEGER" property="userid" />
+    <result column="author_id" jdbcType="INTEGER" property="authorId" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    
+    <result column="head_url" jdbcType="VARCHAR" property="headUrl" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="followUserNum" jdbcType="INTEGER" property="followUserNum" />
+    <result column="articlesNum" jdbcType="INTEGER" property="articlesNum" />
+    <result column="readNum" jdbcType="INTEGER" property="readNum" />
+    <result column="is_vip" jdbcType="INTEGER" property="isVip" />
+    <result column="is_community" jdbcType="INTEGER" property="isCommunity" />
+    <result column="is_admin" jdbcType="INTEGER" property="isAdmin" />
+  </resultMap>
+  <select id="selectAuthorByFollowUserId" resultMap="BaseResultMap">
+  SELECT
+	af.*,
+	count( a.id ) articlesNum,
+	wu.nick_name,
+	sum( a.read_count ) readNum ,
+	aff.followUserNum,
+	wu.head_url,
+	wu.open_id
+FROM
+	author_follow af
+	JOIN wechat_user wu ON af.author_id = wu.id
+	JOIN ( SELECT auf.author_id, count( 1 ) followUserNum FROM author_follow auf WHERE auf.is_deleted = '0' GROUP BY auf.author_id ) aff ON af.author_id = aff.author_id
+	LEFT JOIN articles a ON a.userId = af.author_id 
+	AND a.is_deleted = '0' 
+WHERE
+	af.is_deleted = '0' 
+	and af.userId = #{userid}
+GROUP BY
+	af.id
+	order by wu.nick_name desc
+  
+  </select>
+  <select id="selectFollowMe" resultMap="BaseResultMap">
+  SELECT
+	af.*,
+	count( a.id ) articlesNum,
+	t.nick_name,
+	sum( a.read_count ) readNum,
+	t.head_url,
+	t.is_vip,
+	t.is_community,
+	t.is_admin,
+	t.open_id 
+FROM
+	author_follow af
+	JOIN (
+SELECT
+	wu.id,
+	wu.open_id,
+	wu.head_url,
+	wu.nick_name,
+	up.is_vip,
+	up.is_community,
+	up.is_admin 
+FROM
+	wechat_user wu,
+	user_power up 
+WHERE
+	up.userid = wu.id 
+	) t ON af.userId = t.id
+	LEFT JOIN articles a ON ( a.userId = af.userId AND a.is_deleted = '0' ) 
+WHERE
+	af.is_deleted = '0' 
+	AND af.author_id = #{userid}
+GROUP BY
+	af.id 
+ORDER BY
+	t.nick_name DESC
+  
+  </select>
+</mapper>

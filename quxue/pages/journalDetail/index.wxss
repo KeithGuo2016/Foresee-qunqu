@@ -1,0 +1,129 @@
+/* pages/journalDetail/index.wxss */
+@import '../detail/index.wxss';
+.jobox{
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+}
+.joimg image{
+  width: 202rpx; height: 314rpx;
+  border-radius: 10rpx;
+}
+.jotxt{flex: 1;margin-left: 30rpx;}
+.jotit{
+  font-size: 28rpx;
+  font-weight: bold;
+}
+.jotime{
+  margin: 10rpx 0;
+  color: #333;
+  font-size: 24rpx;
+}
+.jodes{
+ font-size: 24rpx;
+ color: #B4B2B2;
+ line-height: 40rpx;
+ display: -webkit-box;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ -webkit-line-clamp: 2;
+ -webkit-box-orient: vertical;
+}
+.josour{
+  margin: 10rpx 0 30rpx;
+  font-size: 26rpx;
+  color: #333;
+}
+.josour text{
+  color: #b2b2b2;
+  font-size: 28rpx;
+}
+.josour image{
+  vertical-align: middle;
+  width: 42rpx; height: 42rpx;
+  margin: 0 10rpx;
+}
+.jopage{
+  display: flex;
+  justify-content: space-between;
+}
+.jof{
+  font-size: 20rpx;
+  color: #B4B2B2;
+  margin-top: 8rpx;
+
+}
+.jop{
+  border: 1px solid #333;
+  border-radius: 30rpx;
+  padding: 5rpx 10rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+.jop image{
+  vertical-align: middle;
+  margin-right: 10rpx;
+  width: 30rpx; height: 30rpx;
+}
+.jop text{color: #38bab8;}
+.joauth{
+  text-align: center;
+}
+.joaname{
+  font-size: 36rpx;
+  font-weight: bold;
+  margin: 20rpx 0;
+}
+.joainfo{
+  font-size: 20rpx;
+  color:#B4B2B2;
+}
+.joainfo text{
+  font-size: 28rpx;
+  color: #333;
+}
+.joainfo image{
+  vertical-align: middle;
+  width: 52rpx; height: 52rpx;
+  margin: 0 10rpx;
+  border-radius: 50%;
+
+}
+.jo_con{
+  font-size: 30rpx;
+  color: #333;
+  line-height: 48rpx;
+}
+.jo_con view{
+  margin-bottom: 30rpx;
+}
+.cover{
+  width:100%;
+  height: 100%;
+  position: absolute;
+  z-index: -99999;
+}
+.cover image{
+  width: 100%;
+  height: 100%;
+}
+.leftnav{
+  position: absolute;
+  left: 0;
+  width: 85%; height: 100%;
+  background: #2C4646;
+  color: #fff;
+  display: flex;
+align-items: center;
+flex-direction: column;
+
+}
+.leftnav view{
+  padding: 30rpx 0 30rpx;
+  width: 80%;
+  
+  border-bottom: 1px solid #425656;
+}
+.indexc{
+ color: #38BAB8
+}

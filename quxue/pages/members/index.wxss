@@ -1,0 +1,175 @@
+/* pages/members/index.wxss */
+.top{
+  display: flex;
+  padding: 30rpx 22rpx 0 22rpx;
+  justify-content: space-between;
+}
+.search{
+  width: 450rpx;
+  margin: 0;
+  }
+.search input{
+  width: 360rpx;
+}
+.appadmin{
+  width: 200rpx; height: 54rpx;
+  line-height: 54rpx;
+  border: 1px solid #38bab8;
+  font-size: 24rpx;
+  color: #38bab8;
+  border-radius: 30rpx;
+  text-align: center;
+}
+.membox{
+  margin: 30rpx 0 0 0;
+  position: relative;
+}
+.meminfo{
+  width: 100%;height: 50rpx;
+  line-height: 50rpx;
+  background: #efefef;
+  font-size: 26rpx;
+  color: #b4b2b2;
+  text-indent: 30rpx;
+}
+.memlist{
+  position: relative;
+  margin-left: 140rpx;
+  margin-right: 60rpx;
+  border-bottom: 1px solid #E6E6E6;
+}
+.memlist:last-of-type{
+  border-bottom: 0px solid #E6E6E6;
+}
+/*.memlist movable-area{
+  height: 150rpx;
+  width: 500rpx;
+}
+.memlist movable-area.tichu{width: 400rpx;}
+.memlist movable-view{
+  background: #fff;
+  height: 150rpx;
+  width: 665rpx;
+  z-index: 99;
+}*/
+.delete-btn{
+  position: absolute;
+  z-index: 1;
+  width: 160rpx;
+  height: 110rpx;
+  bottom: 39rpx; right: 60rpx;
+  background: #38bab8;
+  color: #fff;
+  font-size: 28rpx;
+  text-align: center;
+  line-height: 110rpx;
+}
+.goout{
+  width: 80rpx;
+  right: 230rpx; 
+}
+.memimg{
+  position: absolute;
+  left: -116rpx;
+  top: 24rpx;
+}
+.memimg>image{
+  width: 96rpx; 
+  height: 96rpx;
+  border-radius: 50%;
+}
+.memname{
+  float: left;
+  width: 100%;
+  height: 144rpx;
+  line-height: 148rpx;
+  font-size: 36rpx;
+  color: #000000;
+}
+.memtag{
+  position: absolute;
+  top: 0rpx;
+  left: 0rpx;
+  width: 32rpx;
+  height: 32rpx;
+  text-align: center;
+  background: #38bab8;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.shezhang_image{
+  width: 22rpx;
+  height: 24rpx;
+  display: block;
+}
+.admin_image{
+  width: 32rpx;
+  height: 32rpx;
+  display: block;
+}
+.mempos{
+  position: absolute;
+  bottom: -24rpx;
+  left: 0;
+  font-size: 24rpx;
+  color: #38bab8;
+  width: 96rpx;
+  text-align: center;
+
+}
+.admem{
+  color:#949696
+}
+.guide_box{
+  position: fixed;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  top: 120rpx;
+  right: 20rpx;
+  bottom: 0;
+  justify-content: center;
+}
+.guide{
+  
+}
+.guide view{
+  width: 30rpx; 
+  height: 30rpx;
+  line-height: 30rpx;
+  text-align: center;
+  font-size: 20rpx;
+  color: #333;
+}
+.guide view.cur{
+  background: #38bab8;
+  border-radius: 50%;
+  color: #fff;
+}
+.head{
+  background: #F2F2F2;
+  height: 60rpx;
+  line-height: 60rpx;
+  color: #5A5A5A;
+  font-size: 28rpx;
+  text-indent: 36rpx;
+}
+.box{
+  width: calc(100% - 20px);height: 60rpx;
+}
+.box .w{width: 100rpx;}
+.say{
+ width: 40rpx;height: 40rpx;
+}
+.img{
+  width: 80rpx;height:80rpx;
+  border-radius: 50%;
+  box-shadow: 0 5px 10px #aaa;
+}
+.star{width: 32rpx;height:32rpx;border-radius: 50%}
+.r10{right: 20rpx;}
+.right{
+  width: 50rpx;height:50rpx;
+}

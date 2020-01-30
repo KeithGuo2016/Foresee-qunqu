@@ -1,0 +1,83 @@
+<view class='search' bindtap='goSearch'>
+  <image src='../images/search.png'></image>
+  <input placeholder='请输入您想要搜索的内容' disabled='true'></input>
+</view>
+<view class='tabnav_un'>
+  <view bindtap='getShequn' class='{{curV ? "cur":""}}'>社群</view>
+  <view bindtap='getShekan' class='{{curV ? "":"cur"}}'>社刊</view>
+</view>
+
+<swiper class="effect" current="{{curIndex}}" duration="300"  bindchange="swiperTab">
+  <swiper-item>
+    <scroll-view scroll-y>
+    <view class='swiper'>
+      <swiper indicator-dots="{{indicatorDots}}"autoplay="{{autoplay}}" interval="{{interval}}" circular='true' duration="{{duration}}">
+          <block wx:for="{{bannerList}}" wx:key='index'>
+            <swiper-item>
+              <image bindtap="detail" data-type="{{item.carouselType}}" data-id='{{item.contentLink}}' src="{{item.carouselIcon}}" class="slide-image" />
+            </swiper-item>
+          </block>
+        </swiper>
+      </view>
+      <view class='shequn_box'>
+      <block wx:for='{{shequnList}}' wx:key='index'>
+        <view class='title'>
+          <view class='titicon'></view>
+          <view class='tit'>{{item.familyName}}</view>
+          <view class='subtit'>{{item.familyDesc}}</view>
+        </view>
+        <view class="list_box">
+        <block wx:for='{{item.list}}' wx:for-item='list' wx:key='list'>
+        <view class='list_un' data-id="{{list.id}}" bindtap='shequnDetail'>
+          <view class='listl listla'><image src='{{list.communityIcon}}'></image></view>
+          <view class='listr'>
+            <view class='tita'>{{list.communityName}}</view>
+            <view class='des desa'>{{list.communityDesc}}</view>
+            <view class='num clear'>{{list.userNum}}人</view>
+            <view class='source sourcea'>
+              <text>{{list.articleNum}}</text>篇/作品发表
+              <view class='count'>{{list.readNum}}人阅读</view>
+            </view>
+          </view>
+        </view>
+        </block>
+        <view class="moredata" data-type="{{item.familyName}}" data-id="{{item.id}}" bindtap='goSearch' >查看更多 <view class="arrows mb6"> </view></view>
+        </view>
+      </block>
+        <view class="hotcom">
+          <view class="hotlist" wx:for="{{atherShequnList}}" wx:key="this" data-id="{{item.id}}" bindtap='shequnDetail' >
+            <image src="{{item.communityIcon}}"></image>
+            <view class="text">{{item.communityName}}</view>
+          </view>
+        </view>  
+      </view>
+      <view class="nodata">—— 喂喂，你碰到我的底线了 ——</view>
+    </scroll-view>
+  </swiper-item>
+
+  <swiper-item>
+    <scroll-view scroll-y>
+      <view class='swiper'>
+      <swiper indicator-dots="{{indicatorDots}}"autoplay="{{autoplay}}" interval="{{interval}}" circular='true' duration="{{duration}}">
+          <block wx:for="{{bannerList}}" wx:key='index'>
+            <swiper-item>
+              <image bindtap="detail" data-type="{{item.carouselType}}" data-id='{{item.contentLink}}' src="{{item.carouselIcon}}" class="slide-image" />
+            </swiper-item>
+          </block>
+        </swiper>
+      </view>
+      <view class='list_box'>
+        <view class='list_un' wx:for='{{shekanList}}' data-id='{{item.id}}' wx:key='{{item.id}}' bindtap='shekanDetail'>
+          <view class='listl2'><image src='{{item.magazineIcon}}'></image></view>
+          <view class='listr'>
+            <view class='tita'>{{item.magazineTitle}}</view>
+            <view class='des des_sk'>{{item.magazineDesc}}</view>
+            <view class='source'><text>{{item.communityName}}</text>社群/出品</view>
+            <view class='count'>{{item.readCount}}人阅读 <text>{{item.followCount}}人收藏</text></view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </swiper-item>
+  
+</swiper>

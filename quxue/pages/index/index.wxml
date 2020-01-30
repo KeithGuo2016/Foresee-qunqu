@@ -1,0 +1,50 @@
+<view class='day_nav'>
+  <view wx:for='{{displayDay}}' class='{{curIndex == index ? "cur":""}}' wx:key='index' data-index='{{index}}' bindtap='getDay'>
+    {{item}}
+  </view>
+</view>
+<view class='line'></view>
+<swiper current="{{curIndex}}" duration="300" bindanimationfinish="swiperTab">
+  <block wx:for="{{7}}" wx:key='listIndex'>
+    <swiper-item>
+      <scroll-view scroll-y>
+        <view>
+          <view class='data_list' wx:for='{{recomList[index]}}' wx:key='item.id'>
+            <view class="ardetail" data-id="{{item.id}}" bindtap='goDetail'>
+              <view class='tit'>{{item.articleTitle}}</view>
+              <view class='auth'>{{item.nickName}}</view>
+              <block wx:if="{{item.articleIconBg}}">
+                <image class='dataimg' src='{{item.articleIconBg}}' mode="widthFix"></image>
+              </block>
+              <block wx:else>
+                <image class='dataimg' src='{{item.articleIcon}}' mode="widthFix"></image>
+              </block>
+              <view class='des'>{{item.articleOutline}}</view>
+            </view>
+            <view class='detail'>
+              <view class="fl" data-id="{{item.communityId}}" bindtap='goCommunityDetail'>
+                <text class='txa'>社群</text>
+                <image class='simg' src='{{item.communityIcon}}'></image>
+                <text class='txb fs'>{{item.communityName}}</text>
+              </view>
+              <view class="fr mt5">
+                <view class='zan'>
+                  <image src='../images/zan.png'></image>
+                  {{item.articleZan}}
+                </view>
+                <view class='eye'>
+                  <image src='../images/yan.png'></image>
+                  {{item.readCount}}
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="nodata" bindtap='goMoreArticle'>
+          更多文章
+          <view class="arrows mb6"></view>
+        </view>
+      </scroll-view>
+    </swiper-item>
+  </block>
+</swiper>

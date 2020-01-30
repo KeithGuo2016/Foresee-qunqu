@@ -1,0 +1,18 @@
+<view class='detail'>
+  <view class='d_tit'>{{detail.deliveryTitle}}</view>
+  <view class='author'>
+    <view class='avator'>
+      <image src='{{detail.userIcon}}'></image> <text class='nik'>{{detail.userName}}</text>
+      <text class='time'>{{detail.deliveryDate}}</text>
+    </view>
+  </view>
+ 
+  <view class='content'>
+  <import src="../wxParse/wxParse.wxml" />
+  <template is="wxParse" data="{{wxParseData:content.nodes}}"/>
+  </view>
+
+</view>  
+
+
+

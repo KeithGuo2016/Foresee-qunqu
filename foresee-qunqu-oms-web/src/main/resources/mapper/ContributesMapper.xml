@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.foresee.dao.ContributesMapper" >
+  <resultMap id="BaseResultMap" type="com.foresee.model.Contributes" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_userId" property="createUserid" jdbcType="INTEGER" />
+    <result column="contribute_userId" property="contributeUserid" jdbcType="INTEGER" />
+    <result column="contribute_title" property="contributeTitle" jdbcType="VARCHAR" />
+    <result column="contribute_icon" property="contributeIcon" jdbcType="VARCHAR" />
+    <result column="orientation" property="orientation" jdbcType="VARCHAR" />
+    <result column="contribute_tag" property="contributeTag" jdbcType="VARCHAR" />
+    <result column="buy_num" property="buyNum" jdbcType="INTEGER" />
+    <result column="max_money" property="maxMoney" jdbcType="VARCHAR" />
+    <result column="min_money" property="minMoney" jdbcType="VARCHAR" />
+    <result column="true_money" property="trueMoney" jdbcType="VARCHAR" />
+    <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+    <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="contribute_range" property="contributeRange" jdbcType="CHAR" />
+    <result column="user_see_range" property="userSeeRange" jdbcType="CHAR" />
+    <result column="contribute_type" property="contributeType" jdbcType="CHAR" />
+    <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="updated_date" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
+    <result column="flow_sts" property="flowSts" jdbcType="CHAR" />
+    <result column="community_id" property="communityId" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.foresee.model.ContributesWithBLOBs" extends="BaseResultMap" >
+    <result column="contribute_desc" property="contributeDesc" jdbcType="LONGVARCHAR" />
+    <result column="case_desc" property="caseDesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, create_userId, contribute_userId, contribute_title, contribute_icon, orientation, 
+    contribute_tag, buy_num, max_money, min_money, true_money, start_date, end_date, 
+    contribute_range, user_see_range, contribute_type, created_date, updated_date, created_by, 
+    updated_by, is_deleted, flow_sts, community_id
+  </sql>
+  <sql id="Blob_Column_List" >
+    contribute_desc, case_desc
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    	a.*,
+    	d.nick_name as createdName,
+		e.nick_name as updatedName,
+    	GROUP_CONCAT(b.tag_name) as tagNames,
+    	c.community_name as communityName
+    	from contributes a LEFT JOIN tag b ON FIND_IN_SET(b.id, a.contribute_tag)
+		LEFT JOIN communitys c ON a.community_id = c.id
+		LEFT JOIN wechat_user d ON a.created_by = d.id
+		LEFT JOIN wechat_user e ON a.updated_by = e.id
+    where a.id = #{id,jdbcType=INTEGER}
+    GROUP BY a.id 
+  </select>
+  <select id="selectList" resultMap="ResultMapWithBLOBs" parameterType="com.foresee.model.ContributesWithBLOBs" >
+    select 
+    	a.*,
+    	d.nick_name as createdName,
+		e.nick_name as updatedName,
+    	GROUP_CONCAT(b.tag_name) as tagNames,
+    	c.community_name as communityName
+    	from contributes a LEFT JOIN tag b ON FIND_IN_SET(b.id, a.contribute_tag)
+		LEFT JOIN communitys c ON a.community_id = c.id
+		LEFT JOIN wechat_user d ON a.created_by = d.id
+		LEFT JOIN wechat_user e ON a.updated_by = e.id
+    where 1=1
+    <include refid="querysql" />
+    GROUP BY a.id order by a.is_deleted asc,a.created_date desc
+  </select>
+  <sql id="querysql">
+  	  <if test="id != null and id !=''" >
+      	and  a.id = #{id,jdbcType=INTEGER}
+      </if>
+ 	  <if test="createUserid != null and  createUserid!=''" >
+        and  a.create_userId = #{createUserid,jdbcType=INTEGER}
+      </if>
+      <if test="contributeUserid != null and  contributeUserid!=''" >
+        and  a.contribute_userId = #{contributeUserid,jdbcType=INTEGER}
+      </if>
+      <if test="contributeTitle != null and  contributeTitle!=''" >
+        and a.contribute_title like concat('%',#{contributeTitle,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="contributeIcon != null and  contributeIcon!=''" >
+        and  a.contribute_icon = #{contributeIcon,jdbcType=VARCHAR}
+      </if>
+      <if test="orientation != null and  orientation!=''" >
+        and  a.orientation = #{orientation,jdbcType=VARCHAR}
+      </if>
+      <if test="contributeTag != null and  contributeTag!=''" >
+        and  a.contribute_tag = #{contributeTag,jdbcType=VARCHAR}
+      </if>
+      <if test="buyNum != null and  buyNum!=''" >
+        and  a.buy_num = #{buyNum,jdbcType=INTEGER}
+      </if>
+      <if test="maxMoney != null and  maxMoney!=''" >
+        and  a.max_money = #{maxMoney,jdbcType=VARCHAR}
+      </if>
+      <if test="minMoney != null and  minMoney!=''" >
+        and  a.min_money = #{minMoney,jdbcType=VARCHAR}
+      </if>
+      <if test="trueMoney != null and  trueMoney!=''" >
+        and  a.true_money = #{trueMoney,jdbcType=VARCHAR}
+      </if>
+      <if test="startDateStar != null and startDateStar !='' and startDateEnd != null and startDateEnd != '' " >
+        <![CDATA[ and a.start_date >= #{startDateStar} and a.start_date < #{startDateEnd} ]]> 
+      </if>
+      <if test="endDateStar != null and endDateStar != ''  and endDateEnd !=null and endDateEnd != ''" >
+      <![CDATA[ and a.end_date >= #{endDateStar} and a.end_date < #{endDateEnd} ]]> 
+      </if>
+      <if test="contributeRange != null and  contributeRange!=''" >
+        and  a.contribute_range = #{contributeRange,jdbcType=CHAR}
+      </if>
+      <if test="userSeeRange != null and  userSeeRange!=''" >
+        and  a.user_see_range = #{userSeeRange,jdbcType=CHAR}
+      </if>
+      <if test="contributeType != null and  contributeType!=''" >
+        and  a.contribute_type = #{contributeType,jdbcType=CHAR}
+      </if>
+      <if test="createdDateStar != null and createdDateStar !='' and createdDateEnd != null and createdDateEnd != '' " >
+        <![CDATA[ and a.created_date >= #{createdDateStar} and a.created_date < #{createdDateEnd} ]]> 
+      </if>
+      <if test="updatedDateStar != null and updatedDateStar != ''  and updatedDateEnd !=null and updatedDateEnd != ''" >
+      <![CDATA[ and a.updated_date >= #{updatedDateStar} and a.updated_date < #{updatedDateEnd} ]]> 
+      </if>
+      <if test="createdBy != null and  createdBy!=''" >
+        and  a.created_by = #{createdBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updatedBy != null and  updatedBy!=''" >
+        and  a.updated_by = #{updatedBy,jdbcType=VARCHAR}
+      </if>
+      <if test="isDeleted != null and  isDeleted!=''  or isDeleted==0 " >
+        and  a.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="flowSts != null and  flowSts!=''" >
+        and  a.flow_sts = #{flowSts,jdbcType=CHAR}
+      </if>
+      <if test="communityId != null and  communityId!=''" >
+        and  a.community_id = #{communityId,jdbcType=INTEGER}
+      </if>
+      <if test="contributeDesc != null and  contributeDesc!=''" >
+        and  a.contribute_desc = #{contributeDesc,jdbcType=LONGVARCHAR}
+      </if>
+      <if test="caseDesc != null and  caseDesc!=''" >
+        and  a.case_desc = #{caseDesc,jdbcType=LONGVARCHAR}
+      </if>
+ </sql>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from contributes
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.foresee.model.ContributesWithBLOBs" >
+    insert into contributes (id, create_userId, contribute_userId, 
+      contribute_title, contribute_icon, orientation, 
+      contribute_tag, buy_num, max_money, 
+      min_money, true_money, start_date, 
+      end_date, contribute_range, user_see_range, 
+      contribute_type, created_date, updated_date, 
+      created_by, updated_by, is_deleted, 
+      flow_sts, community_id, contribute_desc, 
+      case_desc)
+    values (#{id,jdbcType=INTEGER}, #{createUserid,jdbcType=INTEGER}, #{contributeUserid,jdbcType=INTEGER}, 
+      #{contributeTitle,jdbcType=VARCHAR}, #{contributeIcon,jdbcType=VARCHAR}, #{orientation,jdbcType=VARCHAR}, 
+      #{contributeTag,jdbcType=VARCHAR}, #{buyNum,jdbcType=INTEGER}, #{maxMoney,jdbcType=VARCHAR}, 
+      #{minMoney,jdbcType=VARCHAR}, #{trueMoney,jdbcType=VARCHAR}, #{startDate,jdbcType=TIMESTAMP}, 
+      #{endDate,jdbcType=TIMESTAMP}, #{contributeRange,jdbcType=CHAR}, #{userSeeRange,jdbcType=CHAR}, 
+      #{contributeType,jdbcType=CHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{updatedDate,jdbcType=TIMESTAMP}, 
+      #{createdBy,jdbcType=VARCHAR}, #{updatedBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, 
+      #{flowSts,jdbcType=CHAR}, #{communityId,jdbcType=INTEGER}, #{contributeDesc,jdbcType=LONGVARCHAR}, 
+      #{caseDesc,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.foresee.model.ContributesWithBLOBs" useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
+    insert into contributes
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createUserid != null" >
+        create_userId,
+      </if>
+      <if test="contributeUserid != null" >
+        contribute_userId,
+      </if>
+      <if test="contributeTitle != null" >
+        contribute_title,
+      </if>
+      <if test="contributeIcon != null" >
+        contribute_icon,
+      </if>
+      <if test="orientation != null" >
+        orientation,
+      </if>
+      <if test="contributeTag != null" >
+        contribute_tag,
+      </if>
+      <if test="buyNum != null" >
+        buy_num,
+      </if>
+      <if test="maxMoney != null" >
+        max_money,
+      </if>
+      <if test="minMoney != null" >
+        min_money,
+      </if>
+      <if test="trueMoney != null" >
+        true_money,
+      </if>
+      <if test="startDate != null" >
+        start_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="contributeRange != null" >
+        contribute_range,
+      </if>
+      <if test="userSeeRange != null" >
+        user_see_range,
+      </if>
+      <if test="contributeType != null" >
+        contribute_type,
+      </if>
+      <if test="createdDate != null" >
+        created_date,
+      </if>
+      <if test="updatedDate != null" >
+        updated_date,
+      </if>
+      <if test="createdBy != null" >
+        created_by,
+      </if>
+      <if test="updatedBy != null" >
+        updated_by,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="flowSts != null" >
+        flow_sts,
+      </if>
+      <if test="communityId != null" >
+        community_id,
+      </if>
+      <if test="contributeDesc != null" >
+        contribute_desc,
+      </if>
+      <if test="caseDesc != null" >
+        case_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createUserid != null" >
+        #{createUserid,jdbcType=INTEGER},
+      </if>
+      <if test="contributeUserid != null" >
+        #{contributeUserid,jdbcType=INTEGER},
+      </if>
+      <if test="contributeTitle != null" >
+        #{contributeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="contributeIcon != null" >
+        #{contributeIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="orientation != null" >
+        #{orientation,jdbcType=VARCHAR},
+      </if>
+      <if test="contributeTag != null" >
+        #{contributeTag,jdbcType=VARCHAR},
+      </if>
+      <if test="buyNum != null" >
+        #{buyNum,jdbcType=INTEGER},
+      </if>
+      <if test="maxMoney != null" >
+        #{maxMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="minMoney != null" >
+        #{minMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="trueMoney != null" >
+        #{trueMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contributeRange != null" >
+        #{contributeRange,jdbcType=CHAR},
+      </if>
+      <if test="userSeeRange != null" >
+        #{userSeeRange,jdbcType=CHAR},
+      </if>
+      <if test="contributeType != null" >
+        #{contributeType,jdbcType=CHAR},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedDate != null" >
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="flowSts != null" >
+        #{flowSts,jdbcType=CHAR},
+      </if>
+      <if test="communityId != null" >
+        #{communityId,jdbcType=INTEGER},
+      </if>
+      <if test="contributeDesc != null" >
+        #{contributeDesc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="caseDesc != null" >
+        #{caseDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.foresee.model.ContributesWithBLOBs" >
+    update contributes
+    <set >
+      <if test="createUserid != null" >
+        create_userId = #{createUserid,jdbcType=INTEGER},
+      </if>
+      <if test="contributeUserid != null" >
+        contribute_userId = #{contributeUserid,jdbcType=INTEGER},
+      </if>
+      <if test="contributeTitle != null" >
+        contribute_title = #{contributeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="contributeIcon != null" >
+        contribute_icon = #{contributeIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="orientation != null" >
+        orientation = #{orientation,jdbcType=VARCHAR},
+      </if>
+      <if test="contributeTag != null" >
+        contribute_tag = #{contributeTag,jdbcType=VARCHAR},
+      </if>
+      <if test="buyNum != null" >
+        buy_num = #{buyNum,jdbcType=INTEGER},
+      </if>
+      <if test="maxMoney != null" >
+        max_money = #{maxMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="minMoney != null" >
+        min_money = #{minMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="trueMoney != null" >
+        true_money = #{trueMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        start_date = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contributeRange != null" >
+        contribute_range = #{contributeRange,jdbcType=CHAR},
+      </if>
+      <if test="userSeeRange != null" >
+        user_see_range = #{userSeeRange,jdbcType=CHAR},
+      </if>
+      <if test="contributeType != null" >
+        contribute_type = #{contributeType,jdbcType=CHAR},
+      </if>
+      <if test="createdDate != null" >
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedDate != null" >
+        updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="flowSts != null" >
+        flow_sts = #{flowSts,jdbcType=CHAR},
+      </if>
+      <if test="communityId != null" >
+        community_id = #{communityId,jdbcType=INTEGER},
+      </if>
+      <if test="contributeDesc != null" >
+        contribute_desc = #{contributeDesc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="caseDesc != null" >
+        case_desc = #{caseDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.foresee.model.ContributesWithBLOBs" >
+    update contributes
+    set create_userId = #{createUserid,jdbcType=INTEGER},
+      contribute_userId = #{contributeUserid,jdbcType=INTEGER},
+      contribute_title = #{contributeTitle,jdbcType=VARCHAR},
+      contribute_icon = #{contributeIcon,jdbcType=VARCHAR},
+      orientation = #{orientation,jdbcType=VARCHAR},
+      contribute_tag = #{contributeTag,jdbcType=VARCHAR},
+      buy_num = #{buyNum,jdbcType=INTEGER},
+      max_money = #{maxMoney,jdbcType=VARCHAR},
+      min_money = #{minMoney,jdbcType=VARCHAR},
+      true_money = #{trueMoney,jdbcType=VARCHAR},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      contribute_range = #{contributeRange,jdbcType=CHAR},
+      user_see_range = #{userSeeRange,jdbcType=CHAR},
+      contribute_type = #{contributeType,jdbcType=CHAR},
+      created_date = #{createdDate,jdbcType=TIMESTAMP},
+      updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      flow_sts = #{flowSts,jdbcType=CHAR},
+      community_id = #{communityId,jdbcType=INTEGER},
+      contribute_desc = #{contributeDesc,jdbcType=LONGVARCHAR},
+      case_desc = #{caseDesc,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.foresee.model.Contributes" >
+    update contributes
+    set create_userId = #{createUserid,jdbcType=INTEGER},
+      contribute_userId = #{contributeUserid,jdbcType=INTEGER},
+      contribute_title = #{contributeTitle,jdbcType=VARCHAR},
+      contribute_icon = #{contributeIcon,jdbcType=VARCHAR},
+      orientation = #{orientation,jdbcType=VARCHAR},
+      contribute_tag = #{contributeTag,jdbcType=VARCHAR},
+      buy_num = #{buyNum,jdbcType=INTEGER},
+      max_money = #{maxMoney,jdbcType=VARCHAR},
+      min_money = #{minMoney,jdbcType=VARCHAR},
+      true_money = #{trueMoney,jdbcType=VARCHAR},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      contribute_range = #{contributeRange,jdbcType=CHAR},
+      user_see_range = #{userSeeRange,jdbcType=CHAR},
+      contribute_type = #{contributeType,jdbcType=CHAR},
+      created_date = #{createdDate,jdbcType=TIMESTAMP},
+      updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      flow_sts = #{flowSts,jdbcType=CHAR},
+      community_id = #{communityId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

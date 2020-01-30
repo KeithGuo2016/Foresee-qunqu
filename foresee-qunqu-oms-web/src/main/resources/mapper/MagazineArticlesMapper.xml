@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.foresee.dao.MagazineArticlesMapper" >
+  <resultMap id="BaseResultMap" type="com.foresee.model.MagazineArticles" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="magazines_id" property="magazinesId" jdbcType="INTEGER" />
+    <result column="articles_id" property="articlesId" jdbcType="INTEGER" />
+    <result column="magazine_title" property="magazineTitle" jdbcType="VARCHAR" />
+    <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="updated_date" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, magazines_id, articles_id, magazine_title, created_date, updated_date, created_by, 
+    updated_by, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from magazine_articles
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from magazine_articles
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <delete id="deleteByMagazinesId" parameterType="java.lang.Integer" >
+    delete from magazine_articles
+    where magazines_id = #{magazinesId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.foresee.model.MagazineArticles" >
+    insert into magazine_articles (id, magazines_id, articles_id, 
+      magazine_title, created_date, updated_date, 
+      created_by, updated_by, is_deleted
+      )
+    values (#{id,jdbcType=INTEGER}, #{magazinesId,jdbcType=INTEGER}, #{articlesId,jdbcType=INTEGER}, 
+      #{magazineTitle,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{updatedDate,jdbcType=TIMESTAMP}, 
+      #{createdBy,jdbcType=VARCHAR}, #{updatedBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}
+      )
+  </insert>
+  
+  <insert id="insertSelectiveList" parameterType="java.util.List">
+     insert into magazine_articles (
+		  id, magazines_id, articles_id, 
+	      magazine_title, created_date, updated_date, 
+	      created_by, updated_by
+	)
+    values 
+    <foreach collection="list" item="item" index="index" separator="," > 
+     (
+	      #{item.id,jdbcType=INTEGER}, #{item.magazinesId,jdbcType=INTEGER}, #{item.articlesId,jdbcType=INTEGER}, 
+	      #{item.magazineTitle,jdbcType=VARCHAR}, #{item.createdDate,jdbcType=TIMESTAMP}, #{item.updatedDate,jdbcType=TIMESTAMP}, 
+	      #{item.createdBy,jdbcType=VARCHAR}, #{item.updatedBy,jdbcType=VARCHAR}
+      )
+    </foreach>
+  </insert>
+  
+  
+  
+  <insert id="insertSelective" parameterType="com.foresee.model.MagazineArticles" >
+    insert into magazine_articles
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="magazinesId != null" >
+        magazines_id,
+      </if>
+      <if test="articlesId != null" >
+        articles_id,
+      </if>
+      <if test="magazineTitle != null" >
+        magazine_title,
+      </if>
+      <if test="createdDate != null" >
+        created_date,
+      </if>
+      <if test="updatedDate != null" >
+        updated_date,
+      </if>
+      <if test="createdBy != null" >
+        created_by,
+      </if>
+      <if test="updatedBy != null" >
+        updated_by,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="magazinesId != null" >
+        #{magazinesId,jdbcType=INTEGER},
+      </if>
+      <if test="articlesId != null" >
+        #{articlesId,jdbcType=INTEGER},
+      </if>
+      <if test="magazineTitle != null" >
+        #{magazineTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedDate != null" >
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.foresee.model.MagazineArticles" >
+    update magazine_articles
+    <set >
+      <if test="magazinesId != null" >
+        magazines_id = #{magazinesId,jdbcType=INTEGER},
+      </if>
+      <if test="articlesId != null" >
+        articles_id = #{articlesId,jdbcType=INTEGER},
+      </if>
+      <if test="magazineTitle != null" >
+        magazine_title = #{magazineTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedDate != null" >
+        updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.foresee.model.MagazineArticles" >
+    update magazine_articles
+    set magazines_id = #{magazinesId,jdbcType=INTEGER},
+      articles_id = #{articlesId,jdbcType=INTEGER},
+      magazine_title = #{magazineTitle,jdbcType=VARCHAR},
+      created_date = #{createdDate,jdbcType=TIMESTAMP},
+      updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

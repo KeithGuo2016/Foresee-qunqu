@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.foresee.dao.ArticlesCommentMapper">
+	<resultMap id="BaseResultMap" type="com.foresee.model.ArticlesComment">
+			<id property="id" column="id" jdbcType="INTEGER"/>
+			<result property="userid" column="userid" jdbcType="INTEGER"/>
+			<result property="articlesId" column="articles_id" jdbcType="INTEGER"/>
+			<result property="pid" column="pid" jdbcType="INTEGER"/>
+			<result property="toUserId" column="to_user_id" jdbcType="INTEGER"/>
+			<result property="content" column="content" jdbcType="VARCHAR"/>
+			<result property="createdDate" column="created_date" jdbcType="TIMESTAMP"/>
+			<result property="createdBy" column="created_by" jdbcType="VARCHAR"/>
+			<result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id,userid,articles_id,pid,to_user_id,content,created_date,created_by,is_deleted
+	</sql>
+	
+	<select id="getById" parameterType="int" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from
+			articles_comment
+		where
+			id = #{id}
+	</select>
+	<select id="listPage" resultMap="BaseResultMap">
+		select
+			a.*,
+		    b.nick_name as nickName,
+			b.head_url as headUrl,
+		    c.nick_name as toNickName,
+        	c.head_url as toHeadUrl
+		from articles_comment a LEFT JOIN wechat_user b ON a.userid = b.id
+		LEFT JOIN wechat_user c ON a.to_user_id = c.id
+		where 1=1
+		<include refid="querysql"></include>
+		GROUP BY a.id
+		<if test="orderBy == 1">
+		order by a.created_date desc
+		</if>
+		<if test="orderBy == 0">
+		order by a.created_date asc
+		</if>
+		
+	</select>
+	
+	<sql id="querysql">
+			<if test="id!=null and id!='' ">
+			  and a.id = #{ id, jdbcType=INTEGER }
+			</if>
+			<if test="userid!=null and userid!='' ">
+			  and a.userid = #{ userid, jdbcType=INTEGER }
+			</if>
+			<if test="articlesId!=null and articlesId!='' ">
+			  and a.articles_id = #{ articlesId, jdbcType=INTEGER }
+			</if>
+			<if test="pid!=null">
+			  and a.pid = #{ pid, jdbcType=INTEGER }
+			</if>
+			<if test="ispid == 0">
+			  and a.pid is null
+			</if>
+			<if test="ispid == 1">
+			  and a.pid is not null
+			</if>
+			<if test="toUserId!=null and toUserId!='' ">
+			  and a.to_user_id = #{ toUserId, jdbcType=INTEGER }
+			</if>
+			<if test="createdDateStar != null and createdDateStar !='' and createdDateEnd != null and createdDateEnd != '' " >
+		        <![CDATA[ and a.created_date >= #{createdDateStar} and a.created_date < #{createdDateEnd} ]]> 
+		    </if>
+			<if test="createdBy!=null and createdBy!='' ">
+			  and a.created_by = #{ createdBy, jdbcType=VARCHAR }
+			</if>
+			<if test="isDeleted!=null ">
+			  and a.is_deleted = #{ isDeleted, jdbcType=TINYINT }
+			</if>
+	</sql>
+	
+	
+	<update id="update" parameterType="com.foresee.model.ArticlesComment">
+		update articles_comment
+		<set>
+			<if test="userid!=null and userid!='' ">
+			  userid = #{userid, jdbcType=INTEGER },
+			</if>
+			<if test="articlesId!=null and articlesId!='' ">
+			  articles_id = #{articlesId, jdbcType=INTEGER },
+			</if>
+			<if test="pid!=null and pid!='' ">
+			  pid = #{pid, jdbcType=INTEGER },
+			</if>
+			<if test="toUserId!=null and toUserId!='' ">
+			  to_user_id = #{toUserId, jdbcType=INTEGER },
+			</if>
+			<if test="content!=null and content!='' ">
+			  content = #{content, jdbcType=VARCHAR },
+			</if>
+			<if test="createdDate!=null and createdDate!='' ">
+			  created_date = #{createdDate, jdbcType=TIMESTAMP },
+			</if>
+			<if test="createdBy!=null and createdBy!='' ">
+			  created_by = #{createdBy, jdbcType=VARCHAR },
+			</if>
+			<if test="isDeleted!=null">
+			  is_deleted = #{isDeleted, jdbcType=TINYINT },
+			</if>
+		</set>
+		where
+			id = #{id}
+	</update>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from articles_comment 
+		where
+			id = #{id}
+	</delete>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.foresee.model.ArticlesComment">
+		insert into articles_comment
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id!=null and id!=''">
+				id,
+			</if>
+			<if test="userid!=null and userid!=''">
+				userid,
+			</if>
+			<if test="articlesId!=null and articlesId!=''">
+				articles_id,
+			</if>
+			<if test="pid!=null and pid!=''">
+				pid,
+			</if>
+			<if test="toUserId!=null and toUserId!=''">
+				to_user_id,
+			</if>
+			<if test="content!=null and content!=''">
+				content,
+			</if>
+			<if test="createdDate!=null and createdDate!=''">
+				created_date,
+			</if>
+			<if test="createdBy!=null and createdBy!=''">
+				created_by,
+			</if>
+			<if test="isDeleted!=null and isDeleted!=''">
+				is_deleted,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id!=null and id!=''">
+				#{id, jdbcType=INTEGER},
+			</if>
+			<if test="userid!=null and userid!=''">
+				#{userid, jdbcType=INTEGER},
+			</if>
+			<if test="articlesId!=null and articlesId!=''">
+				#{articlesId, jdbcType=INTEGER},
+			</if>
+			<if test="pid!=null and pid!=''">
+				#{pid, jdbcType=INTEGER},
+			</if>
+			<if test="toUserId!=null and toUserId!=''">
+				#{toUserId, jdbcType=INTEGER},
+			</if>
+			<if test="content!=null and content!=''">
+				#{content, jdbcType=VARCHAR},
+			</if>
+			<if test="createdDate!=null and createdDate!=''">
+				#{createdDate, jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdBy!=null and createdBy!=''">
+				#{createdBy, jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted!=null and isDeleted!=''">
+				#{isDeleted, jdbcType=TINYINT},
+			</if>
+		</trim>
+	</insert>
+	
+</mapper>

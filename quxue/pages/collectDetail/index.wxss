@@ -1,0 +1,74 @@
+/* pages/collectDetail/index.wxss */
+@import '../collect/index.wxss';
+@import "../wxParse/wxParse.wxss";
+.gray_bg{
+  background: #F1F1F1;
+}
+.limg{
+  width: 100%;
+  border-radius: 8rpx;
+  display: inline-block;
+}
+.coll_info{
+  color: #000000;
+  font-weight: 400;
+  font-size: 30rpx;
+  
+  letter-spacing: 2rpx;
+}
+.coll_info view{
+  line-height: 48rpx;
+}
+.text_box{
+  padding: 40rpx 40rpx;
+}
+.coll_tit{
+  font-size: 32rpx;
+  font-weight: 600;
+  margin: 40rpx 0;
+}
+.coll_templ{
+  margin: 0 10rpx 60rpx 10rpx;
+  border: 1rpx solid #DFDFDF;
+  border-radius: 24rpx;
+  padding: 16rpx 30rpx;
+  color: #484848;
+  font-weight: 300;
+  font-size: 30rpx;
+  
+  letter-spacing: 2rpx;
+}
+.coll_templ view{
+  line-height: 48rpx;
+}
+.novip{
+  background: #f1ba43;
+}
+.nomember{
+  background: #DFDFDF;
+}
+.coll_over{
+  padding-top: 40rpx;
+  margin-bottom: 40rpx;
+}
+.over_num{
+  font-size: 32rpx;
+  font-weight: 600;
+}
+.ltit text{
+  background: #f1ba43;
+  padding: 3rpx 10rpx;
+  color: #fff;
+}
+.btn_bottom{
+  height:60rpx;
+}
+.arrows2{
+  display: inline-block;
+  border-top: 1rpx solid;
+  border-right: 1rpx solid;
+  width: 16rpx;
+  height: 16rpx;
+  transform: rotate(45deg);
+  border-color: #000000;
+}

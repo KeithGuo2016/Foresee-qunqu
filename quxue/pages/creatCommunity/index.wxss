@@ -1,0 +1,6 @@
+/* pages/creatCommunity/index.wxss */
+@import '../writing/index.wxss';
+@import "/welCropper/welCropper.wxss";
+.check{
+  position: inherit;
+}

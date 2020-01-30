@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foresee.mapper.ArticlesMapper">
+  <resultMap id="BaseResultMap" type="com.foresee.pojo.Articles">
+    <!--
+      WARNING - @mbg.generated
+    -->
+     <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="article_title" jdbcType="VARCHAR" property="articleTitle" />
+    <result column="userId" jdbcType="INTEGER" property="userid" />
+    <result column="article_icon" jdbcType="VARCHAR" property="articleIcon" />
+    <result column="article_outline" jdbcType="VARCHAR" property="articleOutline" />
+    <result column="is_recommend" jdbcType="CHAR" property="isRecommend" />
+    <result column="article_tag" jdbcType="VARCHAR" property="articleTag" />
+    <result column="community_id" jdbcType="INTEGER" property="communityId" />
+    <result column="is_draft" jdbcType="VARCHAR" property="isDraft" />
+    <result column="read_count" jdbcType="INTEGER" property="readCount" />
+    <result column="follow_count" jdbcType="INTEGER" property="followCount" />
+    <result column="article_zan" jdbcType="INTEGER" property="articleZan" />
+    <result column="flow_date" jdbcType="TIMESTAMP" property="flowDate" />
+    <result column="flow_sts" jdbcType="CHAR" property="flowSts" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="gather_id" jdbcType="INTEGER" property="gatherId" />
+    <result column="recommend_date" jdbcType="TIMESTAMP" property="recommendDate" />
+    <result column="article_content" jdbcType="LONGVARCHAR" property="articleContent" />
+     <result column="article_iconbg" property="articleIconBg" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectRecommend" resultMap="BaseResultMap" >
+  select * from articles where flow_sts = '4' and is_recommend='1' 
+  <if test="selectDesc!=null and selectDesc!=''">
+	  		and article_title like CONCAT('%',#{selectDesc},'%')
+	union 
+	select * from articles where flow_sts = '4' and is_recommend='1' and article_outline like CONCAT('%',#{selectDesc},'%')
+	union 
+	select * from articles where flow_sts = '4' and is_recommend='1' and article_tag like CONCAT('%',#{selectDesc},'%')
+	</if>
+	order by ${orderBy} desc
+  </select>
+  
+  <update id="updateById" parameterType="com.foresee.pojo.Articles">
+  	update articles set gather_id = null where id =#{id}
+  </update>
+</mapper>

@@ -1,0 +1,126 @@
+<view class="cover" wx:if='{{cover}}'>
+  <image src="{{detail.magazineIcon}}" bindtap='closeCover'></image>
+</view>
+<view wx:else bindtouchstart="start" bindtouchmove="move" bindtouchend="end">
+  <view class='list_box jobox'>
+    <view class='joimg'>
+      <image src='{{detail.magazineIcon}}'></image>
+    </view>
+    <view class='jotxt'>
+      <view class='jotit'>{{detail.magazineTitle}}</view>
+      <view class='jotime'>{{detail.createdDate}}</view>
+      <view class='jodes'>{{detail.magazineDesc}}</view>
+      <view class='josour'>
+        所在社群
+        <image src='{{arcdetail.communityIcon}}'></image>
+        <text>{{arcdetail.communityName}}</text>
+      </view>
+      <view class='jopage'>
+        <view class='jof'>{{detail.followCount}}人喜欢</view>
+        <view class='jop' bindtap="show">
+          <image src='../images/page.png'></image>
+          目录
+          <text>{{index}}</text>
+          /{{detail.list.length}}
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class='detail'>
+    <view class='des joauth'>
+      <view class='joaname'>{{arcdetail.articleTitle}}</view>
+      <view class='joainfo'>
+        作者
+        <image src='{{arcdetail.headUrl}}'></image>
+        <text>{{arcdetail.nickName}}</text>
+      </view>
+    </view>
+    <view class='content'>
+      <import src="../wxParse/wxParse.wxml" />
+      <template is="wxParse" data="{{wxParseData:content.nodes}}" />
+    </view>
+  </view>
+  <view class='line'></view>
+  <view class='detail2'>
+    <view class='comtit'>评论</view>
+    <block wx:if="{{!commentCount}}">
+      <view class="com_count">快来发表你的评论吧</view>
+    </block>
+    <block wx:else>
+      <view class='comlist' wx:for="{{commentList}}">
+        <view class='comimg'>
+          <image src='{{item.userIcon}}'></image>
+        </view>
+        <view class='comtxt'>
+          <view class='name'>{{item.userName}}</view>
+          <view class='txt'>{{item.content}}</view>
+          <view class='compub'>
+            <view class='pubtime'>{{item.countDown}}</view>
+            <view class='comicon' data-id="{{item.userid}}" data-pid="{{item.id}}" bindtap='goComment'>
+              <image src='../images/com_icon.png'></image>
+            </view>
+          </view>
+          <!-- 评论楼 -->
+          <view class='com_floor'>
+            <view class='flist' wx:for="{{item.list}}" wx:for-item="list" bindtap="goComment" data-id="{{list.userid}}" data-pid="{{item.id}}" wx:key="this">
+              <view class='flimg'>
+                <image src='{{list.userIcon}}'></image>
+              </view>
+              <view class='fltxt'>
+                <view class='fltxta'>
+                  <view class='flname'>{{list.userName}}</view>
+                  <view class='fltime'>{{list.countDown}}</view>
+                </view>
+                <block wx:if="{{list.touserName == null}}">
+                  <view class='fltxtb'>{{list.content}}</view>
+                </block>
+                <block wx:else>
+                  <view class='fltxtb'>
+                    <text>回复</text>
+                    {{list.touserName}} {{list.content}}
+                  </view>
+                  <!-- view bindtap="goComment" data-id="{{list.userid}}"  data-pid="{{item.id}}" class="comtocom">回复 ></view -->
+                </block>
+              </view>
+            </view>
+            <block wx:if="{{item.toCommentNum > 2}}">
+              <view class='more' data-id="{{item.id}}" data-type="comment" bindtap='moreData'>
+                {{item.toCommentNum}}条回复 展开 》
+              </view>
+            </block>
+          </view>
+          <!-- 评论楼 -->
+        </view>
+      </view>
+    </block>
+  </view>
+  <view class='foot'>
+    <view class='foota' data-id="{{0}}" data-pid="" bindtap='goComment'>有什么想说的，展开讲讲</view>
+    <view class='footb'>
+      <view class='foot_icon' data-id="{{arcdetail.id}}" data-type="article" bindtap="moreData">
+        <image class='foa' src='../images/look.png'></image>{{arcdetail.commentNum}}</view>
+      <view class='foot_icon' data-id="{{arcdetail.id}}" bindtap='coll'>
+        <image class='fob' src='{{isColl ?"../images/colla.png":"../images/coll.png"}}'></image>{{followCount}}</view>
+      <view class='foot_icon' data-id="{{arcdetail.id}}" bindtap='zan'>
+        <image class='foc' src='{{isZan ?"../images/zana.png":"../images/zan.png"}}'></image>{{zanVal}}</view>
+    </view>
+  </view>
+  <!-- 展开弹层 -->
+  <view class='dialog' wx:if='{{comment}}'>
+    <view class='areabox'>
+      <view class='areabtn'>
+        <view class='cancel' bindtap='cancelComment'>取消</view>
+        <view class='ok' data-id="{{arcdetail.id}}" bindtap='doComment'>发布</view>
+      </view>
+      <textarea bindinput="getContent" placeholder='有什么想说的，展开讲讲'></textarea>
+    </view>
+  </view>
+  <!-- 导航 -->
+  <view style="transform:translateX({{translate}});transition:0.3s" class="dialog" bindtouchstart="start" bindtouchmove="move" bindtouchend="end">
+    <view class="leftnav">
+      <view wx:for='{{detail.list}}' wx:for-index="idx" class="{{index == idx+1?'indexc' : ''}}" wx:key='{{item.id}}' bindtap="detail" data-id='{{item.articlesId}}' data-index='{{idx}}'>
+        {{item.magazineTitle}}
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html class="iframe-h">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>成员详情</title>
+		<link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="/css/admin.css" />
+		<link rel="stylesheet" type="text/css" href="/css/page.css" />
+		<style>
+			.layui-input{border:none;}
+			.pad-top{padding-top:8px;}
+		</style>
+	</head>
+	<body>
+		<div class="pageloading">
+			<img src="/images/loading.png" class="rotation" />
+		</div>
+		<div class="wrap-container clearfix layer-info">
+			<div class="column-content-detail">
+				<form class="layui-form">
+					<div class="pad-top">
+					    <div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="nickName">微信昵称：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="nickName" name="nick_name" lay-verify="nick_name" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="city">所在城市：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="city" name="city" lay-verify="city" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+					    <div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="updatedDate">更新时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="updatedDate" name="updated_date" lay-verify="updated_date" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+					    <div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="createdDate">创建时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="createdDate" name="created_date" lay-verify="created_date" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="createdName">创建人员：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="createdName" name="created_by" lay-verify="created_by" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="updatedName">更新人员：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="updatedName" name="updated_by" lay-verify="updated_by" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="isDeleted">删除标志：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="isDeleted" name="is_deleted" lay-verify="is_deleted" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="communityId">所在社群：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="communityId" name="communityId" lay-verify="communityId" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="phone">手机号码：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="phone" name="phone" lay-verify="phone" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="userMark">用户标签：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="userMark" name="user_mark" lay-verify="user_mark" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="isVip">是否VIP：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="isVip" name="is_vip" lay-verify="is_vip" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="isAdmin">是否管理员 </label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="isAdmin" name="is_admin" lay-verify="is_admin" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="isCommunity">是否社长：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="isCommunity" name="is_community" lay-verify="is_community" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="userType">用户身份：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="userType" name="user_type" lay-verify="user_type" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s" style="position:relative;top:-20px;">
+					        <label class="layui-form-label" for="flowSts">审批阶段：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="flowSts" name="flow_sts" lay-verify="flow_sts" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  		<div class="layui-inline mar-r-s" style="position:relative;top:-5px;">
+					        <label class="layui-form-label" for="logoUp">微信头像：</label>
+					        <div class="layui-input-inline" style="position:relative;">
+					        	<img id="headUrl" src="/images/up_logo.png" class="up-img" />
+					        </div>
+					    </div>
+				  	</div>
+      			</form>
+			</div>
+		</div>
+	</body>
+	<script src="/static/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery-1.8.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+	layui.use(['form', 'laypage', 'layer'], function(){
+		var form = layui.form, laypage = layui.laypage, layer = layui.layer;  //初始化layui控件
+		var parame = public.getParame();
+		//数据对应表
+	    var is_deleted = ['未删除', '已删除'];  //删除标志
+	    var is_vip = ['非VIP', 'VIP'];  //VIP
+	    var is_admin = ['非管理员', '管理员'];  //管理员
+	    var is_community = ['非社长', '社长'];  //社长
+	    var flow_sts = ['新建', '审核通过', '审核拒绝', '审核中'];  //审批状态
+		//信息回显
+		$.ajax({
+	    	type: 'post',
+	    	url: '/wechatuser/selectlist',
+	    	data: {'page': 1, 'limit': 1, 'id': parame.id},
+	    	async: false,
+			dataType: 'json',
+			success: function(data) {
+				if(data.code == '0'){
+					if(data.data[0] != undefined){
+						$("#nickName").val(data.data[0].nickName);  //微信昵称
+		    			$("#city").val(data.data[0].city);  //所在城市
+		    			$("#updatedDate").val(data.data[0].updatedDate);  //更新时间
+		    			$("#createdDate").val(data.data[0].createdDate);  //创建时间
+		    			$("#createdName").val(data.data[0].createdName);  //创建人员
+		    			$("#updatedName").val(data.data[0].updatedName);  //更新人员
+		    			$("#isDeleted").val(is_deleted[data.data[0].isDeleted]);  //删除标志
+		    			$("#communityId").val(data.data[0].communityName);  //所在社群
+		    			$("#phone").val(data.data[0].phone);  //手机号码
+		    			$("#userMark").val(data.data[0].userMark);  //用户标签
+		    			$("#isVip").val(is_vip[data.data[0].isVip]);  //是否VIP
+		    			$("#isAdmin").val(is_admin[data.data[0].isAdmin]);  //是否管理员
+		    			$("#isCommunity").val(is_community[data.data[0].isCommunity]);  //是否社长
+		    			$("#userType").val(data.data[0].tagTypes);  //用户身份
+		    			$("#flowSts").val(flow_sts[data.data[0].flowSts]);  //审批阶段
+		    			$("#headUrl").attr("src", data.data[0].headUrl);  //微信头像
+		    			$("input").attr("readOnly", "readOnly");
+			      		//图片点击放大
+			      		$("img").click(function() {
+			      			public.bigImg($(this).parent());
+			      		});
+					}
+	    			$(".pageloading").hide();
+	    		}else{
+	    			layer.alert(data.msg, {icon:5, title:"提示"});
+	    		}
+			}
+	    });
+	});
+	</script>
+</html>

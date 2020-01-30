@@ -1,0 +1,154 @@
+/* pages/memberDetail/index.wxss */
+.mebd_top{
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.mdla{
+  display: flex;
+}
+.avator{
+  position: relative;
+  margin-right: 20rpx;
+}
+.avaimg{
+  width: 140rpx; 
+  height: 140rpx;
+  border-radius: 50%;
+}
+.mebd_nik text{
+  display: block;
+  color: #fff;
+}
+.nka{
+  font-size: 32rpx;
+  font-weight: bold;
+  margin: 10rpx 0;
+}
+.mebd_nik text.nkb{
+  font-size: 26rpx;
+  display: inline-block;
+  padding: 3rpx 5rpx;
+  border: 1px solid #fff;
+}
+.mdlb{
+  font-size: 28rpx;
+  color: #CDCDCD;
+}
+.mebdr{
+  position: absolute;
+  right: 40rpx; 
+  bottom: 88rpx;
+}
+.source{
+  width: 100%; 
+  height: 80rpx;
+  margin-bottom: 60rpx;
+  line-height: 80rpx;
+  background: #F2F2F2;
+  font-size: 28rpx;
+}
+.source image{
+  vertical-align: middle;
+  width: 40rpx; height: 40rpx;
+  margin: 0 30rpx;
+}
+.soa{
+  color: #0b0b0b;
+  margin-left: 30rpx;
+}
+.sob{color: #ACACAC;}
+.soc{
+  float: right;
+  font-size: 40rpx;
+  color: #b0b0b0;
+  margin-right: 30rpx;
+  margin-top: 30rpx;
+
+}
+.ma_list{
+  display: flex;
+  margin: 0 20rpx;
+}
+.mal{
+  min-width: 160rpx;
+  font-size: 28rpx;
+  color: #535050;
+  word-break: keep-all;
+}
+.mal text{  
+  font-size: 48rpx;
+  font-weight: 600;
+  color: #000000;
+  margin-right: 10rpx;
+}
+.mar{
+  position: relative;
+  padding: 0 0 34rpx 40rpx;
+  color: #000000;
+  font-weight: 600;
+}
+.mar_tit{
+  font-size: 28rpx;
+  height: 76rpx;
+  display: flex;
+  align-items: center;
+}
+.mar_tit::before{
+  position: absolute;
+  top: 30rpx;
+  left: 0;
+  content: '';
+  display: inline-block;
+  width: 18rpx; height: 18rpx;
+  background: #D8D8D8;
+  border-radius: 50%;
+}
+.mar::before{
+  position: absolute;
+  top: 0;
+  left: 9rpx;
+  content: '';
+  height: 100%;
+  padding-bottom: 20rpx;
+  border-left: 1px solid #D8D8D8;
+}
+.mar1::before{
+  top:30rpx;
+}
+.mar_img{
+  display: flex;
+  justify-content: space-between;
+}
+.mar_img image{
+  width: 170rpx; 
+  height: 170rpx;
+  margin-top: 20rpx;
+}
+
+
+.memtag{
+  position: absolute;
+  top: -10rpx;
+  left: -5rpx;
+  width: 45rpx; height: 45rpx;
+  text-align: center;
+  background: #38bab8;
+  border-radius: 50%;
+}
+.memtag image{
+  width: 25rpx; 
+  height: 23rpx;
+  margin: 11rpx 0 0 0;
+}
+.zhe{
+  display: flex;
+  padding: 220rpx 40rpx 80rpx 40rpx;
+  background-color: rgba(0, 0, 0, .6)
+}
+.background{
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-position-x: center;
+}

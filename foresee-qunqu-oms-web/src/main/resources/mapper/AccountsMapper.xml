@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.foresee.dao.AccountsMapper" >
+  <resultMap id="BaseResultMap" type="com.foresee.model.User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_name" property="username" jdbcType="VARCHAR" />
+    <result column="user_account" property="useraccount" jdbcType="VARCHAR" />
+    <result column="user_pwd" property="userpwd" jdbcType="VARCHAR" />
+    <result column="create_time" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="create_id" property="createid" jdbcType="INTEGER" />
+    <result column="user_phone" property="userphone" jdbcType="VARCHAR" />
+    <result column="role_id" property="roleid" jdbcType="INTEGER" />
+    <result column="is_enable" property="isenable" jdbcType="INTEGER" />
+    <result column="province_id" property="provinceid" jdbcType="INTEGER" />
+    <result column="city_id" property="cityid" jdbcType="INTEGER" />
+    <result column="channel_id" property="channelid" jdbcType="INTEGER" />
+    <result column="role_name" property="rolename" jdbcType="VARCHAR" />
+    <result column="th1" property="th1" jdbcType="VARCHAR" />
+    <result column="th2" property="th2" jdbcType="VARCHAR" />
+    <result column="th3" property="th3" jdbcType="VARCHAR" />
+    <result column="th4" property="th4" jdbcType="VARCHAR" />
+    <result column="th5" property="th5" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, user_name, user_account, user_pwd, create_time, create_id, user_phone, role_id, is_enable, 
+    province_id, city_id, channel_id, th1,  th2, th3, th4, th5
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByTh1" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where th1 = #{th1,jdbcType=VARCHAR} LIMIT 1
+  </select>
+  
+  <select id="selectListAccount" resultMap="BaseResultMap" parameterType="com.foresee.model.User" >
+    select 
+    *
+    from user a,roles b
+    where a.role_id = b.id 
+    <include refid="querysql" />
+  </select>
+  
+  <sql id="querysql">
+  	  <if test="id != null and id!='' " >
+        and a.id = #{id,jdbcType=INTEGER}
+      </if>
+      <if test="username != null and username!='' " >
+        and a.user_name like concat('%',#{username,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="useraccount != null and useraccount!='' " >
+       and a.user_account = #{useraccount,jdbcType=VARCHAR}
+      </if>
+      <if test="userpwd != null and userpwd!= '' " >
+       and a.user_pwd = #{userpwd,jdbcType=VARCHAR}
+      </if>
+      <if test="createtime != null and createtime!='' " >
+       and a.create_time = #{createtime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="createid != null and createid!='' " >
+       and a.create_id = #{createid,jdbcType=INTEGER}
+      </if>
+      <if test="userphone != null and userphone!='' " >
+       and a.user_phone like concat('%',#{userphone,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="roleid != null and roleid!='' " >
+       and a.role_id = #{roleid,jdbcType=INTEGER}
+      </if>
+      <if test="isenable != null and isenable != '' or isenable == 0" >
+       and a.is_enable = #{isenable,jdbcType=INTEGER}
+      </if>
+      <if test="provinceid != null and provinceid!='' " >
+        and a.province_id = #{provinceid,jdbcType=INTEGER}
+      </if>
+      <if test="cityid != null and cityid!='' " >
+        and a.city_id = #{cityid,jdbcType=INTEGER}
+      </if>
+      <if test="channelid != null and channelid!='' " >
+        and a.channel_id = #{channelid,jdbcType=INTEGER}
+      </if>
+      <if test="th1 != null and th1!='' " >
+       and a.th1 = #{th1,jdbcType=VARCHAR}
+      </if>
+      <if test="th2 != null and th2!='' " >
+       and a.th2 = #{th2,jdbcType=VARCHAR}
+      </if>
+      <if test="th3 != null and th3!='' " >
+       and a.th3 = #{th3,jdbcType=VARCHAR}
+      </if>
+      <if test="th4 != null and th4!='' " >
+       and a.th4 = #{th4,jdbcType=VARCHAR}
+      </if>
+      <if test="th5 != null and th5!='' " >
+       and a.th5 = #{th5,jdbcType=VARCHAR}
+      </if>
+  </sql>
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.foresee.model.User" >
+    insert into user (id, user_name, user_account, 
+      user_pwd, create_time, create_id, 
+      user_phone, role_id, is_enable, province_id, city_id, channel_id,
+      th1, th2, th3, th4, 
+      th5)
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{useraccount,jdbcType=VARCHAR}, 
+      #{userpwd,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createid,jdbcType=INTEGER}, 
+      #{userphone,jdbcType=VARCHAR}, #{roleid,jdbcType=INTEGER}, #{isenable,jdbcType=INTEGER}, 
+      #{provinceid,jdbcType=INTEGER}, #{cityid,jdbcType=INTEGER}, #{channelid,jdbcType=INTEGER},
+      #{th1,jdbcType=VARCHAR}, #{th2,jdbcType=VARCHAR}, #{th3,jdbcType=VARCHAR}, #{th4,jdbcType=VARCHAR}, 
+      #{th5,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.foresee.model.User" >
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="username != null" >
+        user_name,
+      </if>
+      <if test="useraccount != null" >
+        user_account,
+      </if>
+      <if test="userpwd != null" >
+        user_pwd,
+      </if>
+      <if test="createtime != null" >
+        create_time,
+      </if>
+      <if test="createid != null" >
+        create_id,
+      </if>
+      <if test="userphone != null" >
+        user_phone,
+      </if>
+      <if test="roleid != null" >
+        role_id,
+      </if>
+      <if test="isenable != null" >
+        is_enable,
+      </if>
+      <if test="provinceid != null" >
+        province_id,
+      </if>
+      <if test="cityid != null" >
+        city_id,
+      </if>
+      <if test="channelid != null" >
+        channel_id,
+      </if>
+      <if test="th1 != null" >
+        th1,
+      </if>
+      <if test="th2 != null" >
+        th2,
+      </if>
+      <if test="th3 != null" >
+        th3,
+      </if>
+      <if test="th4 != null" >
+        th4,
+      </if>
+      <if test="th5 != null" >
+        th5,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="useraccount != null" >
+        #{useraccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userpwd != null" >
+        #{userpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createid != null" >
+        #{createid,jdbcType=INTEGER},
+      </if>
+      <if test="userphone != null" >
+        #{userphone,jdbcType=VARCHAR},
+      </if>
+      <if test="roleid != null" >
+        #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="isenable != null" >
+        #{isenable,jdbcType=INTEGER},
+      </if>
+      <if test="provinceid != null" >
+        #{provinceid,jdbcType=INTEGER},
+      </if>
+      <if test="cityid != null" >
+        #{cityid,jdbcType=INTEGER},
+      </if>
+      <if test="channelid != null" >
+        #{channelid,jdbcType=INTEGER},
+      </if>
+      <if test="th1 != null" >
+        #{th1,jdbcType=VARCHAR},
+      </if>
+      <if test="th2 != null" >
+        #{th2,jdbcType=VARCHAR},
+      </if>
+      <if test="th3 != null" >
+        #{th3,jdbcType=VARCHAR},
+      </if>
+      <if test="th4 != null" >
+        #{th4,jdbcType=VARCHAR},
+      </if>
+      <if test="th5 != null" >
+        #{th5,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.foresee.model.User" >
+    update user
+    <set >
+      <if test="username != null" >
+        user_name = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="useraccount != null" >
+        user_account = #{useraccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userpwd != null" >
+        user_pwd = #{userpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        create_time = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createid != null" >
+        create_id = #{createid,jdbcType=INTEGER},
+      </if>
+      <if test="userphone != null" >
+        user_phone = #{userphone,jdbcType=VARCHAR},
+      </if>
+      <if test="roleid != null" >
+        role_id = #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="isenable != null" >
+        is_enable = #{isenable,jdbcType=INTEGER},
+      </if>
+      <if test="provinceid != null" >
+        province_id = #{provinceid,jdbcType=INTEGER},
+      </if>
+      <if test="cityid != null" >
+        city_id = #{cityid,jdbcType=INTEGER},
+      </if>
+      <if test="channelid != null" >
+        channel_id = #{channelid,jdbcType=INTEGER},
+      </if>
+      <if test="th1 != null" >
+        th1 = #{th1,jdbcType=VARCHAR},
+      </if>
+      <if test="th2 != null" >
+        th2 = #{th2,jdbcType=VARCHAR},
+      </if>
+      <if test="th3 != null" >
+        th3 = #{th3,jdbcType=VARCHAR},
+      </if>
+      <if test="th4 != null" >
+        th4 = #{th4,jdbcType=VARCHAR},
+      </if>
+      <if test="th5 != null" >
+        th5 = #{th5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.foresee.model.User" >
+    update user
+    set user_name = #{username,jdbcType=VARCHAR},
+      user_account = #{useraccount,jdbcType=VARCHAR},
+      user_pwd = #{userpwd,jdbcType=VARCHAR},
+      create_time = #{createtime,jdbcType=TIMESTAMP},
+      create_id = #{createid,jdbcType=INTEGER},
+      user_phone = #{userphone,jdbcType=VARCHAR},
+      role_id = #{roleid,jdbcType=INTEGER},
+      is_enable = #{isenable,jdbcType=INTEGER},
+      province_id = #{provinceid,jdbcType=INTEGER},
+      city_id = #{cityid,jdbcType=INTEGER},
+      channel_id = #{channelid,jdbcType=INTEGER},
+      th1 = #{th1,jdbcType=VARCHAR},
+      th2 = #{th2,jdbcType=VARCHAR},
+      th3 = #{th3,jdbcType=VARCHAR},
+      th4 = #{th4,jdbcType=VARCHAR},
+      th5 = #{th5,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select roles.role_name as rolename ,user.id as id, user.user_name as username, user.user_account as useraccount, 
+    user.user_pwd as userpwd, user.create_time as createtime, user.create_id as createid, 
+    user.user_phone as userphone, user.role_id as roleid, user.is_enable as isenable,  
+    user.province_id as provinceid,user.city_id as cityid,user.channel_id as channelid,    
+    user.th1 as th1, user.th2 as th2, user.th3 as th3, user.th4 as th4, user.th5 as th5      
+    from user , roles
+    where user.role_id = roles.id and user.id = #{id,jdbcType=INTEGER}  
+  </select>
+</mapper>

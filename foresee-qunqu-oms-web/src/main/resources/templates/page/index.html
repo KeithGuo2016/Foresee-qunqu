@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+  		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>群趣创作管理后台</title>
+		<link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="/css/admin.css" />
+		<link rel="stylesheet" type="text/css" href="/css/page.css" />
+	</head>
+	<body>
+		<div class="pageloading">
+			<img src="/images/loading.png" class="rotation" />
+		</div>
+		<div class="main-layout" id='main-layout'>
+			<!--侧边栏-->
+			<div class="main-layout-side">
+				<div class="m-logo">群趣创作管理后台</div>
+				<ul class="layui-nav layui-nav-tree" id="leftNav" lay-filter="leftNav">
+					<!-- loading -->
+					<i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop layui-icon-loading" style="margin:10px 0px 0px 55px;font-size:30px;"></i>  
+					<!-- loading -->
+				</ul>
+			</div>
+			<!--右侧内容-->
+			<div class="main-layout-container">
+				<!--头部-->
+				<div class="main-layout-header">
+					<div class="menu-btn" id="hideBtn">
+						<a href="javascript:;">
+							<span class="iconfont">&#xe60e;</span>
+						</a>
+					</div>
+					<ul class="layui-nav" lay-filter="rightNav">
+						<li class="layui-nav-item">
+							<a href="javascript:void(0);" id="userName">--</a>
+						</li>
+						<!-- <li class="layui-nav-item">
+							<a href="javascript:void(0);" id="checkPwd">修改密码</a>
+						</li> -->
+						<li class="layui-nav-item">
+							<a href="javascript:void(0);" id="loginOut">退出</a>
+						</li>
+					</ul>
+				</div>
+				<!--主体内容-->
+				<div class="main-layout-body">
+					<iframe src="" id="framePage" width="100%" height="100%" name="iframe" scrolling="auto" class="iframe bg-fff" framborder="0"></iframe>
+				</div>
+			</div>
+			<!--遮罩-->
+			<div class="main-mask"></div>
+			<input type="hidden" id="loginId" value="" />
+		</div>
+		<script src="/static/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/js/main.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+			layui.use(['jquery', 'form', 'layer'], function() {
+				var $ = layui.$, form = layui.form, layer = layui.layer;  //初始化layui控件
+				$.ajax({
+			    	type: 'post',
+			    	url: '/login/datil',
+			    	async: false,
+					dataType: 'json',
+					success: function(data) {
+						if(data.code == '0'){
+							$("#userName").text(data.data.username);
+							$("#loginId").val(data.data.id);
+							$(".pageloading").hide();
+						}else{
+							layer.alert(data.msg, {icon:5, title:"提示"});
+						}
+					}
+			    });
+				//请求菜单接口
+				$.ajax({
+					type: "POST",
+					url: "/menu/all/tree",
+					data: {},
+					success: function(data) {
+						if(data.code == 0){
+							//请求成功
+							var one_nav, two_nav, three_nav = '';
+							var iis = true;
+							$.each(data.data, function(index1, value1) {
+								if(value1.menulevel == 1){
+									$.each(data.data, function(index2, value2) {
+										if(value1.id == value2.menupid){
+											if(two_nav == undefined){two_nav = ''}
+											two_nav += '<dd><a href="javascript:void(0);" data-id="'+value2.id+'" data-url="'+value2.menuurl+'" data-text="'+value2.menuname+'"><span class="l-line"></span>'+value2.menuname+'</a></dd>';
+										}
+									});
+									if(two_nav == undefined){two_nav = ''}
+									one_nav += '<li class="layui-nav-item">'+
+									  	'<a href="javascript:void(0);" data-text="'+value1.menuname+'" class="nav-open pad-left-35"><i class="layui-icon left-icon '+value1.menuicon+'"></i>'+value1.menuname+'</a>'+
+									  	'<dl class="layui-nav-child">'+two_nav+'</dl>'+
+									'</li>';
+									two_nav = '';
+								}
+							});
+							var jsonTextInit = JSON.stringify({dataform: data});
+				        	sessionStorage.setItem("allmenu",jsonTextInit);
+							$("#leftNav").html(one_nav);
+							$("#leftNav li:eq(0)").children("a").click();
+							$("#leftNav li:eq(0)").children("a").next("dl").find("a:eq(0)").click();
+						}else {
+							//layer.alert(data.msg, {icon: 5, title: "提示"});
+							window.location.href = '/login.html';
+						}
+					}
+				});
+				var time = 0;
+				$("#leftNav").on("click", ".layui-nav-item .nav-open", function() {
+					if (time == 0) {
+					    time = 1;
+					    var index = setInterval(function(){
+					        time--;
+					        if (time == 0) {
+					          clearInterval(index);
+					        }
+					      },300);
+					    $(this).parent("li").siblings().find("span.layui-nav-more").removeClass("layui-nav-mored").end().find("dl").slideUp();
+						$(this).parent("li").find("dl").slideToggle().end().find("span.layui-nav-more").toggleClass("layui-nav-mored");
+					}
+				});
+				$("#leftNav").on("click", "dl dd", function() {
+					$("#leftNav li dd").find("a").removeClass("col-blue");
+					$(this).find("a").addClass("col-blue");
+					$("#framePage").attr("src", $(this).children().attr("data-url"));
+					sessionStorage.setItem("menuId",$(this).children().attr("data-id"));
+				});
+				//点击修改密码
+				/*$("#checkPwd").click(function() {
+					layer.open({
+			            type:2,
+			            title:'修改密码',
+			            content:'/view/account/accountcheckpwd.html?id=' + $("#loginId").val(),
+			            offset:'auto',
+			            area:['400px','260px'],
+			            anim:0,
+			            fixed:true,
+			            scrollbar:false,
+			            resize:false
+			        });
+				});*/
+				//点击退出登录
+				$("#loginOut").click(function() {
+					$.ajax({
+						url: "/login/loginout",
+						type: "POST",
+						dataType: "json"
+					});
+					window.location.href = '/login.html';
+				});
+			});
+		</script>
+	</body>
+</html>

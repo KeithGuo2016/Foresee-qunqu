@@ -1,0 +1,51 @@
+/* pages/collectDetail/index.wxss */
+@import '../collect/index.wxss';
+@import "../wxParse/wxParse.wxss";
+.gray_bg{
+  background: #efefef;
+}
+.coll_info{
+  font-size: 30rpx;
+  color: #333;
+  line-height: 48rpx;
+}
+.coll_info view{
+  margin-top: 30rpx;
+}
+.coll_tit{
+  font-size: 32rpx;
+  font-weight: bold;
+  margin: 30rpx 0;
+}
+.coll_templ{
+  width: 690rpx; height: auto;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1rpx solid #efefef;
+  border-radius: 10rpx;
+  box-sizing: border-box;
+  padding: 20rpx 20rpx 0 20rpx;
+  font-size: 28rpx;
+  color: #666;
+  line-height: 48rpx;
+}
+.coll_templ view{
+  margin: 0 0 20rpx 0;
+}
+.novip{
+  background: #f1ba43;
+}
+.coll_over{
+  border-top: 10px solid #efefef;
+  padding-top: 10px;
+  margin: 30px 0;
+}
+.over_num{
+  font-size: 32rpx;
+  font-weight: bold;
+}
+.ltit text{
+  background: #f1ba43;
+  padding: 3rpx 10rpx;
+  color: #fff;
+}

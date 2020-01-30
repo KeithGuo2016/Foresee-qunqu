@@ -1,0 +1,162 @@
+<view class='me_code' wx:if='{{!ewm}}'>
+  <view class='top'>
+    <view class='topl '><text>群趣文学</text>{{userInfo.communityName}}</view>
+    <view class='topr' bindtap='showEwm'><image src='../images/me_code.png'></image></view>
+  </view>
+  <view class='avator'  bindtap='myArt' >
+    <view wx:if='{{userInfo.isVip}}' class="vip"><image src="../images/vip.png"></image></view>
+    <image src='{{userInfo.headUrl}}'></image>
+  </view>
+  <view class='leader pt1' wx:if='{{userInfo.isCommunity}}'>
+    <view class='limg'><image src='../images/me_l.png'></image></view>社长    
+  </view>
+  <view class='name tc pt1'>{{userInfo.nickName}}</view>
+  <view class='des tc pt1' bindtap="goSet">写点什么，介绍下自己吧。</view>
+  <view class='btn tc pt1' bindtap='goWriting'>
+    <image src='../images/me_x.png'></image>我要写作
+  </view>
+  
+  <view wx:if='{{userInfo.isCommunity}}' class='btn btng tc' bindtap='goCollect'><image src='../images/yug.png'></image>发起约稿</view>
+  
+  <view class='line'></view>
+  <view class='user'>
+    <view class='uslist' data-id='{{userInfo.communityid}}' bindtap='shequnDetail'>
+    <!--block wx:if="{{isAddCommunity}}"-->
+      <view class='usl'><image src='../images/me_icon1.png'></image>所在社群</view>
+    <!--/block>
+     <block wx:else>
+      <view class='usl'><image src='../images/me_icon1.png'></image>加入社群</view>
+      </block-->
+      <view class='usr'>
+        <view class='usra'><image src='{{userInfo.communityIcon}}'></image>{{userInfo.communityName}}</view> <image class="ico" src="../images/jt_icon.png"></image>
+      </view>
+    </view>
+    <view class='uslist' bindtap='goMessage'>
+      <view class='usl'><image src='../images/me_icon2.png'></image>消息中心</view>
+      <view class='usr'>
+         <image class="ico" src="../images/jt_icon.png"></image>
+      </view>
+    </view>
+    <!--view class='uslist' bindtap='myApply'>
+      <view class='usl'><image src='../images/me_icon2.png'></image>我的申请</view>
+      <view class='usr'>
+         <image class="ico" src="../images/jt_icon.png"></image>
+      </view>
+  </view-->
+    <view class='uslist' bindtap='myFocus'>
+      <view class='usl'><image src='../images/me_icon3.png'></image>我的关注</view>
+      <view class='usr'>
+         <image class="ico" src="../images/jt_icon.png"></image>
+      </view>
+    </view>
+    <view class='uslist' bindtap='myComment'>
+      <view class='usl'><image src='../images/me_icon4.png'></image>我的评论</view>
+      <view class='usr'>
+         <image class="ico" src="../images/jt_icon.png"></image>
+      </view>
+    </view>
+    <view class='uslist' bindtap="needPub">
+      <view class='usl'><image src='../images/me_icon5.png'></image>我要出版</view>
+      <view class='usr'>
+         <image class="ico" src="../images/jt_icon.png"></image>
+      </view>
+    </view>
+    <view class='uslist' bindtap='myGather'>
+      <view class='usl'><image src='../images/me_icon6.png'></image>我的文集</view>
+      <view class='usr'>
+         <image class="ico" src="../images/jt_icon.png"></image>
+      </view>
+  </view>
+  <view class='uslist' bindtap='goSet'>
+      <view class='usl'><image src='../images/me_set.png'></image>设置</view>
+      <view class='usr'>
+         <image class="ico" src="../images/jt_icon.png"></image>
+      </view>
+  </view>
+  <block wx:if='{{!userInfo.isCommunity}}'>
+    <view class='uslist' bindtap='creatComm'>
+      <view class='usl'><image src='../images/me_icon8.png'></image>创建社群</view>
+      <view class='usr'>
+        <image class="ico" src="../images/jt_icon.png"></image>
+      </view>
+    </view>
+  </block>
+  <block wx:else>
+    <view class='uslist' data-id='{{userInfo.communityid}}' bindtap='shequnDetail'>
+      <view class='usl'><image src='../images/me_icon8.png'></image>创建社群</view>
+      <view class='usr'>
+      <view class='usra' wx:if='{{userInfo.isCommunity}}'>你已经拥有社群，不能再创建  </view>
+        <image class="ico" src="../images/jt_icon.png"></image>
+      </view>
+    </view>
+  </block>
+    <view class='uslist mb5' bindtap='goTmp'>
+      <view class='usl'><image src='../images/me_icon10.png'></image>草稿箱</view>
+      <view class='usr'>
+         <image class="ico" src="../images/jt_icon.png"></image>
+      </view>
+    </view>
+    <view class='uslist mb5'>
+      <view class='usl'><image src='../images/me_icon10.png'></image>活动邀请数量</view>
+      <view class='usr'>
+         {{userInfo.inviteCount}}人
+      </view>
+    </view>
+  <!--view class='uslist' bindtap='myArt'>
+      <view class='usl'><image src='../images/me_icon9.png'></image>我的文章</view>
+      <view class='usr'>
+         <image class="ico" src="../images/jt_icon.png"></image>
+      </view>
+  </view-->
+  
+
+  </view>
+</view>
+
+<!-- 申请出版 -->
+<view class="dialog" wx:if='{{applyPub}}'>
+  <view class="apply">
+  <view class="apply_top">
+    <view class="ap_can" bindtap="canApply">取消</view>
+    <view class="aptit">申请出版</view>
+    <view class="ap_ok" bindtap="goApply">确定</view>
+  </view>
+  <view class="apply_con">
+    <label>
+      <view class="key">姓名：</view>
+      <view class="val"><input type="text" bindinput="getName"></input></view>
+    </label>
+    <label>
+      <view class="key">电话：</view>
+      <view class="val"><input type="text" maxlength='11' bindinput='checkPhone'></input></view>
+    </label>
+    <label>
+      <view class='laba'>验证码：</view>
+      <input class='phone' maxlength="6" bindinput="codeNum"></input>
+      <view wx:if='{{showCode}}' class='code tc {{phoneVerify ? "check":""}}' bindtap='getCode'>获取验证码</view>
+      <view wx:else class='timec'>{{time}} s</view>
+    </label>
+    <label>
+      <view class="key">说明：</view>
+      <textarea bindinput="getApply" placeholder="申请说明"></textarea>
+    </label>
+  </view>
+    
+  </view>
+</view>
+
+<view class='showcode'  wx:if='{{ewm}}'>
+  <view class='top top_s'>
+    <view class='topl'><text>群趣创作</text></view>
+    <view class='topr'><image src='../images/me_code.png'></image></view>
+  </view>
+  <view class='show_c tc'>
+    <image src='{{userInfo.communityCodeIcon}}'></image>
+    <view class='show_name'>欢迎加入{{userInfo.communityName}}</view>
+  </view>
+  <view class='show_gray'></view>
+  <view class='show_back tc' bindtap='showEwm'>
+    <view class='back_c'><image src='../images/me_up.png'></image></view>
+    <view class='s_nik'>{{userInfo.nickName}}</view>
+  </view>
+</view>

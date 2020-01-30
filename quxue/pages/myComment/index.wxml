@@ -1,0 +1,12 @@
+<view class='list_box'>
+  <view class='messlist' wx:for="{{commentList}}" wx:key="{{this}}"  data-id="{{item.articlesId}}"  bindtap='goDetail'>
+  <view class='messtit'>
+       《{{item.articleTitle}}》
+    </view>
+    <view class='messtxt'>
+      {{item.content}}
+    </view>
+    <view class='messtime'>{{item.countDown}}</view>
+  </view>
+</view>
+ <view wx:if='{{nodata}}' class="nodata">—— 喂喂，你碰到我的底线了 ——</view>

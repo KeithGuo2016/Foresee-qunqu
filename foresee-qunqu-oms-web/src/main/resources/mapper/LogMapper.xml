@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.foresee.dao.LogMapper" >
+  <resultMap id="BaseResultMap" type="com.foresee.model.Log" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="log_url" property="logUrl" jdbcType="VARCHAR" />
+    <result column="log_description" property="logDescription" jdbcType="VARCHAR" />
+    <result column="log_method" property="logMethod" jdbcType="VARCHAR" />
+    <result column="log_class_method" property="logClassMethod" jdbcType="VARCHAR" />
+    <result column="log_ip" property="logIp" jdbcType="VARCHAR" />
+    <result column="log_parameter" property="logParameter" jdbcType="VARCHAR" />
+    <result column="log_operation_id" property="logOperationId" jdbcType="INTEGER" />
+    <result column="log_operation_name" property="logOperationName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, log_url, log_description, log_method, log_class_method, log_ip, log_parameter, 
+    log_operation_id, log_operation_name, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="com.foresee.model.Log" >
+    select 
+    <include refid="Base_Column_List" />
+    from log
+    where 1=1
+    <include refid="querysql"></include>
+  </select>
+  <sql id="querysql">
+  	  <if test="id != null and id!=''" >
+        and id = #{id,jdbcType=INTEGER}
+      </if>
+  	  <if test="logUrl != null and logUrl!=''" >
+        and log_url = #{logUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="logDescription != null and logDescription!=''" >
+        and log_description = #{logDescription,jdbcType=VARCHAR}
+      </if>
+      <if test="logMethod != null and logMethod!=''" >
+        and log_method = #{logMethod,jdbcType=VARCHAR}
+      </if>
+      <if test="logClassMethod != null and logClassMethod!=''" >
+        and log_class_method = #{logClassMethod,jdbcType=VARCHAR}
+      </if>
+      <if test="logIp != null and logIp!=''" >
+        and log_ip = #{logIp,jdbcType=VARCHAR}
+      </if>
+      <if test="logParameter != null and logParameter!=''" >
+        and log_parameter = #{logParameter,jdbcType=VARCHAR}
+      </if>
+      <if test="logOperationId != null and logOperationId!=''" >
+        and log_operation_id = #{logOperationId,jdbcType=INTEGER}
+      </if>
+      <if test="logOperationName != null and logOperationName!=''" >
+        and log_operation_name = #{logOperationName,jdbcType=VARCHAR}
+      </if>
+      <if test="createTimeStar != null and createTimeStar !='' and createTimeEnd != null and createTimeEnd != '' " >
+        <![CDATA[ and create_time >= #{createTimeStar} and create_time < #{createTimeEnd} ]]> 
+      </if>
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.foresee.model.Log" >
+    insert into log (id, log_url, log_description, 
+      log_method, log_class_method, log_ip, 
+      log_parameter, log_operation_id, log_operation_name, 
+      create_time)
+    values (#{id,jdbcType=INTEGER}, #{logUrl,jdbcType=VARCHAR}, #{logDescription,jdbcType=VARCHAR}, 
+      #{logMethod,jdbcType=VARCHAR}, #{logClassMethod,jdbcType=VARCHAR}, #{logIp,jdbcType=VARCHAR}, 
+      #{logParameter,jdbcType=VARCHAR}, #{logOperationId,jdbcType=INTEGER}, #{logOperationName,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.foresee.model.Log" >
+    insert into log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="logUrl != null" >
+        log_url,
+      </if>
+      <if test="logDescription != null" >
+        log_description,
+      </if>
+      <if test="logMethod != null" >
+        log_method,
+      </if>
+      <if test="logClassMethod != null" >
+        log_class_method,
+      </if>
+      <if test="logIp != null" >
+        log_ip,
+      </if>
+      <if test="logParameter != null" >
+        log_parameter,
+      </if>
+      <if test="logOperationId != null" >
+        log_operation_id,
+      </if>
+      <if test="logOperationName != null" >
+        log_operation_name,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="logUrl != null" >
+        #{logUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="logDescription != null" >
+        #{logDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="logMethod != null" >
+        #{logMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="logClassMethod != null" >
+        #{logClassMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="logIp != null" >
+        #{logIp,jdbcType=VARCHAR},
+      </if>
+      <if test="logParameter != null" >
+        #{logParameter,jdbcType=VARCHAR},
+      </if>
+      <if test="logOperationId != null" >
+        #{logOperationId,jdbcType=INTEGER},
+      </if>
+      <if test="logOperationName != null" >
+        #{logOperationName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.foresee.model.Log" >
+    update log
+    <set >
+      <if test="logUrl != null" >
+        log_url = #{logUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="logDescription != null" >
+        log_description = #{logDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="logMethod != null" >
+        log_method = #{logMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="logClassMethod != null" >
+        log_class_method = #{logClassMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="logIp != null" >
+        log_ip = #{logIp,jdbcType=VARCHAR},
+      </if>
+      <if test="logParameter != null" >
+        log_parameter = #{logParameter,jdbcType=VARCHAR},
+      </if>
+      <if test="logOperationId != null" >
+        log_operation_id = #{logOperationId,jdbcType=INTEGER},
+      </if>
+      <if test="logOperationName != null" >
+        log_operation_name = #{logOperationName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.foresee.model.Log" >
+    update log
+    set log_url = #{logUrl,jdbcType=VARCHAR},
+      log_description = #{logDescription,jdbcType=VARCHAR},
+      log_method = #{logMethod,jdbcType=VARCHAR},
+      log_class_method = #{logClassMethod,jdbcType=VARCHAR},
+      log_ip = #{logIp,jdbcType=VARCHAR},
+      log_parameter = #{logParameter,jdbcType=VARCHAR},
+      log_operation_id = #{logOperationId,jdbcType=INTEGER},
+      log_operation_name = #{logOperationName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

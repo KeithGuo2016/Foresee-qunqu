@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html class="iframe-h">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>文章列表</title>
+		<link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="/css/admin.css" />
+		<link rel="stylesheet" type="text/css" href="/css/page.css" />
+	</head>
+	<body>
+		<div class="pageloading">
+			<img src="/images/loading.png" class="rotation" />
+		</div>
+		<div class="wrap-container clearfix layui-anim layui-anim-fadein">
+			<div class="column-content-detail" id="page" style="padding-right:4px;">
+				<div class="layui-form-item page-btn" action="">
+					<!--顶部按钮-->
+					<div class="layui-inline tool-btn" id="menuBtn"></div>
+					<!--顶部按钮-->
+				</div>
+				<form class="layui-form">
+					<div class="page-search">
+						<!--文章标题-->
+						<div class="layui-inline">
+							<label class="layui-form-label " for="articleTitle">文章标题：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="articleTitle" name="article_title" placeholder="请输入文章标题" autocomplete="off" class="layui-input" maxlength="200" />
+					        </div>
+						</div>
+						<!--文章标题-->
+						<!--首页推荐-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="isRecommend">首页推荐：</label>
+					        <div class="layui-input-inline">
+					        	<select id="isRecommend" name="is_recommend">
+									<option value="">请选择首页推荐</option>
+									<option value="1">首页推荐</option>
+									<option value="0">首页不推荐</option>
+								</select>
+					        </div>
+						</div>
+						<!--首页推荐-->
+						<!--是否草稿-->
+						<!-- <div class="layui-inline">
+							<label class="layui-form-label" for="isDraft">文章类型：</label>
+					        <div class="layui-input-inline">
+					        	<select id="isDraft" name="is_draft">
+									<option value="">请选择文章类型</option>
+									<option value="1">草稿</option>
+									<option value="0">文章</option>
+								</select>
+					        </div>
+						</div> -->
+						<!--是否草稿-->
+						<!-- 所属社群 -->
+						<div class="layui-inline">
+					        <label class="layui-form-label" for="communityId">所属社群：</label>
+					        <div class="layui-input-inline">
+					        	<select id="communityId" name="community_id">
+									<option value="">请选择所属社群</option>
+								</select>
+					        </div>
+					    </div>
+						<!-- 所属社群 -->
+						<!--通过时间-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="flowDate">通过时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="flowDate" name="flow_date" autocomplete="off" class="layui-input" placeholder="请选择审核通过时间" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--通过时间-->
+						<!--审批阶段-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="flowSts">审批阶段：</label>
+					        <div class="layui-input-inline">
+					        	<select id="flowSts" name="flow_sts">
+									<option value="">请选择审批阶段</option>
+									<option value="0">新建</option>
+									<option value="1">初审通过</option>
+									<option value="3">复审通过</option>
+									<option value="4">终审通过</option>
+									<option value="2">审核拒绝</option>
+								</select>
+					        </div>
+						</div>
+						<!--审批阶段-->
+						<!--创建时间-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="createdDate">创建时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="createdDate" name="created_date" autocomplete="off" class="layui-input" placeholder="请选择创建时间" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--创建时间-->
+						<!--更新时间-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="updatedDate">更新时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="updatedDate" name="updated_date" autocomplete="off" class="layui-input" placeholder="请选择更新时间" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--更新时间-->
+						<!--创建人-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="createdName">创建人员：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="createdName" name="created_by" placeholder="请输入创建人姓名" autocomplete="off" class="layui-input" maxlength="20" />
+					        </div>
+						</div>
+						<!--创建人-->
+						<!--更新人-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="updatedName">更新人员：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="updatedName" name="updated_by" placeholder="请输入更新人姓名" autocomplete="off" class="layui-input" maxlength="20" />
+					        </div>
+						</div>
+						<!--更新人-->
+						<!--删除标志-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="isDeleted">删除标志：</label>
+					        <div class="layui-input-inline">
+					        	<select id="isDeleted" name="is_deleted">
+									<option value="">请选择删除标志</option>
+									<option value="0">未删除</option>
+									<option value="1">已删除</option>
+								</select>
+					        </div>
+						</div>
+						<!--删除标志-->
+						<!--推荐日期-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="recommendDate">推荐日期：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="recommendDate" name="recommend_date" autocomplete="off" class="layui-input" placeholder="请选择推荐显示日期" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--推荐日期-->
+						<div class="layui-inline search-btn">
+							<button type="button" class="layui-btn layui-btn-sm btn-search bg-blue main-search" id="searchBt" lay-submit="">搜索</button>
+						</div>
+					</div>
+				</form>
+				<div class="">
+					<table class="layui-hide table-box" id="dataList" lay-filter="orderAll"></table>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="/static/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery-1.8.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+	layui.use(['form', 'table', 'laydate', 'laypage', 'layer'], function(){
+	    var form = layui.form, table = layui.table, laypage = layui.laypage, laydate = layui.laydate, layer = layui.layer;  //初始化layui控件
+	    //数据对应表
+	    var is_deleted = ['未删除', '已删除'];  //删除标志
+	    var is_recommend = ['不推荐', '推荐'];  //是否首页推荐
+	    var is_draft = ['非草稿', '草稿'];  //是否是草稿
+	    var flow_sts = ['新建', '初审通过', '审核拒绝', '复审通过', '终审通过'];  //审批阶段
+	    //获取筛选条件
+	    var get_search = function(){
+	    	var search_arr = [];
+	    	search_arr["article_title"] = $.trim($("#articleTitle").val());  //文章标题
+	    	search_arr["is_recommend"] = $.trim($("#isRecommend").val());  //是否首页推荐
+	    	search_arr["is_draft"] = $.trim($("#isDraft").val());  //是否是草稿
+	    	search_arr["flow_date_start"] = public.getTime($.trim($("#flowDate").val())).start;  //审核通过时间起始
+	    	search_arr["flow_date_end"] = public.getTime($.trim($("#flowDate").val())).end;  //审核通过时间终止
+	    	search_arr["flow_sts"] = $.trim($("#flowSts").val());  //审批阶段
+	    	search_arr["created_date_start"] = public.getTime($.trim($("#createdDate").val())).start;  //创建时间起始
+	    	search_arr["created_date_end"] = public.getTime($.trim($("#createdDate").val())).end;  //创建时间终止
+	    	search_arr["updated_date_start"] = public.getTime($.trim($("#updatedDate").val())).start;  //更新时间起始
+	    	search_arr["updated_date_end"] = public.getTime($.trim($("#updatedDate").val())).end;  //更新时间终止
+	    	search_arr["created_by"] = $.trim($("#createdName").val());  //创建人
+	    	search_arr["updated_by"] = $.trim($("#updatedName").val());  //更新人
+	    	search_arr["is_deleted"] = $.trim($("#isDeleted").val());  //删除标志
+	    	search_arr["recommend_date_start"] = public.getTime($.trim($("#recommendDate").val())).start;  //推荐显示日期起始
+	    	search_arr["recommend_date_end"] = public.getTime($.trim($("#recommendDate").val())).end;  //推荐显示日期终止
+	    	search_arr["community_id"] = $.trim($("#communityId").val());  //所属社群
+	    	return search_arr;
+	    };
+	    //请求社群
+	    $.ajax({
+	    	type: 'post',
+	    	url: '/communitys/selectlist',
+	    	data: {'page': 1, 'limit': 999999999},
+	    	async: false,
+			dataType: 'json',
+			success: function(data) {
+				if(data.code == '0' && data.data.length > 0){
+					var str = '';
+					//回显社群列表
+					$.each(data.data, function (k, val) {
+						str += '<option value="' + val.id + '">' + val.communityName + '</option>';
+					});
+					$("#communityId").html("");
+					$("#communityId").append("<option value=''>请选择所属社群</option>"+ str);
+					form.render();
+				}
+			}
+	    });
+	    //数据表格渲染控件
+	    table.render({
+	        elem: '#dataList',
+	        url: '/articles/selectlist',
+	        method: 'post',
+	        id: 'orderAll',
+	        where: {
+	            //初始化发送至后台数据
+	        	'isDraft':0
+	        },
+	        cols: [
+	               
+	               [
+	                
+		            {field: 'id', title: 'id', hide: true},
+		            {field: 'isDeleted', title: 'isDeleted', hide: true},
+		            {field: 'userId', title: '作者id', hide: true},
+		            {field: 'communityId', title: '社群id', hide: true},
+		            {type: 'numbers', title: '序号', width: 60},
+		            {field: 'articleTitle', title: '文章标题', width: 150, event: 'onSelect'},
+		            {field: 'articleIcon', title: '文章封面', width: 150, event: 'onSelect', templet: function(d) {
+		            	return d.articlIcon == "" ? "--" : public.showImg(d.articleIcon);
+			        }},
+		            {field: 'communityName', title: '所属社群', width: 120, event: 'onSelect', templet: function(d) {
+		            	return d.communityName == null ? "--" :d.communityName;
+			        }},
+		            {field: 'articleOutline', title: '文章简述', width: 250, event: 'onSelect'},
+		            //{field: 'articleContent', title: '文章内容', width: 250, event: 'onSelect'},
+		            {field: 'isRecommend', title: '是否首页推荐', width: 120, event: 'onSelect', templet:function(d){
+		            	return d.isRecommend == "" ? "--" : is_recommend[d.isRecommend];
+			        }},
+		            {field: 'tagNames', title: '文章标签', width: 200, event: 'onSelect'},
+		            {field: 'isDraft', title: '是否是草稿', width: 100, event: 'onSelect', templet:function(d){
+		            	return d.isDraft == "" ? "--" : is_draft[d.isDraft];
+			        }},
+		            {field: 'readCount', title: '文章阅读量', width: 120, event: 'onSelect'},
+		            {field: 'followCount', title: '关注量', width: 100, event: 'onSelect'},
+		            {field: 'flowDate', title: '审核通过时间', width: 170, event: 'onSelect', templet: function(d) {
+		            	return d.flowDate == "" ? "--" : d.flowDate;
+			        }},
+		            {field: 'flowSts', title: '审批阶段', width: 100, event: 'onSelect', templet:function(d){
+		            	return d.flowSts == "" ? "--" : flow_sts[d.flowSts];
+			        }},
+		            {field: 'createdDate', title: '创建时间', width: 170, event: 'onSelect', templet: function(d) {
+		            	return d.createdDate == "" ? "--" : d.createdDate;
+			        }},
+		            {field: 'updatedDate', title: '更新时间', width: 170, event: 'onSelect', templet: function(d) {
+		            	return d.updatedDate == "" ? "--" : d.updatedDate;
+			        }},
+		            {field: 'createdName', title: '创建人', width: 100, event: 'onSelect', templet:function(d){
+		            	return d.createdName == null ? "--" : d.createdName;
+			        }},
+		            {field: 'updatedName', title: '更新人', width: 100, event: 'onSelect', templet:function(d){
+		            	return d.updatedName == null ? "--" : d.updatedName;
+			        }},
+		            {field: 'isDeleted', title: '删除标志', width: 100, event: 'onSelect', templet:function(d){
+		            	return is_deleted[d.isDeleted];
+			        }},
+		            //{field: 'gatherId', title: '所属文集', width: 100, event: 'onSelect'},
+		            {field: 'recommendDate', title: '推荐显示日期', width: 170, event: 'onSelect', templet:function(d){
+		            	return d.recommendDate == null ? "--" : d.recommendDate;
+			        }}
+		            
+	        		]
+	               
+	              ],
+	        page: true,
+	        limit: 10,
+	        limits: [5, 10, 15, 25, 35],
+	        loading: true,
+	        done: function (res, curr, count) {
+	           if ($(".layui-table-main").find("tr").length != 0) {
+	                $(".layui-table-page").show();
+	           }
+	      		//图片点击放大
+	      		$("img").click(function() {
+	      			public.bigImg($(this).parent());
+	      		});
+	           $(".pageloading").hide();
+	        }
+	    });
+	    public.adaptation();
+	    //请求三级菜单
+		public.getmenu();
+	    //点击搜索
+	    $("#searchBt").click(function() {
+	    	var res = get_search();
+	        //请求后台数据表格接口
+	        table.reload("orderAll", {
+	            url: "/articles/selectlist",
+	            where: {
+	                "articleTitle": res.article_title,  //文章标题
+	                "isRecommend": res.is_recommend,  //是否首页推荐
+	                "isDraft": 0,  //是否是草稿
+	                "flowDateStar": res.flow_date_start,  //审核通过时间起始
+	                "flowDateEnd": res.flow_date_end,  //审核通过时间终止
+	                "flowSts": res.flow_sts,  //审批阶段
+	                "createdDateStar": res.created_date_start,  //创建时间起始
+	                "createdDateEnd": res.created_date_end,  //创建时间终止
+	                "updatedDateStar": res.updated_date_start,  //更新时间起始
+	                "updatedDateEnd": res.updated_date_end,  //更新时间终止
+	                "createdName": res.created_by,  //创建人
+	                "updatedName": res.updated_by,  //更新人
+	                "isDeleted": res.is_deleted,  //删除标志
+	                "recommendDateStar": res.recommend_date_start,  //推荐显示日期起始
+	                "recommendDateEnd": res.recommend_date_end,  //推荐显示日期终止
+	                "communityId": res.community_id  //所属社群
+	            },
+	            method: "post"
+	        });
+	        public.adaptation();
+	    });
+	    //点击添加
+	    $("#page").on("click", ".btn-add", function () {
+	        public.dialogLayer(2,"添加文章","wenzhanglbadd.html","100%","100%");
+   		});
+   		//点击编辑
+	    $("#page").on("click", ".btn-bj", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	var isdeleate = $("tr.layui-table-click").find("td:eq(1) div").text();
+	    	if(ids != '' && ids != undefined){
+		    	if(isdeleate == "1"){layer.alert("您只能操作未删除的数据项！", {icon: 5, title: "提示"});return false;}
+	    		public.dialogLayer(2,"编辑文章","wenzhanglbedit.html?id=" + ids,"100%","100%");
+        	}else {
+        		layer.alert("请先选中要编辑的文章", {icon: 5, title: "提示"});
+        	}
+   		});
+	    //点击详情
+	    $("#page").on("click", ".btn-info", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	if(ids != '' && ids != undefined){
+	    		public.dialogLayer(2,"文章详情","wenzhanginfo.html?id=" + ids,"100%","100%");
+        	}else {
+        		layer.alert("请先选中要操作的数据项！", {icon: 5, title: "提示"});
+        	}
+   		});
+	    //点击设置轮播
+	    $("#page").on("click", ".btn-carousel", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	var isdeleate = $("tr.layui-table-click").find("td:eq(1) div").text();
+	    	if(ids != '' && ids != undefined){
+		    	if(isdeleate == "1"){layer.alert("您只能操作未删除的数据项！", {icon: 5, title: "提示"});return false;}
+	    		public.dialogLayer(2,"设置轮播","wenzhangcarousels.html?id=" + ids,"530px","300px");
+        	}else {
+        		layer.alert("请先选中要操作的数据项！", {icon: 5, title: "提示"});
+        	}
+   		});
+	    //点击删除
+	    $("#page").on("click", ".btn-del", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	var status = $("tr.layui-table-click").find("td:eq(1) div").text();
+	    	if(ids != '' && ids != undefined){
+	    		if(status != '1'){
+	    			layer.confirm('您确认删除该数据吗？', {icon: 3, title:'提示'}, function(index){
+		        		//删除申请
+			    		$.post('/articles/updateisdeleted', {'id': ids}, function(data) {
+			    			if(data.code == '0'){
+			    				layer.msg('删除成功', {'icon': 1,time:1000},function(){
+			    					layer.closeAll();
+			        	            $("#searchBt").click();
+		                        });
+			    			}else{
+			    				layer.alert(data.msg, {icon: 5, title: "提示"});
+			    			}
+			    		});
+	        		});
+	    		}else{
+	    			layer.alert("您只能操作未删除的数据！", {icon: 5, title: "提示"});
+	    		}
+        	}else {
+        		layer.alert("请先选中要操作的数据项！", {icon: 5, title: "提示"});
+        	}
+   		});
+	    //点击发送审核
+	    /*$("#page").on("click", ".btn-fssh", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	if(ids != '' && ids != undefined){
+	    		$.post('/articles/apply', {'id': ids}, function(data) {
+	    			if(data.code == '0'){
+	    				layer.msg('发送审核成功', {'icon': 1,time:1000},function(){
+	    					layer.closeAll();
+	        	            $("#searchBt").click();
+                        });
+	    			}else{
+	    				layer.alert(data.msg, {icon: 5, title: "提示"});
+	    			}
+	    		}, 'json');
+        	}else {
+        		layer.alert("请先选中要操作的数据项！", {icon: 5, title: "提示"});
+        	}
+   		});*/
+   		//拒绝
+   		$("#page").on("click", ".btn-jj", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	var status = $("tr.layui-table-click").find("td:eq(15) div").text();
+	    	if(ids != '' && ids != undefined){
+	    		if(status.trim() != '审核拒绝' && status.trim() != '终审通过'){
+	    			layer.confirm('您确认审核拒绝吗？', {icon: 3, title:'提示'}, function(index){
+		    			$.post('/articles/update', {'id': ids, 'flowSts': 2}, function(data) {
+			    			if(data.code == '0'){
+			    				layer.msg('审核拒绝成功', {'icon': 1,time:1000},function(){
+			    					layer.closeAll();
+			        	            $("#searchBt").click();
+		                        });
+			    			}else{
+			    				layer.alert(data.msg, {icon: 5, title: "提示"});
+			    			}
+			    		}, 'json');
+	        		});
+	    		}else{
+	    			layer.alert("此数据禁止操作，审核拒绝失败！", {icon: 5, title: "提示"});
+	    		}
+        	}else {
+        		layer.alert("请先选中要操作的数据项！", {icon: 5, title: "提示"});
+        	}
+   		});
+   		//初审
+   		$("#page").on("click", ".btn-cs", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	var status = $("tr.layui-table-click").find("td:eq(15) div").text();
+	    	if(ids != '' && ids != undefined){
+	    		if(status.trim() == '新建'){
+	    			layer.confirm('您确认通过初审吗？', {icon: 3, title:'提示'}, function(index){
+		    			$.post('/articles/update', {'id': ids, 'flowSts': 1}, function(data) {
+			    			if(data.code == '0'){
+			    				layer.msg('初审通过成功', {'icon': 1,time:1000},function(){
+			    					layer.closeAll();
+			        	            $("#searchBt").click();
+		                        });
+			    			}else{
+			    				layer.alert(data.msg, {icon: 5, title: "提示"});
+			    			}
+			    		}, 'json');
+	        		});
+	    		}else{
+	    			layer.alert("只有新建的文章才能通过初审！", {icon: 5, title: "提示"});
+	    		}
+        	}else {
+        		layer.alert("请先选中要操作的数据项！", {icon: 5, title: "提示"});
+        	}
+   		});
+   		//复审
+   		$("#page").on("click", ".btn-fs", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	var status = $("tr.layui-table-click").find("td:eq(15) div").text();
+	    	if(ids != '' && ids != undefined){
+	    		if(status.trim() == '初审通过'){
+		    		layer.confirm('您确认通过复审吗？', {icon: 3, title:'提示'}, function(index){
+			    		$.post('/articles/update', {'id': ids, 'flowSts': 3}, function(data) {
+			    			if(data.code == '0'){
+			    				layer.msg('复审通过成功', {'icon': 1,time:1000},function(){
+			    					layer.closeAll();
+			        	            $("#searchBt").click();
+		                        });
+			    			}else{
+			    				layer.alert(data.msg, {icon: 5, title: "提示"});
+			    			}
+			    		}, 'json');
+	        		});
+	    		}else{
+	    			layer.alert("只有初审通过的文章才能通过复审！", {icon: 5, title: "提示"});
+	    		}
+        	}else {
+        		layer.alert("请先选中要操作的数据项！", {icon: 5, title: "提示"});
+        	}
+   		});
+   		//终审
+   		$("#page").on("click", ".btn-zs", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	var status = $("tr.layui-table-click").find("td:eq(15) div").text();
+	    	if(ids != '' && ids != undefined){
+	    		if(status.trim() == '复审通过'){
+		    		layer.confirm('您确认通过终审吗？', {icon: 3, title:'提示'}, function(index){
+			    		$.post('/articles/update', {'id': ids, 'flowSts': 4}, function(data) {
+			    			if(data.code == '0'){
+			    				layer.msg('终审通过成功', {'icon': 1,time:1000},function(){
+			    					layer.closeAll();
+			        	            $("#searchBt").click();
+		                        });
+			    			}else{
+			    				layer.alert(data.msg, {icon: 5, title: "提示"});
+			    			}
+			    		}, 'json');
+	        		});
+	    		}else{
+	    			layer.alert("只有复审通过的文章才能通过终审！", {icon: 5, title: "提示"});
+	    		}
+        	}else {
+        		layer.alert("请先选中要操作的数据项！", {icon: 5, title: "提示"});
+        	}
+   		});
+   		//点击刷新
+	    /*$("#page").on("click", ".refreshBtn", function () {
+	    	$('.iframe', window.parent.document).attr('src', $('.iframe', window.parent.document).attr('src'));
+   		});*/
+	    //通过时间
+	    laydate.render({
+	        elem: '#flowDate',
+	        range: true
+	    });
+	    //创建时间
+	    laydate.render({
+	        elem: '#createdDate',
+	        range: true
+	    });
+	    //更新时间
+	    laydate.render({
+	        elem: '#updatedDate',
+	        range: true
+	    });
+	    //推荐日期
+	    laydate.render({
+	        elem: '#recommendDate',
+	        range: true
+	    });
+	});
+	</script>
+</html>    

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foresee.mapper.MagazinesMapperCostom">
+  <resultMap id="BaseResultMap" type="com.foresee.vo.MagazinesVo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="communitys_id" jdbcType="INTEGER" property="communitysId" />
+    <result column="magazine_title" jdbcType="VARCHAR" property="magazineTitle" />
+    <result column="magazine_icon" jdbcType="VARCHAR" property="magazineIcon" />
+    <result column="magazine_desc" jdbcType="VARCHAR" property="magazineDesc" />
+    <result column="read_count" jdbcType="INTEGER" property="readCount" />
+    <result column="follow_count" jdbcType="INTEGER" property="followCount" />
+    <result column="magazine_tag" jdbcType="VARCHAR" property="magazineTag" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="flow_sts" jdbcType="CHAR" property="flowSts" />
+    <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
+    
+     <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+     <result column="community_name" jdbcType="VARCHAR" property="communityName" />
+      <result column="head_url" jdbcType="VARCHAR" property="headUrl" />
+  </resultMap>
+  
+  <select id="selectByCommunitysId" resultMap="BaseResultMap" >
+  SELECT
+	m.start_date,
+	m.read_count,
+	m.magazine_title,
+	GROUP_CONCAT( b.tag_name ) magazine_tag,
+	m.magazine_icon,
+	m.magazine_desc,
+	m.id,
+	zan.article_zan follow_count ,
+	m.flow_sts,
+	m.created_date,
+	m.create_user_id,
+	m.communitys_id,
+	wu.nick_name,
+	wu.head_url 
+FROM
+	magazines m
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, m.magazine_tag )
+	JOIN wechat_user wu ON wu.id = m.create_user_id 
+	LEFT JOIN (
+SELECT
+	ma.magazines_id,
+	sum(a.article_zan) article_zan 
+FROM
+	magazine_articles ma,
+	articles a 
+WHERE
+	a.id = ma.articles_id 
+	AND a.is_deleted = '0' 
+	AND ma.is_deleted = '0' 
+GROUP BY
+	ma.magazines_id 
+	) zan ON zan.magazines_id = m.id 
+WHERE
+	m.is_deleted = '0' 
+	AND m.flow_sts = '1' 
+	AND m.start_date <![CDATA[ <= ]]> NOW( ) 
+	and m.communitys_id = #{communitysId}
+GROUP BY
+	m.id 
+ORDER BY
+	m.start_date DESC
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap" >
+   SELECT
+	m.start_date,
+	m.read_count,
+	m.magazine_title,
+	GROUP_CONCAT( b.tag_name ) magazine_tag,
+	m.magazine_icon,
+	m.magazine_desc,
+	m.id,
+	m.follow_count,
+	m.flow_sts,
+	m.created_date,
+	m.create_user_id,
+	m.communitys_id,
+	wu.nick_name,
+	wu.head_url,
+	c.community_name
+FROM
+	magazines m
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, m.magazine_tag )
+	JOIN wechat_user wu ON wu.id = m.create_user_id 
+	join communitys c on (c.id=m.communitys_id  and c.is_deleted='0')
+WHERE
+	m.is_deleted = '0' 
+	AND m.flow_sts = '1' 
+	AND m.start_date <![CDATA[ <= ]]> NOW( ) 
+GROUP BY
+	m.id 
+ORDER BY
+	m.start_date DESC
+  </select>
+  <select id="searchMagazine" resultMap="BaseResultMap" >
+  select * from(SELECT
+	m.start_date,
+	m.read_count,
+	m.magazine_title,
+	GROUP_CONCAT( b.tag_name ) magazine_tag,
+	m.magazine_icon,
+	m.magazine_desc,
+	m.id,
+	m.follow_count,
+	m.flow_sts,
+	m.created_date,
+	m.create_user_id,
+	m.communitys_id,
+	wu.nick_name,
+	wu.head_url ,
+	m.magazine_tag tagId
+FROM
+	magazines m
+	LEFT JOIN tag b ON FIND_IN_SET( b.id, m.magazine_tag )
+	JOIN wechat_user wu ON wu.id = m.create_user_id 
+	join communitys c on (c.id=m.communitys_id  and c.is_deleted='0')
+WHERE
+	m.is_deleted = '0' 
+	AND m.flow_sts = '1' 
+	AND m.start_date <![CDATA[ <= ]]> NOW( ) 
+	<if test="communitysId!=null and communitysId!=''">
+	and m.communitys_id = #{communitysId}
+	</if>
+GROUP BY
+	m.id ) ta 
+	where 1=1 
+	<if test="tagId!=null and tagId!=''">
+	and FIND_IN_SET( #{tagId}, ta.tagId ) 
+	</if>
+	<if test="searchDesc!=null and searchDesc!=''">
+	and (ta.magazine_title like '%${searchDesc}%' or ta.magazine_desc like '%${searchDesc}%' or ta.magazine_tag like '%${searchDesc}%')
+	</if>
+ORDER BY
+	ta.start_date DESC
+  </select>
+  
+  <select id="selectById" resultMap="BaseResultMap" >
+ SELECT
+	m.start_date,
+	m.read_count,
+	m.magazine_title,
+	m.magazine_tag,
+	m.magazine_icon,
+	m.magazine_desc,
+	m.id,
+	m.flow_sts,
+	m.created_date,
+	m.create_user_id,
+	m.communitys_id,
+	zan.article_zan follow_count 
+FROM
+	magazines m
+	LEFT JOIN (
+SELECT
+	ma.magazines_id,
+	sum(a.article_zan) article_zan 
+FROM
+	magazine_articles ma,
+	articles a 
+WHERE
+	a.id = ma.articles_id 
+	AND a.is_deleted = '0' 
+	AND ma.is_deleted = '0' 
+GROUP BY
+	ma.magazines_id 
+	) zan ON zan.magazines_id = m.id 
+WHERE
+	m.is_deleted = '0' 
+	AND m.flow_sts = '1' 
+	and m.id=#{magazinesid}
+  </select>
+</mapper>

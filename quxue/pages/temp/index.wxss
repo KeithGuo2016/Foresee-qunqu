@@ -1,0 +1,48 @@
+/* pages/message/index.wxss */
+.messlist{
+  padding: 0;
+}
+.messtit{
+  font-size: 32rpx;
+  font-weight: bold;
+}
+.messtxt{
+  font-size: 30rpx;
+  color: #333;
+  line-height: 50rpx;
+  margin: 10rpx 0 15rpx;
+}
+.messtime{
+  font-size: 26rpx;
+  color: #b4b2b2b2;
+}
+
+.sc_sq{
+  position: relative;
+  width: 690rpx;
+  overflow: hidden;
+  margin: 30rpx 0 0;
+}
+.sc_sq movable-area{
+  width: 560rpx;
+  height: 210rpx;
+}
+.sc_sq movable-view{
+  width: 690rpx;
+  height: 210rpx;
+  z-index: 2;
+  background: #fff;
+}
+.canFo{
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  top: 0;
+  width: 140rpx;
+  height: 200rpx;
+  line-height: 200rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: #fff;
+  background: #38bab8;
+}

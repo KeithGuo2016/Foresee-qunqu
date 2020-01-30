@@ -1,0 +1,42 @@
+<import src="/welCropper/welCropper.wxml" />
+<view class="addbtn" bindtap="newgather">新建文集</view>
+<view class='list'>
+<view class="galist" wx:for="{{list}}" wx:key="this">
+    <view bindtap="editor" data-id="{{item.id}}" data-index="{{index}}" class="tag">编辑</view>
+    <image bindtap="goDetail" data-id="{{item.id}}" src="{{item.gatherIcon}}"></image>
+    <view class="ga_tit">{{item.gatherName}}（{{item.articleCount}}篇）</view>
+    <view bindtap="selArticle" data-id="{{item.id}}" data-index="{{index}}" class="adga">添加文章进文集</view>
+  </view>
+   
+</view>
+<!-- 弹出 -->
+<view class="dialog" wx:if='{{editor}}'>
+<view class="gather_set">
+  <view class="gtop">
+    <view class="gcan" bindtap="gcancel">取消</view>
+    <view class="gok" bindtap="goadd">确定</view>
+  </view>
+  <view class="gcon">
+    <view class="glabela">
+      <view class="glname">文集名称</view>
+      <input class="glinput" value="{{gatherName}}" bindinput="getName"></input>
+    </view>
+    <view class="glabelb">
+      <view class="upicon" wx:if="{{upicon}}" bindtap='selectTap' data-mode='rectangle'><image src="../images/fengmian.png"></image></view>
+       <view wx:else class="upload_icon upload_img" bindtap='selectTap' data-mode='rectangle'>
+      <image src="{{tempFile}}"></image></view>
+      <view class="upname" bindtap='selectTap' data-mode='rectangle'>添加封面</view>
+
+    </view>
+    <view class="glabelb">
+      <view class="upicon" bindtap="selArticle" data-id="{{getherid}}"><image src="../images/tianjia.png"></image></view>
+      <view class="upname" bindtap="selArticle" data-id="{{getherid}}">添加文章</view>
+    </view>
+    <view class="glabelb glabelc" wx:for="{{articleList}}" wx:key="this">
+      <view class="gtit">{{item.articleTitle}}</view>
+      <view class="gicon" data-id="{{item.id}}" data-index="{{index}}" bindtap="delArticle" ><image src="../images/shanchu.png"></image></view>
+    </view>
+  </view>
+</view>
+</view>
+<template is="welCropper" data="{{cropperData:cropperData, cropperMovableItems:cropperMovableItems, cropperChangableData:cropperChangableData}}"></template> 

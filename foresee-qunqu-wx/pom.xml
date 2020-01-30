@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.foresee</groupId>
+  <artifactId>foresee-qunqu-wx</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>群趣创作</name>
+  <description>
+        所需技术描述：
+       小程序
+        maven
+        springmvc
+        springboot
+        mybatis
+        mybatis-pagehelper
+        redis
+        ffmpeg
+        druid
+        mysql
+    </description>
+    <parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.5.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+	<modules>
+		<module>foresee-qunqu-wx-common</module>
+		<module>foresee-qunqu-wx-pojo</module>
+		<module>foresee-qunqu-wx-mapper</module>
+		<module>foresee-qunqu-wx-service</module>
+		<module>foresee-qunqu-wx-api</module>
+	</modules>
+</project>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html class="iframe-h">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>社群文章</title>
+		<link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="/css/admin.css" />
+		<link rel="stylesheet" type="text/css" href="/css/page.css" />
+	</head>
+	<body>
+		<div class="pageloading">
+			<img src="/images/loading.png" class="rotation" />
+		</div>
+		<div class="wrap-container clearfix layui-anim layui-anim-fadein">
+			<div class="column-content-detail" id="page" style="padding-right:4px;">
+				<form class="layui-form">
+					<div class="page-search">
+						<!--文章标题-->
+						<div class="layui-inline">
+							<label class="layui-form-label " for="articleTitle">文章标题：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="articleTitle" name="article_title" placeholder="请输入文章标题" autocomplete="off" class="layui-input" maxlength="200" />
+					        </div>
+						</div>
+						<!--文章标题-->
+						<!--首页推荐-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="isRecommend">首页推荐：</label>
+					        <div class="layui-input-inline">
+					        	<select id="isRecommend" name="is_recommend">
+									<option value="">请选择首页推荐</option>
+									<option value="1">首页推荐</option>
+									<option value="0">首页不推荐</option>
+								</select>
+					        </div>
+						</div>
+						<!--首页推荐-->
+						<!--是否草稿-->
+						<!-- <div class="layui-inline">
+							<label class="layui-form-label" for="isDraft">文章类型：</label>
+					        <div class="layui-input-inline">
+					        	<select id="isDraft" name="is_draft">
+									<option value="">请选择文章类型</option>
+									<option value="1">草稿</option>
+									<option value="0">文章</option>
+								</select>
+					        </div>
+						</div> -->
+						<!--是否草稿-->
+						<!--通过时间-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="flowDate">通过时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="flowDate" name="flow_date" autocomplete="off" class="layui-input" placeholder="请选择审核通过时间" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--通过时间-->
+						<!--审批阶段-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="flowSts">审批阶段：</label>
+					        <div class="layui-input-inline">
+					        	<select id="flowSts" name="flow_sts">
+									<option value="">请选择审批阶段</option>
+									<option value="0">新建</option>
+									<option value="3">审核中</option>
+									<option value="1">审核通过</option>
+									<option value="2">审核拒绝</option>
+								</select>
+					        </div>
+						</div>
+						<!--审批阶段-->
+						<!--创建时间-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="createdDate">创建时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="createdDate" name="created_date" autocomplete="off" class="layui-input" placeholder="请选择创建时间" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--创建时间-->
+						<!--更新时间-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="updatedDate">更新时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="updatedDate" name="updated_date" autocomplete="off" class="layui-input" placeholder="请选择更新时间" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--更新时间-->
+						<!--创建人-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="createdName">创建人员：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="createdName" name="created_by" placeholder="请输入创建人姓名" autocomplete="off" class="layui-input" maxlength="20" />
+					        </div>
+						</div>
+						<!--创建人-->
+						<!--更新人-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="updatedName">更新人员：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="updatedName" name="updated_by" placeholder="请输入更新人姓名" autocomplete="off" class="layui-input" maxlength="20" />
+					        </div>
+						</div>
+						<!--更新人-->
+						<!--删除标志-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="isDeleted">删除标志：</label>
+					        <div class="layui-input-inline">
+					        	<select id="isDeleted" name="is_deleted">
+									<option value="">请选择删除标志</option>
+									<option value="0">未删除</option>
+									<option value="1">已删除</option>
+								</select>
+					        </div>
+						</div>
+						<!--删除标志-->
+						<!--推荐日期-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="recommendDate">推荐日期：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="recommendDate" name="recommend_date" autocomplete="off" class="layui-input" placeholder="请选择推荐显示日期" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--推荐日期-->
+						<div class="layui-inline search-btn">
+							<button type="button" class="layui-btn layui-btn-sm btn-search bg-blue main-search" id="searchBt" lay-submit="">搜索</button>
+						</div>
+					</div>
+				</form>
+				<div class="">
+					<table class="layui-hide table-box" id="dataList" lay-filter="orderAll"></table>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="/static/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery-1.8.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+	layui.use(['form', 'table', 'laydate', 'laypage', 'layer'], function(){
+	    var form = layui.form, table = layui.table, laypage = layui.laypage, laydate = layui.laydate, layer = layui.layer;  //初始化layui控件
+	    //数据对应表
+	    var is_deleted = ['未删除', '已删除'];  //删除标志
+	    var is_recommend = ['不推荐', '推荐'];  //是否首页推荐
+	    var is_draft = ['非草稿', '草稿'];  //是否是草稿
+	    var flow_sts = ['新建', '审核通过', '审核拒绝', '审核中'];  //审批阶段
+	    var parame = public.getParame();
+	    //获取筛选条件
+	    var get_search = function(){
+	    	var search_arr = [];
+	    	search_arr["article_title"] = $.trim($("#articleTitle").val());  //文章标题
+	    	search_arr["is_recommend"] = $.trim($("#isRecommend").val());  //是否首页推荐
+	    	search_arr["is_draft"] = $.trim($("#isDraft").val());  //是否是草稿
+	    	search_arr["flow_date_start"] = public.getTime($.trim($("#flowDate").val())).start;  //审核通过时间起始
+	    	search_arr["flow_date_end"] = public.getTime($.trim($("#flowDate").val())).end;  //审核通过时间终止
+	    	search_arr["flow_sts"] = $.trim($("#flowSts").val());  //审批阶段
+	    	search_arr["created_date_start"] = public.getTime($.trim($("#createdDate").val())).start;  //创建时间起始
+	    	search_arr["created_date_end"] = public.getTime($.trim($("#createdDate").val())).end;  //创建时间终止
+	    	search_arr["updated_date_start"] = public.getTime($.trim($("#updatedDate").val())).start;  //更新时间起始
+	    	search_arr["updated_date_end"] = public.getTime($.trim($("#updatedDate").val())).end;  //更新时间终止
+	    	search_arr["created_by"] = $.trim($("#createdName").val());  //创建人
+	    	search_arr["updated_by"] = $.trim($("#updatedName").val());  //更新人
+	    	search_arr["is_deleted"] = $.trim($("#isDeleted").val());  //删除标志
+	    	search_arr["recommend_date_start"] = public.getTime($.trim($("#recommendDate").val())).start;  //推荐显示日期起始
+	    	search_arr["recommend_date_end"] = public.getTime($.trim($("#recommendDate").val())).end;  //推荐显示日期终止
+	    	return search_arr;
+	    };
+	    //数据表格渲染控件
+	    table.render({
+	        elem: '#dataList',
+	        url: '/articles/selectlist',
+	        method: 'post',
+	        id: 'orderAll',
+	        where: {
+	        	'communityId': parame.id,
+	        	'isDraft':0
+	        },
+	        cols: [
+	               
+	               [
+	                
+		            {field: 'id', title: 'id', hide: true},
+		            {field: 'isDeleted', title: 'isDeleted', hide: true},
+		            {field: 'userId', title: '作者id', hide: true},
+		            {field: 'communityId', title: '社群id', hide: true},
+		            {type: 'numbers', title: '序号', width: 60},
+		            {field: 'articleTitle', title: '文章标题', width: 150, event: 'onSelect'},
+		            {field: 'articleIcon', title: '文章封面', width: 150, event: 'onSelect', templet: function(d) {
+		            	return d.articlIcon == "" ? "--" : public.showImg(d.articleIcon);
+			        }},
+		            {field: 'communityName', title: '所属社群', width: 120, event: 'onSelect', templet: function(d) {
+		            	return d.communityName == null ? "--" :d.communityName;
+			        }},
+		            {field: 'articleOutline', title: '文章简述', width: 250, event: 'onSelect'},
+		            //{field: 'articleContent', title: '文章内容', width: 250, event: 'onSelect'},
+		            {field: 'isRecommend', title: '是否首页推荐', width: 120, event: 'onSelect', templet:function(d){
+		            	return d.isRecommend == "" ? "--" : is_recommend[d.isRecommend];
+			        }},
+		            {field: 'tagNames', title: '文章标签', width: 200, event: 'onSelect'},
+		            {field: 'isDraft', title: '是否是草稿', width: 100, event: 'onSelect', templet:function(d){
+		            	return d.isDraft == "" ? "--" : is_draft[d.isDraft];
+			        }},
+		            {field: 'readCount', title: '文章阅读量', width: 120, event: 'onSelect'},
+		            {field: 'followCount', title: '关注量', width: 100, event: 'onSelect'},
+		            {field: 'flowDate', title: '审核通过时间', width: 170, event: 'onSelect', templet: function(d) {
+		            	return d.flowDate == "" ? "--" : d.flowDate;
+			        }},
+		            {field: 'flowSts', title: '审批阶段', width: 100, event: 'onSelect', templet:function(d){
+		            	return d.flowSts == "" ? "--" : flow_sts[d.flowSts];
+			        }},
+		            {field: 'createdDate', title: '创建时间', width: 170, event: 'onSelect', templet: function(d) {
+		            	return d.createdDate == "" ? "--" : d.createdDate;
+			        }},
+		            {field: 'updatedDate', title: '更新时间', width: 170, event: 'onSelect', templet: function(d) {
+		            	return d.updatedDate == "" ? "--" : d.updatedDate;
+			        }},
+		            {field: 'createdName', title: '创建人', width: 100, event: 'onSelect', templet:function(d){
+		            	return d.createdName == null ? "--" : d.createdName;
+			        }},
+		            {field: 'updatedName', title: '更新人', width: 100, event: 'onSelect', templet:function(d){
+		            	return d.updatedName == null ? "--" : d.updatedName;
+			        }},
+		            {field: 'isDeleted', title: '删除标志', width: 100, event: 'onSelect', templet:function(d){
+		            	return is_deleted[d.isDeleted];
+			        }},
+		            //{field: 'gatherId', title: '所属文集', width: 100, event: 'onSelect'},
+		            {field: 'recommendDate', title: '推荐显示日期', width: 170, event: 'onSelect', templet:function(d){
+		            	return d.recommendDate == null ? "--" : d.recommendDate;
+			        }}
+		            
+	        		]
+	               
+	              ],
+	        page: true,
+	        limit: 10,
+	        limits: [5, 10, 15, 25, 35],
+	        loading: true,
+	        done: function (res, curr, count) {
+	           if ($(".layui-table-main").find("tr").length != 0) {
+	                $(".layui-table-page").show();
+	           }
+	      		//图片点击放大
+	      		$("img").click(function() {
+	      			public.bigImg($(this).parent());
+	      		});
+	           $(".pageloading").hide();
+	        }
+	    });
+	    public.adaptation();
+	    //点击搜索
+	    $("#searchBt").click(function() {
+	    	var res = get_search();
+	        //请求后台数据表格接口
+	        table.reload("orderAll", {
+	            url: "/articles/selectlist",
+	            where: {
+	            	"articleTitle": res.article_title,  //文章标题
+	                "isRecommend": res.is_recommend,  //是否首页推荐
+	                "isDraft": 0,  //是否是草稿
+	                "flowDateStar": res.flow_date_start,  //审核通过时间起始
+	                "flowDateEnd": res.flow_date_end,  //审核通过时间终止
+	                "flowSts": res.flow_sts,  //审批阶段
+	                "createdDateStar": res.created_date_start,  //创建时间起始
+	                "createdDateEnd": res.created_date_end,  //创建时间终止
+	                "updatedDateStar": res.updated_date_start,  //更新时间起始
+	                "updatedDateEnd": res.updated_date_end,  //更新时间终止
+	                "createdName": res.created_by,  //创建人
+	                "updatedName": res.updated_by,  //更新人
+	                "isDeleted": res.is_deleted,  //删除标志
+	                "recommendDateStar": res.recommend_date_start,  //推荐显示日期起始
+	                "recommendDateEnd": res.recommend_date_end  //推荐显示日期终止
+	            },
+	            method: "post"
+	        });
+	        public.adaptation();
+	    });
+	});
+	</script>
+</html>    

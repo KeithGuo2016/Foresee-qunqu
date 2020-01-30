@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.foresee.dao.CommunitysMapper" >
+  <resultMap id="BaseResultMap" type="com.foresee.model.Communitys" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="community_name" property="communityName" jdbcType="VARCHAR" />
+    <result column="community_icon" property="communityIcon" jdbcType="VARCHAR" />
+    <result column="community_mark" property="communityMark" jdbcType="VARCHAR" />
+    <result column="community_tag" property="communityTag" jdbcType="VARCHAR" />
+    <result column="bg_icon" property="bgIcon" jdbcType="VARCHAR" />
+    <result column="auth_desc" property="authDesc" jdbcType="VARCHAR" />
+    <result column="community_notice" property="communityNotice" jdbcType="VARCHAR" />
+    <result column="community_desc" property="communityDesc" jdbcType="VARCHAR" />
+    <result column="community_type" property="communityType" jdbcType="INTEGER" />
+    <result column="admin_id" property="adminId" jdbcType="INTEGER" />
+    <result column="community_sts" property="communitySts" jdbcType="CHAR" />
+    <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="updated_date" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
+    <result column="flow_sts" property="flowSts" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, community_name, community_icon, community_mark, community_tag, bg_icon, auth_desc, 
+    community_notice, community_desc, community_type, admin_id, community_sts, created_date, 
+    updated_date, created_by, updated_by, is_deleted, flow_sts
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    a.*,
+	d.nick_name as createdName,
+	e.nick_name as updatedName,
+    GROUP_CONCAT(b.tag_name) as tagNames
+    from communitys a LEFT JOIN tag b ON FIND_IN_SET(b.id, a.community_tag)
+	LEFT JOIN wechat_user d ON a.created_by = d.id
+	LEFT JOIN wechat_user e ON a.updated_by = e.id
+    where a.id = #{id,jdbcType=INTEGER}
+    GROUP BY a.id
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="com.foresee.model.Communitys" >
+    select 
+    a.*,
+	d.nick_name as createdName,
+	e.nick_name as updatedName,
+    GROUP_CONCAT(b.tag_name) as tagNames
+    from communitys a LEFT JOIN tag b ON FIND_IN_SET(b.id, a.community_tag)
+	LEFT JOIN wechat_user d ON a.created_by = d.id
+	LEFT JOIN wechat_user e ON a.updated_by = e.id
+    where 1=1
+    <include refid="querysql"></include>
+    GROUP BY a.id
+  </select>
+  <sql id="querysql">
+  	  <if test="id != null and id != ''" >
+        and a.id = #{id,jdbcType=INTEGER}
+      </if>
+  	  <if test="communityName != null and communityName!=''" >
+  	  	and a.community_name like concat('%',#{communityName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="communityIcon != null and communityIcon!=''" >
+        and a.community_icon = #{communityIcon,jdbcType=VARCHAR}
+      </if>
+      <if test="communityMark != null and communityMark!=''" >
+        and a.community_mark = #{communityMark,jdbcType=VARCHAR}
+      </if>
+      <if test="communityTag != null and communityTag!=''" >
+        and a.community_tag = #{communityTag,jdbcType=VARCHAR}
+      </if>
+      <if test="bgIcon != null and bgIcon!=''" >
+        and a.bg_icon = #{bgIcon,jdbcType=VARCHAR}
+      </if>
+      <if test="authDesc != null and authDesc!=''" >
+        and a.auth_desc = #{authDesc,jdbcType=VARCHAR}
+      </if>
+      <if test="communityNotice != null and communityNotice!=''" >
+        and a.community_notice = #{communityNotice,jdbcType=VARCHAR}
+      </if>
+      <if test="communityDesc != null and communityDesc!=''" >
+        and a.community_desc = #{communityDesc,jdbcType=VARCHAR}
+      </if>
+      <if test="communityType != null and communityType!=''  or communityType==0 " >
+        and a.community_type = #{communityType,jdbcType=INTEGER}
+      </if>
+      <if test="adminId != null and adminId!=''" >
+        and a.admin_id = #{adminId,jdbcType=INTEGER}
+      </if>
+      <if test="communitySts != null and communitySts!=''" >
+        and a.community_sts = #{communitySts,jdbcType=CHAR}
+      </if>
+      <if test="createdDateStar != null and createdDateStar !='' and createdDateEnd != null and createdDateEnd != '' " >
+        <![CDATA[ and a.created_date >= #{createdDateStar} and a.created_date < #{createdDateEnd} ]]> 
+      </if>
+      <if test="updatedDateStar != null and updatedDateStar != ''  and updatedDateEnd !=null and updatedDateEnd != ''" >
+      <![CDATA[ and a.updated_date >= #{updatedDateStar} and a.updated_date < #{updatedDateEnd} ]]> 
+      </if>
+      <if test="createdBy != null and createdBy!=''" >
+        and a.created_by = #{createdBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updatedBy != null and updatedBy!=''" >
+        and a.updated_by = #{updatedBy,jdbcType=VARCHAR}
+      </if>
+      <if test="isDeleted != null and isDeleted!='' or isDeleted==0 " >
+        and a.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+      <if test="flowSts != null and flowSts!=''" >
+        and a.flow_sts = #{flowSts,jdbcType=CHAR}
+      </if>
+      <if test="notFlowSts != null and notFlowSts!=''" >
+        and a.flow_sts != #{notFlowSts,jdbcType=CHAR}
+      </if>
+  </sql>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from communitys
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.foresee.model.Communitys" >
+    insert into communitys (id, community_name, community_icon, 
+      community_mark, community_tag, bg_icon, 
+      auth_desc, community_notice, community_desc, 
+      community_type, admin_id, community_sts, 
+      created_date, updated_date, created_by, 
+      updated_by, is_deleted, flow_sts
+      )
+    values (#{id,jdbcType=INTEGER}, #{communityName,jdbcType=VARCHAR}, #{communityIcon,jdbcType=VARCHAR}, 
+      #{communityMark,jdbcType=VARCHAR}, #{communityTag,jdbcType=VARCHAR}, #{bgIcon,jdbcType=VARCHAR}, 
+      #{authDesc,jdbcType=VARCHAR}, #{communityNotice,jdbcType=VARCHAR}, #{communityDesc,jdbcType=VARCHAR}, 
+      #{communityType,jdbcType=INTEGER}, #{adminId,jdbcType=INTEGER}, #{communitySts,jdbcType=CHAR}, 
+      #{createdDate,jdbcType=TIMESTAMP}, #{updatedDate,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, 
+      #{updatedBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, #{flowSts,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.foresee.model.Communitys" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into communitys
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="communityName != null" >
+        community_name,
+      </if>
+      <if test="communityIcon != null" >
+        community_icon,
+      </if>
+      <if test="communityMark != null" >
+        community_mark,
+      </if>
+      <if test="communityTag != null" >
+        community_tag,
+      </if>
+      <if test="bgIcon != null" >
+        bg_icon,
+      </if>
+      <if test="authDesc != null" >
+        auth_desc,
+      </if>
+      <if test="communityNotice != null" >
+        community_notice,
+      </if>
+      <if test="communityDesc != null" >
+        community_desc,
+      </if>
+      <if test="communityType != null" >
+        community_type,
+      </if>
+      <if test="adminId != null" >
+        admin_id,
+      </if>
+      <if test="communitySts != null" >
+        community_sts,
+      </if>
+      <if test="createdDate != null" >
+        created_date,
+      </if>
+      <if test="updatedDate != null" >
+        updated_date,
+      </if>
+      <if test="createdBy != null" >
+        created_by,
+      </if>
+      <if test="updatedBy != null" >
+        updated_by,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="flowSts != null" >
+        flow_sts,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="communityName != null" >
+        #{communityName,jdbcType=VARCHAR},
+      </if>
+      <if test="communityIcon != null" >
+        #{communityIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="communityMark != null" >
+        #{communityMark,jdbcType=VARCHAR},
+      </if>
+      <if test="communityTag != null" >
+        #{communityTag,jdbcType=VARCHAR},
+      </if>
+      <if test="bgIcon != null" >
+        #{bgIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="authDesc != null" >
+        #{authDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="communityNotice != null" >
+        #{communityNotice,jdbcType=VARCHAR},
+      </if>
+      <if test="communityDesc != null" >
+        #{communityDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="communityType != null" >
+        #{communityType,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null" >
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="communitySts != null" >
+        #{communitySts,jdbcType=CHAR},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedDate != null" >
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="flowSts != null" >
+        #{flowSts,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.foresee.model.Communitys" >
+    update communitys
+    <set >
+      <if test="communityName != null" >
+        community_name = #{communityName,jdbcType=VARCHAR},
+      </if>
+      <if test="communityIcon != null" >
+        community_icon = #{communityIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="communityMark != null" >
+        community_mark = #{communityMark,jdbcType=VARCHAR},
+      </if>
+      <if test="communityTag != null" >
+        community_tag = #{communityTag,jdbcType=VARCHAR},
+      </if>
+      <if test="bgIcon != null" >
+        bg_icon = #{bgIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="authDesc != null" >
+        auth_desc = #{authDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="communityNotice != null" >
+        community_notice = #{communityNotice,jdbcType=VARCHAR},
+      </if>
+      <if test="communityDesc != null" >
+        community_desc = #{communityDesc,jdbcType=VARCHAR},
+      </if>
+        community_type = #{communityType,jdbcType=INTEGER},
+      <if test="adminId != null" >
+        admin_id = #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="communitySts != null" >
+        community_sts = #{communitySts,jdbcType=CHAR},
+      </if>
+      <if test="createdDate != null" >
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedDate != null" >
+        updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="flowSts != null" >
+        flow_sts = #{flowSts,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.foresee.model.Communitys" >
+    update communitys
+    set community_name = #{communityName,jdbcType=VARCHAR},
+      community_icon = #{communityIcon,jdbcType=VARCHAR},
+      community_mark = #{communityMark,jdbcType=VARCHAR},
+      community_tag = #{communityTag,jdbcType=VARCHAR},
+      bg_icon = #{bgIcon,jdbcType=VARCHAR},
+      auth_desc = #{authDesc,jdbcType=VARCHAR},
+      community_notice = #{communityNotice,jdbcType=VARCHAR},
+      community_desc = #{communityDesc,jdbcType=VARCHAR},
+      community_type = #{communityType,jdbcType=INTEGER},
+      admin_id = #{adminId,jdbcType=INTEGER},
+      community_sts = #{communitySts,jdbcType=CHAR},
+      updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      flow_sts = #{flowSts,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

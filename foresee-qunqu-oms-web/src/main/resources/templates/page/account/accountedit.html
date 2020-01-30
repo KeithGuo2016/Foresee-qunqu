@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html class="iframe-h">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>账号编辑</title>
+		<link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="/css/zTreeStyle/zTreeStyle.css" />
+		<link rel="stylesheet" type="text/css" href="/css/admin.css" />
+		<link rel="stylesheet" type="text/css" href="/css/page.css" />
+	</head>
+	<body>
+		<div class="pageloading">
+			<img src="/images/loading.png" class="rotation" />
+		</div>
+		<div class="wrap-container clearfix">
+			<div class="column-content-detail">
+				<form class="layui-form">
+					<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					      <label class="layui-form-label" for="userName">用户名称：</label>
+					      <div class="layui-input-inline">
+					        <input type="text" id="userName" name="user-name" lay-verify="user-name" value="" th:value="${account.username}" autocomplete="off" class="layui-input" placeholder="请输入用户名称">
+					      	<input type="hidden" id="id" value="" th:value="${account.id}"/>
+					      </div>
+					    </div>
+					    <div class="layui-inline">
+				            <label class="layui-form-label" for="roleFather">用户角色：</label>
+				            <div class="layui-input-inline">
+				                <input type="text" id="roleFather" readonly name="role-father" lay-verify="role-father" value="" th:value="${account.rolename}" autocomplete="off" class="layui-input" placeholder="请选择用户角色">
+				            </div>
+				        </div>
+				  	</div>
+				  	<div class="pad-top-b">
+				  		<div class="layui-inline mar-r-s">
+					      <label class="layui-form-label" for="accountPhone">手机号码：</label>
+					      <div class="layui-input-inline">
+					        <input type="text" id="accountPhone" name="account-phone" lay-verify="account-phone" value="" th:value="${account.userphone}" autocomplete="off" class="layui-input" placeholder="请输入手机号码" maxlength='15'>
+					      </div>
+					    </div>
+					    <div class="layui-inline mar-r-s">
+					      <label class="layui-form-label" for="channelid">所属社群：</label>
+					      <div class="layui-input-inline">
+					      	  <select id="channelid" name="channelid">
+								  <option value="">请选择所属社群</option>
+							  </select>
+					      </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top-b">
+				  		<div class="layui-inline mar-r-s">
+					      <label class="layui-form-label" for="accountName">用户账号：</label>
+					      <div class="layui-input-inline">
+					        <input type="text" id="accountName" name="account-name" lay-verify="account-name" value="" th:value="${account.useraccount}" autocomplete="off" class="layui-input" placeholder="请输入账户名称">
+					      </div>
+					    </div>
+					    <!-- <div class="layui-inline">
+				            <label class="layui-form-label" for="accountPwd">用户密码：</label>
+				            <div class="layui-input-inline">
+				                <input type="password" id="accountPwd" name="account-pwd" lay-verify="account-pwd" value="" th:value="${account.userpwd}" autocomplete="off" class="layui-input" placeholder="请输入账号密码">
+				            </div>
+				        </div> -->
+					    <div class="layui-inline">
+				            <label class="layui-form-label" for="status">用户状态：</label>
+				            <div class="layui-input-inline radio-spec">
+				               	<input type="radio" name="accountstatus" value="1" title="启用" th:checked=" ${account.isenable == 1}"/>
+				                <input type="radio" name="accountstatus" value="0" title="禁用" th:checked=" ${account.isenable == 0}"/>
+				            </div>
+				        </div>
+				  	</div>
+				  	<div class="pad-top-b">
+				  		<div class="layui-inline">
+					      <button class="layui-btn layui-btn-sm layui-btn-normal mar-left" onClick="return false;" id="yes-submit">确&nbsp;&nbsp;认</button>
+					      <button class="layui-btn layui-btn-sm layui-btn-normal mar-left" onClick="return false;" id="no-submit">取&nbsp;&nbsp;消</button>
+					    </div>
+				  	</div>
+      			</form>
+			</div>
+		</div>
+		<div id="roleContent" class="roleContent layui-anim layui-anim-upbit">
+			<div class="tree-select">请选择角色所属</div>
+			<ul id="roleTree" class="ztree roletree"></ul>
+		</div>
+		<input type="hidden" id="roleId" th:value="${account.roleid}" />
+		<input type="hidden" id="channId" th:value="${account.channelid}" />
+	</body>
+	<script src="/static/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery-1.8.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery.ztree.core.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+	layui.use(['jquery', 'form'], function(){
+	    var $ = layui.$,form = layui.form;  //初始化layui控件
+	    var selectedNodes = $("#roleId").val();
+	    var onClick = function() {
+        	var zTreeObj = $.fn.zTree.getZTreeObj("roleTree");
+        	selectedNodes = zTreeObj.getSelectedNodes()[0].id;
+			$("#roleFather").val(zTreeObj.getSelectedNodes()[0].name);
+			$("#roleContent").hide();
+        }
+	    //角色数据格式
+	    var setting = {
+	    	view: {dblClickExpand: false},
+			data:{simpleData:{enable:true}},
+			callback:{onClick: onClick}
+		};
+		//请求角色数据
+	    $.ajax({
+	        type:"POST",
+	        url:"/role/selectroleslist",
+	        dataType:"json",
+	        success:function(res){
+	        	 $.fn.zTree.init($("#roleTree"), setting, res.data);
+		            $.each(res.data, function(index, value){
+		            	if(value.id == $("#roleId").val()){
+		            		$("#roleFather").val(value.name);
+		            		selectedNodes = value.id;
+		            	}
+		            	$(".pageloading").hide();
+		         });
+	        }
+	    });
+	    //请求所属社群
+	    $.ajax({
+	        type:"POST",
+	        url:"/communitys/selectlist",
+	        data:{'page': 1, 'limit': 999999999},
+	        dataType: "json",
+	        async: false,
+	        success:function(data){
+	            if(data.code == '0' && data.data.length > 0){
+	            	var str = '';
+					//回显社群列表
+					$.each(data.data, function (k, val) {
+						str += '<option value="' + val.id + '">' + val.communityName + '</option>';
+					});
+					$("#channelid").html("");
+					$("#channelid").append("<option value=''>请选择所属社群</option>"+ str);
+					$("#channelid option").each(function(index){
+		            	if($(this).attr("value") == $("#channId").val()){
+		            		$(this).attr("selected",true);
+		            	}
+		            });
+					form.render();
+	            }
+	        }
+	    });
+        //点击选择框
+        $("#roleFather").click(function(){
+        	var cityObj = $("#roleFather");
+			var cityOffset = $("#roleFather").offset();
+			$("#roleContent").css({"left":cityOffset.left + "px", "top":cityOffset.top + cityObj.outerHeight() + 12 + "px"}).slideDown("fast");
+			$("body").bind("mousedown", onBodyDown);
+			return false;
+        });
+        //表单树联动效果
+        $(".wrap-container").click(function(){$("#roleContent").hide();});
+        $("#roleContent").click(function(){return false;});
+        $(".tree-select").click(function(){$("#roleContent").hide();$("#roleFather").val("");selectedNodes="";$(".ztree li a").removeClass("curSelectedNode")});
+        //点击确定
+	    $("#yes-submit").click(function() {
+	    	var id = $.trim($("#id").val());
+	    	var user_name = $.trim($("#userName").val());  //用户名
+	    	var account_name = $.trim($("#accountName").val());  //账户
+	    	//var account_pwd = $.trim($("#accountPwd").val());  //密码
+	    	var account_phone = $.trim($("#accountPhone").val());  //手机号
+	    	var account_status = $("input[name='accountstatus']:checked").val();  //账户状态
+	    	var account_role = selectedNodes;  //账户角色
+	    	var channelid = $("#channelid").val();  //所属社群id
+	    	if(channelid == "" || channelid == undefined || channelid == null){channelid = '0';}
+	    	if(user_name && account_name && account_phone && account_status && account_role != ''){
+	    		//请求菜单添加接口
+				$.post('/account/update',{'id':id,
+										  'username':user_name,
+										  'useraccount':account_name,
+										  'userphone':account_phone,
+										  'roleid':account_role,
+										  'isenable':account_status,
+										  'channelid': channelid},function(res){
+										  if(res.code==0){
+											   layer.msg('编辑成功', {'icon': 1,time:500},function(){
+						            	           var index = parent.layer.getFrameIndex(window.name);
+						            	           parent.layer.close(index);
+						        			       window.parent.location.reload();
+						                       });
+										  }else{
+										  	  layer.alert(res.msg, {icon: 5, title: "提示"});
+										  }
+				},'json')
+		
+	    	}else{
+	    		layer.alert("请先补充完整账号信息!", {icon: 5, title: "提示"});
+	    	}
+	    });
+        //点击取消
+        $("#no-submit").click(function() {
+        	var index = parent.layer.getFrameIndex(window.name);
+       		parent.layer.close(index);
+        });
+        function hideMenu() {
+			$("#roleContent").fadeOut("fast");
+			$("body").unbind("mousedown", onBodyDown);
+		}
+        function onBodyDown(event) {
+			if (!(event.target.id == "roleFather" || event.target.id == "roleContent" || $(event.target).parents("#roleContent").length>0)) {
+				hideMenu();
+			}
+		}
+	});
+	</script>
+</html>

@@ -1,0 +1,94 @@
+<import src='../editor/editor.wxml' />
+<!-- 引入组件 -->
+<import src="/welCropper/welCropper.wxml" />
+<view class='list_box'>
+  <view class='pub_tit'>征稿标题：</view>
+  <textarea class='intit'  style="height:{{cropperData.hidden?'40rpx':'0'}}"  bindinput="getTit" placeholder='请输入标题5-50字'></textarea>
+  <view class='pub_tit'>选择标签:({{tagN}}/3）</view>
+  <view class='pub_tag'>
+    <block wx:for='{{itemList}}' wx:key='this'>
+      <view bindtap="selTag" class="{{item.checked?'cur':''}}" data-id="{{item.id}}" data-index='{{index}}'>{{item.tagName}}</view>
+    </block>
+  </view>
+  <view class='label'>
+    <view class='lname'>选择封面图片：</view>
+    <view wx:if='{{upicon}}' class="upload_icon2" bindtap='selectTap' data-mode='rectangle'>
+      <image src="../images/fengmian.png"></image>
+    </view>
+    <view wx:else class="upload_icon upload_img" bindtap='selectTap' data-mode='rectangle'>
+      <image src="{{tempFile}}"></image>
+    </view>
+  </view>
+  <view class="pub_tit">征稿范围：</view>
+  <radio-group class="radio-group" bindchange="radioChangea">
+    <label>
+      <radio value="0" />全部用户</label>
+    <label>
+      <radio value="1" />社群成员</label>
+    <label>
+      <radio value="1" />仅VIP</label>
+  </radio-group>
+  <view class="pub_tit">投放稿件可见范围：</view>
+  <radio-group class="radio-group" bindchange="radioChangeb">
+    <label>
+      <radio value="0" />全部可见</label>
+    <label>
+      <radio value="1" />仅征稿方</label>
+  </radio-group>
+  <view class="pub_tit">征稿类型：</view>
+  <radio-group class="radio-group" bindchange="radioChangec">
+    <label>
+      <radio value="0" />有奖征稿</label>
+    <label>
+      <radio value="1" />有偿征稿</label>
+  </radio-group>
+  <!-- <view class='pub_tit'>征稿要求:</view>
+  <input class='intit' placeholder='原创未发表'></input>
+  <view class='pub_tit'>数字要求:</view>
+  <view class='pub_txt'>
+    <input class='intit' placeholder='请输入字数'></input> 字左右
+  </view> -->
+  <view class='pub_tit'>稿件需求量:</view>
+  <view class='pub_txt'>
+    <input class='intit' style="height:{{cropperData.hidden?'40rpx':'0'}}" bindinput="getNum" placeholder=''></input> 篇
+  </view>
+  <view class='pub_tit'>赏金范围:</view>
+  <view class='pub_txt'>
+    <input bindinput="minMon" style="height:{{cropperData.hidden?'40rpx':'0'}}" class='pri intit' placeholder=''></input> —
+    <input bindinput="maxMon" style="height:{{cropperData.hidden?'40rpx':'0'}}" class='pri intit' placeholder=''></input> 元
+  </view>
+  <view class='pub_tit'>征稿期:</view>
+  <view class='pub_txt'>
+
+    <picker class='alarm_picker intit' mode="multiSelector" value="{{dateTime}}" bindchange="changeDateTime" bindcolumnchange="changeDateTimeColumn" range="{{dateTimeArray}}">
+      <view class="picker">
+        {{startDate}}
+      </view>
+    </picker>
+    —
+    <picker class='alarm_picker intit' mode="multiSelector" value="{{dateTime1}}" bindchange="changeDateTime1" bindcolumnchange="changeDateTimeColumn1" range="{{dateTimeArray1}}">
+      <view class="picker">
+        {{endDate}}
+      </view>
+    </picker>
+  </view>
+  <view class='pub_tit'>征稿详细说明:</view>
+  <view id="labeltextarea" class='labeltextarea'>
+    <editor id="editor" class="ql-container" placeholder="{{placeholder}}" showImgSize showImgToolbar showImgResize bindinput="onStatusChange" read-only="{{readOnly}}" bindready="">
+    </editor>
+    <view class='upload_icon2 positionviewbg' style="margin: {{thisH}}rpx 0 0 290rpx; " bindtap="insertImage">
+      <image src="../images/qietu.png"></image>
+    </view>
+  </view>
+
+  <view class='pub_tit'>征稿范文:</view>
+  <view id="labeltextarea1" class='labeltextarea'>
+    <editor id="editor1" class="ql-container" placeholder="{{placeholder}}" showImgSize showImgToolbar showImgResize bindinput="onStatusChange1" read-only="{{readOnly}}" bindready="">
+    </editor>
+    <view class='upload_icon2 positionviewbg' style="margin: {{thisH1}}rpx 0 0 290rpx; " bindtap="insertImage1">
+      <image src="../images/qietu.png"></image>
+    </view>
+  </view>
+  <view bindtap="pub" class='coll_btn tc'>发布</view>
+</view>
+<template is="welCropper" data="{{cropperData:cropperData, cropperMovableItems:cropperMovableItems, cropperChangableData:cropperChangableData}}"></template>

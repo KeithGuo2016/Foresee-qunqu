@@ -1,0 +1,4 @@
+/* pages/list/index.wxss */
+.all{
+  padding-bottom: 30rpx;
+}

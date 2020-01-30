@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html class="iframe-h">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>征稿详情</title>
+		<link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="/css/admin.css" />
+		<link rel="stylesheet" type="text/css" href="/css/formSelects-v4.css" />
+		<link rel="stylesheet" type="text/css" href="/css/page.css" />
+		<style>
+			.layui-form-label{width:100px;}
+			.layui-input,.xm-select-parent .xm-input{width:200px;}
+			.mar-r-s{margin-right:125px;}
+			.layui-edge{display:none;}
+			.layui-input,.xm-select-parent .xm-input{border:none;}
+			.layui-textarea{width:420px;height:200px;border:none;}
+		</style>
+	</head>
+	<body>
+		<div class="pageloading">
+			<img src="/images/loading.png" class="rotation" />
+		</div>
+		<div class="wrap-container clearfix">
+			<div class="column-content-detail">
+				<form class="layui-form">
+					<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="contributeTitle">征稿标题：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="contributeTitle" name="contribute_title" lay-verify="contribute_title" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+					    <div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="orientation">征稿方向：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="orientation" name="orientation" lay-verify="orientation" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="contributeTag">征稿标签：</label>
+					        <div class="layui-input-inline">
+					        	<select id="contributeTag" name="contribute_tag" xm-select="xm-contributeTag">
+									<option value="">请选择征稿标签</option>
+								</select>
+					        </div>
+					    </div>
+					    <div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="buyNum">预购数量：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="buyNum" name="buy_num" lay-verify="buy_num" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="maxMoney">赏金最大值：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="maxMoney" name="max_money" lay-verify="max_money" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+					    <div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="minMoney">赏金最小值：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="minMoney" name="min_money" lay-verify="min_money" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="trueMoney">确定额度：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="trueMoney" name="true_money" lay-verify="true_money" value="" autocomplete="off" class="layui-input" placeholder="--" />
+					        </div>
+					    </div>
+					    <div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="contributeRange">征稿范围：</label>
+					        <div class="layui-input-inline">
+					        	<select id="contributeRange" name="contribute_range">
+									<option value="">--</option>
+									<option value="0">全部用户</option>
+									<option value="1">社群成员</option>
+									<option value="2">仅VIP</option>
+								</select>
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+						<!--开始时间-->
+						<div class="layui-inline mar-r-s">
+							<label class="layui-form-label" for="startDate">开始时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="startDate" name="start_date" autocomplete="off" class="layui-input" placeholder="--" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--开始时间-->
+						<!--截止时间-->
+						<div class="layui-inline mar-r-s">
+							<label class="layui-form-label" for="endDate">截止时间：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="endDate" name="end_date" autocomplete="off" class="layui-input" placeholder="--" readOnly='readOnly' />
+					        </div>
+						</div>
+						<!--截止时间-->
+					</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="userSeeRange">可见范围：</label>
+					        <div class="layui-input-inline">
+					        	<select id="userSeeRange" name="user_see_range">
+									<option value="">--</option>
+									<option value="0">全部可见</option>
+									<option value="1">仅征稿方</option>
+								</select>
+					        </div>
+					    </div>
+					    <div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="contributeType">征稿类型：</label>
+					        <div class="layui-input-inline">
+					        	<select id="contributeType" name="contribute_type">
+									<option value="">--</option>
+									<option value="1">收费</option>
+									<option value="0">免费</option>
+								</select>
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+					    <div class="layui-inline mar-r-s" style="position:relative;top:-20px;">
+					        <label class="layui-form-label" for="communityId">所属社群：</label>
+					        <div class="layui-input-inline">
+					        	<select id="communityId" name="community_id">
+									<option value="">--</option>
+								</select>
+					        </div>
+					    </div>
+				  		<div class="layui-inline mar-r-s" style="position:relative;top:-5px;">
+					        <label class="layui-form-label" for="logoUp">征稿封面：</label>
+					        <div class="layui-input-inline" style="position:relative;">
+					        	<img id="contributeIcon" src="/images/up_logo.png" class="up-img" />
+					        </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="contributeDesc">征稿描述：</label>
+					        <div class="layui-input-inline">
+					        	<div id="contributeDesc" class="layui-layedit2"></div>
+						    </div>
+					    </div>
+				  	</div>
+				  	<div class="pad-top">
+				  		<div class="layui-inline mar-r-s">
+					        <label class="layui-form-label" for="caseDesc">案例描述：</label>
+					        <div class="layui-input-inline">
+					        	<div id="caseDesc" class="layui-layedit2"></div>
+						    </div>
+					    </div>
+				  	</div>
+      			</form>
+			</div>
+		</div>
+	</body>
+	<script src="/static/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery-1.8.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/formSelects-v4.js"></script>
+	<script type="text/javascript" charset="utf-8">
+	layui.use(['form', 'laydate', 'laypage', 'layer'], function(){
+		var form = layui.form, laydate = layui.laydate, laypage = layui.laypage, layer = layui.layer,formSelects = layui.formSelects;  //初始化layui控件
+		var parame = public.getParame();
+		formSelects.btns("xm-contributeTag", []);
+	    layui.formSelects.value("xm-contributeTag", []);
+	    var img_one = '';  //征稿封面
+	    //请求标签
+	    $.ajax({
+	    	type: 'post',
+	    	url: '/tag/selectlist',
+	    	data: {'page': 1, 'limit': 999999999, 'tagType': 5},
+	    	async: false,
+			dataType: 'json',
+			success: function(data) {
+				if(data.code == '0'){
+					var sign_str = "";
+			       	var sign_arr = [];
+		        	//标签管理列表数据
+		        	$.each(data.data,function(k,val){
+		        		sign_str = {"name": val.tagName, "value": val.id};
+		        		sign_arr.push(sign_str);
+			        });
+					formSelects.data('xm-contributeTag', 'local', {arr: sign_arr});
+				}else{
+					layer.alert(data.msg, {icon: 5, title: "提示"});
+				}
+			}
+	    });
+	    //请求社群
+	    $.ajax({
+	    	type: 'post',
+	    	url: '/communitys/selectlist',
+	    	data: {'page': 1, 'limit': 999999999},
+	    	async: false,
+			dataType: 'json',
+			success: function(data) {
+				if(data.code == '0' && data.data.length > 0){
+					var str = '';
+					//回显社群列表
+					$.each(data.data, function (k, val) {
+						str += '<option value="' + val.id + '">' + val.communityName + '</option>';
+					});
+					$("#communityId").html("");
+					$("#communityId").append("<option value=''>--</option>"+ str);
+					form.render();
+				}else{
+					layer.alert(data.msg, {icon: 5, title: "提示"});
+				}
+			}
+	    });
+	    //信息回显
+	    $.ajax({
+	    	type: 'post',
+	    	url: '/contributes/select',
+	    	data: {'id': parame.id},
+	    	async: false,
+			dataType: 'json',
+			success: function(data) {
+				if(data.code == '0'){
+					//回显多选项
+					if(data.data.contributeTag == '1'){
+						var status = [data.data.contributeTag];
+					}else{
+						var status = data.data.contributeTag.split(',');
+					}
+					$("#contributeTitle").val(data.data.contributeTitle);  //征稿标题
+			    	$("#orientation").val(data.data.orientation);  //征稿方向
+			    	layui.formSelects.value("xm-contributeTag", status);  //征稿标签
+			    	$("#buyNum").val(data.data.buyNum);  //预购数量
+			    	$("#maxMoney").val(data.data.maxMoney);  //赏金最大值
+			    	$("#minMoney").val(data.data.minMoney);  //赏金最小值
+			    	$("#trueMoney").val(data.data.trueMoney);  //确定额度
+			    	//征稿范围
+			    	$("#contributeRange option").each(function(index){
+		            	if($(this).attr("value") == data.data.contributeRange){
+		            		$(this).attr("selected",true);
+		            	}
+		            });
+			    	$("#startDate").val(data.data.startDate);  //开始时间
+			    	$("#endDate").val(data.data.endDate);  //截止时间
+			    	//可见范围
+			    	$("#userSeeRange option").each(function(index){
+		            	if($(this).attr("value") == data.data.userSeeRange){
+		            		$(this).attr("selected",true);
+		            	}
+		            });
+			    	//征稿类型
+			    	$("#contributeType option").each(function(index){
+		            	if($(this).attr("value") == data.data.contributeType){
+		            		$(this).attr("selected",true);
+		            	}
+		            });
+			    	$("#contributeDesc").html(data.data.contributeDesc);  //征稿描述
+			    	$("#caseDesc").html(data.data.caseDesc);  //案例描述
+			    	img_one = data.data.contributeIcon;  //征稿封面
+			    	$("#contributeIcon").attr("src", data.data.contributeIcon);  //征稿封面
+			    	//所属社群
+			    	$("#communityId option").each(function(index){
+		            	if($(this).attr("value") == data.data.communityId){
+		            		$(this).attr("selected",true);
+		            	}
+		            });
+			    	form.render();
+			    	$("input,textarea").attr("readOnly", "readOnly");
+			    	$("select").attr("disabled", "disabled");
+			    	$("div,input").click(function(){
+			    		return false;
+			    	});
+			    	//图片点击放大
+			      	   $("img").click(function() {
+			      			public.bigImg($(this).parent());
+			      	   });
+				    $(".pageloading").hide();
+				}else{
+					layer.alert(data.msg, {icon: 5, title: "提示"});
+				}
+			}
+	    });
+	});
+	</script>
+</html>

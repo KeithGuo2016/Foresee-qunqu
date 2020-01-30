@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html class="iframe-h">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>账户管理</title>
+		<link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="/css/zTreeStyle/zTreeStyle.css" />
+		<link rel="stylesheet" type="text/css" href="/css/admin.css" />
+		<link rel="stylesheet" type="text/css" href="/css/page.css" />
+	</head>
+	<body>
+		<div class="pageloading">
+			<img src="/images/loading.png" class="rotation" />
+		</div>
+		<div class="wrap-container clearfix layui-anim layui-anim-fadein">
+			<div class="column-content-detail" id="page" style="padding-right:4px;">
+				<div class="layui-form-item page-btn" action="">
+					<!--顶部按钮-->
+					<div class="layui-inline tool-btn" id="menuBtn"></div>
+					<!--顶部按钮-->
+				</div>
+				<form class="layui-form">
+					<div class="page-search">
+						<!--人员姓名-->
+						<div class="layui-inline">
+							<label class="layui-form-label " for="userName">用户姓名：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="userName" name="user-name" placeholder="请输入用户姓名" autocomplete="off" class="layui-input" maxlength="20" />
+					        </div>
+						</div>
+						<!--人员姓名-->
+						<!--手机号码-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="userPhone">用户手机：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="userPhone" name="user-phone" placeholder="请输入用户手机号码" autocomplete="off" class="layui-input" maxlength="15" />
+					        </div>
+						</div>
+						<!--手机号码-->
+						<!--下单日期-->
+						<!-- <div class="layui-inline">
+							<label class="layui-form-label" for="orderPlace">下单日期：</label>
+					        <div class="layui-input-inline">
+					        	<input type="text" id="orderPlace" name="order-place" autocomplete="off" class="layui-input" placeholder="请选择下单日期区间" readOnly='readOnly' />
+					        </div>
+						</div> -->
+						<!--下单日期-->
+						<!--用户状态-->
+						<div class="layui-inline">
+							<label class="layui-form-label" for="userStatus">用户状态：</label>
+					        <div class="layui-input-inline">
+					        	<select id="userStatus" name="user_status">
+									<option value="">请选择用户状态</option>
+									<option value="0">禁用</option>
+									<option value="1">启用</option>
+								</select>
+					        </div>
+						</div>
+						<!--用户状态-->
+						<div class="layui-inline search-btn">
+							<button type="button" class="layui-btn layui-btn-sm btn-search bg-blue main-search" id="searchBt" lay-submit="">搜索</button>
+						</div>
+					</div>
+				</form>
+				<div class="">
+					<table class="layui-hide table-box" id="dataList" lay-filter="orderAll"></table>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="/static/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery-1.8.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+	layui.use(['form', 'table', 'laydate', 'laypage', 'layer'], function(){
+	    var form = layui.form, table = layui.table, laypage = layui.laypage, laydate = layui.laydate, layer = layui.layer;  //初始化layui控件
+	    var selectedNodes = '';
+	    //数据表格渲染控件
+	    table.render({
+	        elem: '#dataList',
+	        url: '/account/selectaccounts',
+	        method: 'post',
+	        id: 'orderAll',
+	        where: {
+	            //初始化发送至后台数据
+	        },
+	        cols: [
+	               
+	               [
+	                
+		            {field: 'id', title: 'id', hide: true},
+		            {type: 'numbers', title: '序号', width: '8%'},
+		            {field: 'username', title: '用户姓名', width: '18%', event: 'onSelect'},
+		            {field: 'userphone', title: '用户手机', width: '18%', event: 'onSelect'},
+		            {field: 'useraccount', title: '用户账号', width: '20%', event: 'onSelect'},
+		            {field: 'rolename', title: '用户角色', width: '18%', event: 'onSelect', templet: function(d) {
+		            	return d.rolename == null ? "--" : d.rolename;
+			        }},
+		            {field: 'isenable', title: '用户状态', width: '18%', event: 'onSelect'}
+		            
+	        		]
+	               
+	              ],
+	        page: true,
+	        limit: 10,
+	        limits: [5, 10, 15, 25, 35],
+	        loading: true,
+	        done: function (res, curr, count) {
+	           if ($(".layui-table-main").find("tr").length != 0) {
+	                $(".layui-table-page").show();
+	           }
+	           $(".pageloading").hide();
+	        }
+	    });
+	    public.adaptation();
+	    //请求三级菜单
+		public.getmenu();
+	    //点击搜索
+	    $("#searchBt").click(function() {
+	    	var user_name = $.trim($("#userName").val());  //用户姓名
+	    	var user_phone = $.trim($("#userPhone").val());  //用户手机
+	    	var user_status = $.trim($("#userStatus").val());  //用户状态
+	        //请求后台数据表格接口
+	        table.reload("orderAll", {
+	            url: "/account/selectaccounts",
+	            where: {
+	                "username": user_name,
+	                "userphone": user_phone,
+	                "isenable": user_status
+	            },
+	            method: "post"
+	        });
+	        public.adaptation();
+	    });
+	    //点击添加
+	    $("#page").on("click", ".btn-add", function () {
+	        public.dialogLayer(2,"添加用户","accountadd.html","530px","460px");
+   		});
+   		//点击删除
+	    $("#page").on("click", ".layui-btn-danger", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	if(ids != '' && ids != undefined){
+	    		layer.confirm("确定要删除吗?", {icon: 3, title:"提示"}, function(index){
+	    			$.post('/account/del',{'id':ids},function(res){
+	        			if(res.code==0){
+	        				layer.msg('删除成功', {'icon': 1,time:500},function(){
+            					layer.close(index);
+            					$("#searchBt").click();
+                            });
+	        			}else{
+	        				layer.alert(data.msg, {icon: 5, title: "提示"})
+	        			}
+	        		},'json');
+       			});
+        	}else {
+        		layer.alert("请先选中要删除的用户", {icon: 5, title: "提示"});
+        	}
+   		});
+   		//点击编辑
+	    $("#page").on("click", ".btn-bj", function () {
+	    	var ids = $("tr.layui-table-click").find("td:eq(0) div").text();
+	    	if(ids != '' && ids != undefined){
+	    		public.dialogLayer(2,"编辑账号","accountedit.html?id="+ ids,"530px","460px");
+        	}else {
+        		layer.alert("请先选中要编辑的账号", {icon: 5, title: "提示"});
+        	}
+   		});
+   		//点击刷新
+	    /*$("#page").on("click", ".refreshBtn", function () {
+	    	$('.iframe', window.parent.document).attr('src', $('.iframe', window.parent.document).attr('src'));
+   		});*/
+	});
+	</script>
+</html>    

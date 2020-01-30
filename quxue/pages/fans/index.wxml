@@ -1,0 +1,12 @@
+<view class='membox'>
+  <view class='memlist' wx:for='{{fansList}}' wx:key='{{item.id}}' bindtap='memDetail' data-id='{{item.openId}}'>
+    <view class='memimg'>
+      <view class='memtag' wx:if='{{item.isCommunity}}'><image src='../images/me_l.png'></image></view>
+      <view class='admin' wx:if='{{item.isAdmin}}'><image src='../images/admin.png'></image></view>
+      <image src='{{item.headUrl}}'></image>
+      <text wx:if='{{item.isCommunity}}' class='mempos'>社长</text>
+      <text wx:if='{{item.isAdmin}}' class='mempos admem'>管理员</text>
+    </view>
+    <view class='memname'>{{item.nickName}}</view>
+  </view>
+</view>

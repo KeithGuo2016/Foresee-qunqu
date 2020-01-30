@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.foresee.dao.CommonProvinceMapper" >
+  <resultMap id="BaseResultMap" type="com.foresee.model.CommonProvince" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.foresee.model.CommonProvince" >
+    insert into common_province (id, province_name)
+    values (#{id,jdbcType=INTEGER}, #{provinceName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.foresee.model.CommonProvince" >
+    insert into common_province
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="provinceName != null" >
+        province_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="provinceName != null" >
+        #{provinceName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="allProvince" resultMap="BaseResultMap">
+  		select * from common_province 
+  		<if test="id != null and id != ''">
+  			where id = #{id}
+  		</if>
+  </select>
+</mapper>

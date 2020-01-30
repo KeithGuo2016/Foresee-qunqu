@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foresee.mapper.TagMapperCostom">
+  <resultMap id="BaseResultMap" type="com.foresee.vo.TagVo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="tag_type" jdbcType="BIT" property="tagType" />
+    <result column="tag_name" jdbcType="VARCHAR" property="tagName" />
+    <result column="tag_desc" jdbcType="VARCHAR" property="tagDesc" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="followNum" jdbcType="INTEGER" property="followNum" />
+  </resultMap>
+  <select id="selectArticlesTagLike" resultMap="BaseResultMap" >
+  SELECT
+	t.id,
+	t.tag_type,
+	t.tag_name,
+	t.tag_desc,
+	t.is_deleted,
+	count(1) followNum
+FROM
+	tag t,
+	articles a,
+	articles_follow af 
+WHERE
+	af.article_id  = a.id
+	AND af.is_deleted = '0' 
+	AND FIND_IN_SET( t.id, a.article_tag ) 
+	and t.is_deleted ='0'
+	
+	and af.userId=#{userid}
+	
+GROUP BY
+	t.id
+	order by count(t.id) desc
+	
+  </select>
+  
+  <select id="selectCommunitysTagLike" resultMap="BaseResultMap" >
+  SELECT
+	t.id,
+	t.tag_type,
+	t.tag_name,
+	t.tag_desc,
+	t.is_deleted,
+	count(t.id) followNum
+FROM
+	tag t,
+	communitys c,
+	communitys_follow cf 
+	where 
+	cf.is_deleted ='0'
+	and cf.communitys_id = c.id
+	and cf.userId = #{userid}
+	AND FIND_IN_SET( t.id, c.community_tag )
+	and t.is_deleted ='0'
+	GROUP BY
+	t.id
+	order by count(t.id) desc
+	
+  </select>
+  <select id="selectContributeTagLike" resultMap="BaseResultMap" >
+  SELECT
+	t.id,
+	t.tag_type,
+	t.tag_name,
+	t.tag_desc,
+	t.is_deleted,
+	count(t.id) followNum
+FROM
+	tag t,
+	contributes c,
+	contribute_delivery cd 
+	where
+	cd.is_deleted='0'
+	and cd.userid=#{userid}
+	and cd.contributes_id = c.id
+	AND FIND_IN_SET( t.id, c.contribute_tag ) 
+	and t.is_deleted ='0'
+	GROUP BY
+	t.id
+	order by count(t.id) desc 
+  </select>
+  
+  <select id="selectMagazineTagLike" resultMap="BaseResultMap" >
+  SELECT
+	t.id,
+	t.tag_type,
+	t.tag_name,
+	t.tag_desc,
+	t.is_deleted,
+	count(t.id) followNum
+FROM
+	tag t,
+	magazines m,
+	magazine_follow mf 
+WHERE
+	mf.is_deleted ='0'
+	and mf.magazine_id = m.id
+	AND FIND_IN_SET( t.id, m.magazine_tag ) 
+	and t.is_deleted ='0'
+	and mf.userId =#{userid}
+GROUP BY
+	t.id
+	order by count(t.id) desc
+	
+  
+  </select>
+  
+</mapper>

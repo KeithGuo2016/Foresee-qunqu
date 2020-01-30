@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foresee.mapper.ContributeDeliveryMapper">
+  <resultMap id="BaseResultMap" type="com.foresee.pojo.ContributeDelivery">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="contributes_id" jdbcType="INTEGER" property="contributesId" />
+    <result column="delivery_title" jdbcType="VARCHAR" property="deliveryTitle" />
+    <result column="delivery_icon" jdbcType="VARCHAR" property="deliveryIcon" />
+    <result column="delivery_content" jdbcType="LONGVARCHAR" property="deliveryContent" />
+    <result column="is_select" jdbcType="INTEGER" property="isSelect" />
+    <result column="is_pay" jdbcType="INTEGER" property="isPay" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="read_num" jdbcType="INTEGER" property="readNum" />
+    
+  </resultMap>
+</mapper>

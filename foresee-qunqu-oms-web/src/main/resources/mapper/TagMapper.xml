@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.foresee.dao.TagMapper" >
+  <resultMap id="BaseResultMap" type="com.foresee.model.Tag" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="tag_type" property="tagType" jdbcType="INTEGER" />
+    <result column="tag_name" property="tagName" jdbcType="VARCHAR" />
+    <result column="tag_desc" property="tagDesc" jdbcType="VARCHAR" />
+    <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="updated_date" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, tag_type, tag_name, tag_desc, created_date, updated_date, created_by, updated_by, 
+    is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    	a.*,
+		d.nick_name as createdName,
+		e.nick_name as updatedName
+    from tag a LEFT JOIN wechat_user d ON a.created_by = d.id
+		LEFT JOIN wechat_user e ON a.updated_by = e.id
+    where a.id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="com.foresee.model.Tag" >
+    select 
+    	a.*,
+		d.nick_name as createdName,
+		e.nick_name as updatedName
+    from tag a LEFT JOIN wechat_user d ON a.created_by = d.id
+		LEFT JOIN wechat_user e ON a.updated_by = e.id
+    where 1=1
+    <include refid="querysql"></include>
+  </select>
+  <sql id="querysql">
+	  <if test="id != null and id!='' ">
+	    and	a.id = #{id,jdbcType=INTEGER}
+	  </if>
+  	  <if test="tagType != null and tagType!='' or tagType==0" >
+        and	a.tag_type = #{tagType,jdbcType=INTEGER}
+      </if>
+      <if test="tagName != null and tagName!='' " >
+        and a.tag_name like concat('%',#{tagName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="tagDesc != null and tagDesc!='' " >
+        and a.tag_desc like concat('%',#{tagDesc,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="createdDateStar != null and createdDateStar !='' and createdDateEnd != null and createdDateEnd != '' " >
+        <![CDATA[ and a.created_date >= #{createdDateStar} and a.created_date < #{createdDateEnd} ]]> 
+      </if>
+      <if test="updatedDateStar != null and updatedDateStar != ''  and updatedDateEnd !=null and updatedDateEnd != ''" >
+      	<![CDATA[ and a.updated_date >= #{updatedDateStar} and a.updated_date < #{updatedDateEnd} ]]> 
+      </if>
+      <if test="createdBy != null and createdBy!='' " >
+        and	a.created_by = #{createdBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updatedBy != null and updatedBy!='' " >
+        and	a.updated_by = #{updatedBy,jdbcType=VARCHAR}
+      </if>
+      <if test="isDeleted != null and isDeleted!='' or isDeleted==0" >
+        and	a.is_deleted = #{isDeleted,jdbcType=INTEGER}
+      </if>
+  </sql>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tag
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.foresee.model.Tag" >
+    insert into tag (id, tag_type, tag_name, 
+      tag_desc, created_date, updated_date, 
+      created_by, updated_by, is_deleted
+      )
+    values (#{id,jdbcType=INTEGER}, #{tagType,jdbcType=INTEGER}, #{tagName,jdbcType=VARCHAR}, 
+      #{tagDesc,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{updatedDate,jdbcType=TIMESTAMP}, 
+      #{createdBy,jdbcType=VARCHAR}, #{updatedBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.foresee.model.Tag" >
+    insert into tag
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="tagType != null" >
+        tag_type,
+      </if>
+      <if test="tagName != null" >
+        tag_name,
+      </if>
+      <if test="tagDesc != null" >
+        tag_desc,
+      </if>
+      <if test="createdDate != null" >
+        created_date,
+      </if>
+      <if test="updatedDate != null" >
+        updated_date,
+      </if>
+      <if test="createdBy != null" >
+        created_by,
+      </if>
+      <if test="updatedBy != null" >
+        updated_by,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="tagType != null" >
+        #{tagType,jdbcType=INTEGER},
+      </if>
+      <if test="tagName != null" >
+        #{tagName,jdbcType=VARCHAR},
+      </if>
+      <if test="tagDesc != null" >
+        #{tagDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedDate != null" >
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.foresee.model.Tag" >
+    update tag
+    <set >
+      <if test="tagType != null" >
+        tag_type = #{tagType,jdbcType=INTEGER},
+      </if>
+      <if test="tagName != null" >
+        tag_name = #{tagName,jdbcType=VARCHAR},
+      </if>
+      <if test="tagDesc != null" >
+        tag_desc = #{tagDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedDate != null" >
+        updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.foresee.model.Tag" >
+    update tag
+    set tag_type = #{tagType,jdbcType=INTEGER},
+      tag_name = #{tagName,jdbcType=VARCHAR},
+      tag_desc = #{tagDesc,jdbcType=VARCHAR},
+      created_date = #{createdDate,jdbcType=TIMESTAMP},
+      updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

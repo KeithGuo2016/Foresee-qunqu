@@ -1,0 +1,110 @@
+/* pages/gather/index.wxss */
+@import "/welCropper/welCropper.wxss";
+.addbtn{
+  width: 400rpx; height: 70rpx;
+  margin: 50rpx auto;
+  background: #38BAB8;
+  border-radius: 40rpx;
+  line-height: 70rpx;
+  text-align: center;
+  font-size: 30rpx;
+  color: #fff;
+}
+.galist{
+  float: left;
+  width: 300rpx;height: 630rpx;
+  margin: 0 0 0 56rpx;
+  position: relative;
+  text-align: center;
+}
+.galist image{
+  width: 300rpx; height: 460rpx;
+  border-radius: 10rpx;
+}
+.ga_tit{
+  font-size: 30rpx;
+  font-weight: 400rpx;
+  margin-top: 10rpx;
+}
+.adga{
+  width: 280rpx; height: 50rpx;
+  border: 1px solid #38BAB8;
+  border-radius: 20rpx;
+  line-height: 50rpx;
+  margin: 20rpx auto;
+  text-align: center;
+  font-size: 26rpx;
+  color: #38BAB8;
+}
+.tag{
+  position: absolute;
+  left: 20rpx;bottom: 200rpx;
+  display: inline-block;
+  background: #38BAB8;
+  border-radius: 10rpx;
+  font-size: 30rpx;
+  color: #fff;
+  padding: 5rpx 10rpx;
+}
+.gather_set{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: #fff;
+}
+.upicon image{
+  vertical-align: middle;
+  margin: 0 30rpx 0 0rpx;
+  width: 72rpx;
+  height: 72rpx;
+}
+.gtop{
+  display: flex;
+  padding: 20rpx 30rpx;
+  box-sizing: border-box;
+  border-bottom: 1px solid #e3e3e3;
+  justify-content: space-between;
+}
+.gcan{
+  font-size: 32rpx;
+  color: #979797;
+}
+.gok{
+  font-size: 32rpx;
+  color: #38BAB8;
+}
+.gcon{
+  padding: 30rpx;
+  box-sizing: border-box;
+  font-size: 28rpx;
+  color: #0f0f0f;
+}
+.glabela{
+  display: flex;
+}
+.glinput{
+  flex: 1;
+  margin: 0 0 0 20px;
+  border-bottom: 1px solid #111111;
+}
+.glabelb{
+  display: flex;
+  margin: 40rpx 0 30px 0;
+  align-items: center;
+}
+.gtit{
+  font-size: 36rpx;
+  font-weight: 500;
+}
+.gicon image{
+  width: 46rpx;
+  height: 46rpx;
+}
+.glabelc{
+  justify-content: space-between;
+}
+.upload_img image{
+  margin: 20rpx 20rpx 0 0rpx;
+  width: 46rpx;
+  height: 82rpx;
+}
