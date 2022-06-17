@@ -118,7 +118,7 @@
 		<dependency>
 		    <groupId>com.alibaba</groupId>
 		    <artifactId>fastjson</artifactId>
-		    <version>1.2.51</version>
+		    <version>1.2.83</version>
 		</dependency>
 		
 		<!-- swagger2 配置 -->
@@ -183,7 +183,7 @@
 	  <dependency>
 	      <groupId>com.alibaba</groupId>
 	      <artifactId>fastjson</artifactId>
-	      <version>1.2.53</version>
+	      <version>1.2.83</version>
 	  </dependency>
 	  <!-- 引入OSS图片服务器 -->
 	  <dependency>
